@@ -8,7 +8,14 @@
     <entity name="Ingrediente" representedClassName="Ingrediente" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="nome" optional="YES" attributeType="String"/>
-        <relationship name="receitasQueUtilizam" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ReceitaIngrediente" inverseName="ingrediente" inverseEntity="ReceitaIngrediente"/>
+        <relationship name="receitasQueUtilizam" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="IngredienteDaReceita" inverseName="ingrediente" inverseEntity="IngredienteDaReceita"/>
+    </entity>
+    <entity name="IngredienteDaReceita" representedClassName="IngredienteDaReceita" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="medida" optional="YES" attributeType="String"/>
+        <attribute name="quantidade" optional="YES" attributeType="String"/>
+        <relationship name="ingrediente" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Ingrediente" inverseName="receitasQueUtilizam" inverseEntity="Ingrediente"/>
+        <relationship name="receita" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Receita" inverseName="ingredientesDaReceita" inverseEntity="Receita"/>
     </entity>
     <entity name="PassoReceita" representedClassName="PassoReceita" syncable="YES" codeGenerationType="class">
         <attribute name="etapa" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
@@ -27,18 +34,11 @@
         <attribute name="dificuldade" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="imagem" optional="YES" attributeType="String"/>
-        <attribute name="porcoes" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="porcoes" optional="YES" attributeType="String"/>
         <attribute name="tempoDePreparo" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="titulo" optional="YES" attributeType="String"/>
         <relationship name="autor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Autor" inverseName="receitas" inverseEntity="Autor"/>
-        <relationship name="ingredientesDaReceita" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ReceitaIngrediente" inverseName="receita" inverseEntity="ReceitaIngrediente"/>
+        <relationship name="ingredientesDaReceita" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="IngredienteDaReceita" inverseName="receita" inverseEntity="IngredienteDaReceita"/>
         <relationship name="passo" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PassoReceita" inverseName="receita" inverseEntity="PassoReceita"/>
-    </entity>
-    <entity name="ReceitaIngrediente" representedClassName="ReceitaIngrediente" syncable="YES" codeGenerationType="class">
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="medida" optional="YES" attributeType="String"/>
-        <attribute name="quantidade" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="ingrediente" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Ingrediente" inverseName="receitasQueUtilizam" inverseEntity="Ingrediente"/>
-        <relationship name="receita" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Receita" inverseName="ingredientesDaReceita" inverseEntity="Receita"/>
     </entity>
 </model>

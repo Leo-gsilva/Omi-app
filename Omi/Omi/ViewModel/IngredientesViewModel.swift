@@ -31,7 +31,7 @@ class IngredientesViewModel {
     func adicionar(nome: String) {
         guard !nome.isEmpty else { return }
         do {
-            try repo.criarIngrediente(nome: nome)
+            try repo.buscarOuCriarIngrediente(nome: nome)
             carregarIngredientes()
         } catch {
             print("Erro ao adicionar: \(error)")
