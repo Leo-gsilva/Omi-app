@@ -21,6 +21,21 @@ final class ReceitasRepo {
         try context.save()
     }
     
+    func criarReceita(titulo: String, categoria: String, descricao: String, imagem: String, tempoDePreparo: Int, porcoes: Int, ingredientes: [Ingrediente], dificuldade: String?){
+        let receita = Receita(context: context)
+        receita.id = UUID()
+        receita.titulo = titulo
+        receita.categoria = categoria
+        receita.descricao = descricao
+        receita.imagem = imagem
+        receita.tempoDePreparo = Int16(tempoDePreparo)
+        receita.porcoes = Int16(porcoes)
+        receita.dificuldade = dificuldade
+        receita.dataCriacao = Date()
+        try? context.save()
+    }
+    
+    
     // Read (Fetch)
     func buscarIngredientes() throws -> [Ingrediente] {
         let request = NSFetchRequest<Ingrediente>(entityName: "Ingrediente")
