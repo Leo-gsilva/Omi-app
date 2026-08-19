@@ -22,7 +22,7 @@ final class ReceitasRepo {
         let request = NSFetchRequest<Ingrediente>(entityName: "Ingrediente")
         // O '[c]' no final do %m avisa o Core Data para ignorar maiúsculas e minúsculas!
         // Assim "Chocolate" e "chocolate" são reconhecidos como o mesmo item.
-        request.predicate = NSPredicate(format: "nome [c] == %@", nomeLimpo)
+        request.predicate = NSPredicate(format: "nome == [c] %@", nomeLimpo)
         request.fetchLimit = 1
         
         let resultados = try context.fetch(request)
@@ -47,11 +47,13 @@ final class ReceitasRepo {
             tempoDePreparo: Int16,
             porcoes: String,
             dificuldade: String?,
-            //ingredientesComMedida: [(ingrediente: Ingrediente, quantidade: String, medida: String)]
+            ingredientes: [IngredienteAdicionado],
+            passos: [PassoAdicionado]
         ) throws {
             
             // 1. Cria a Receita principal
             let receita = Receita(context: context)
+            
             receita.id = UUID()
             receita.titulo = titulo
             receita.categoria = categoria
@@ -63,42 +65,31 @@ final class ReceitasRepo {
             receita.dataCriacao = Date()
             
             // 2. Loop passando por todos os ingredientes que o usuário escolheu
-//            for item in ingredientesComMedida {
-//                
-//                // Cria a entidade intermediária
-//                let relacao = IngredienteDaReceita(context: context)
-//                    relacao.id = UUID()
-//                    relacao.quantidade = item.quantidade
-//                    relacao.medida = item.medida
-//                
-//                // 3. A Mágica do Core Data: Fazendo os vínculos (Relacionamentos)
-//                relacao.receita = receita           // Diz que essa medida pertence à receita que acabamos de criar
-//                relacao.ingrediente = item.ingrediente // Aponta para o ingrediente existente no banco de dados
-//            }
+            for item in ingredientes {
+                let ingrediente = try buscarOuCriarIngrediente(nome: item.nome)
+                // Cria a entidade intermediária
+                let relacao = IngredienteDaReceita(context: context)
+                
+                relacao.id = UUID()
+                relacao.quantidade = String(item.quantidade)
+                relacao.medida = item.medida
+                relacao.receita = receita
+                relacao.ingrediente = ingrediente
+            }
             
-            // DEBUG - Cria ingredientes teste e seus relacionamentos
-            let ingrediente = Ingrediente(context: context)
-            ingrediente.id = UUID()
-            ingrediente.nome = "Ingrediente teste"
-            
-            let relacao = IngredienteDaReceita(context: context)
-            
-            relacao.id = UUID()
-            relacao.quantidade = "1"
-            relacao.medida = "colher"
-            relacao.receita = receita
-            relacao.ingrediente = ingrediente
-            
-            let passo = PassoReceita(context: context)
-
-            passo.id = UUID()
-            passo.etapa = 1
-            passo.nome = "Passo de teste"
-            passo.texto = "Misture os ingredientes."
-            passo.imagem = ""
-            passo.tempoEstimado = 5
-
-            passo.receita = receita
+            // CRIAR OS PASSOS
+            for item in passos {
+                let passo = PassoReceita(context: context)
+                
+                passo.id = UUID()
+                
+                passo.etapa = Int16(item.etapa)
+                passo.nome = item.nome
+                passo.texto = item.texto
+                passo.imagem = ""
+                passo.tempoEstimado = Int16(item.tempoEstimado)
+                passo.receita = receita
+            }
             
             // 4. Salva o contexto (Isso salva a Receita e todas as relações ReceitaIngrediente de uma vez só)
             try context.save()

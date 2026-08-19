@@ -8,7 +8,7 @@
 import Observation
 
 @Observable
-final class LivroReceitasViewModel {
+final class CategoriaViewModel {
     var categoriaAtual: CategoriaReceita = .cafeDaManha
 
     func proximaCategoria() {

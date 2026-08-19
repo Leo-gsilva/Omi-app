@@ -15,8 +15,18 @@ struct IngredienteAdicionado: Identifiable {
     let medida: String
 }
 
+struct PassoAdicionado: Identifiable {
+    let id = UUID()
+    let etapa: Int
+    let nome: String
+    let texto: String
+    let tempoEstimado: Int
+}
+
 @Observable
-class CriarReceitaViewModel {
+final class CriarReceitaViewModel {
+    
+    // Receita
     var titulo = ""
     var categoria: CategoriaReceita = .almoco
     var descricao = ""
@@ -24,13 +34,21 @@ class CriarReceitaViewModel {
     var porcoesTexto = ""
     var dificuldade = ""
     
+    // Ingredientes
     // Lista dos itens que o usuário foi adicionando na tela
     var ingredientesAdicionados: [IngredienteAdicionado] = []
     
     // Campos temporários para digitar
-    var nomeIngredienteTexto = "" // <-- Mudou aqui!
+    var nomeIngredienteTexto = ""
     var quantidadeTexto = ""
     var medidaTexto = ""
+    
+    // Passos
+    var passosAdicionados: [PassoAdicionado] = []
+    
+    var nomeDoPasso: String = ""
+    var descricaoDoPasso: String = ""
+    var tempoPassoTexto: String = ""
     
     private let repo: ReceitasRepo
     
@@ -38,7 +56,9 @@ class CriarReceitaViewModel {
         self.repo = repo
     }
     
-    func adicionarNaLista() {
+    // FUNÇÕES
+    // INGREDIENTE
+    func adicionarIngrediente() {
         guard !nomeIngredienteTexto.isEmpty,
               let quantidade = Double(quantidadeTexto),
               !medidaTexto.isEmpty else { return }
@@ -52,27 +72,41 @@ class CriarReceitaViewModel {
         medidaTexto = ""
     }
     
+    // ADICIONAR PASSO
+    func adicionarPasso() {
+        guard !nomeDoPasso.isEmpty, !descricaoDoPasso.isEmpty else { return }
+        
+        let passo = PassoAdicionado(etapa: passosAdicionados.count + 1, nome: nomeDoPasso, texto: descricaoDoPasso, tempoEstimado: Int(tempoPassoTexto) ?? 0)
+        
+        passosAdicionados.append(passo)
+        
+        nomeDoPasso = ""
+        descricaoDoPasso = ""
+        tempoPassoTexto = ""
+    }
+    
     func salvarReceitaNoBanco() {
-        let tempo = Int16(tempoDePreparoTexto) ?? 0
-        let porcoes = porcoesTexto
+//        let tempo = Int16(tempoDePreparoTexto) ?? 0
+//        let porcoes = porcoesTexto
         
         do {
             // AQUI ACONTECE A MÁGICA: Transformamos os textos digitados em objetos do CoreData!
-            let tuplas = try ingredientesAdicionados.map { item -> (Ingrediente, Double, String) in
-                // O repo procura o texto. Se achar, vincula. Se não, cria!
-                let ingredienteCoreData = try repo.buscarOuCriarIngrediente(nome: item.nome)
-                return (ingredienteCoreData, item.quantidade, item.medida)
-            }
+//            let tuplas = try ingredientesAdicionados.map { item -> (Ingrediente, Double, String) in
+//                // O repo procura o texto. Se achar, vincula. Se não, cria!
+//                let ingredienteCoreData = try repo.buscarOuCriarIngrediente(nome: item.nome)
+//                return (ingredienteCoreData, item.quantidade, item.medida)
+//            }
             
             try repo.criarReceita(
                 titulo: titulo,
                 categoria: categoria.rawValue,
                 descricao: descricao,
                 imagem: "imagem_padrao",
-                tempoDePreparo: tempo,
-                porcoes: porcoes,
+                tempoDePreparo: Int16(tempoDePreparoTexto) ?? 0,
+                porcoes: porcoesTexto,
                 dificuldade: dificuldade,
-                //ingredientesComMedida: tuplas as! [(ingrediente: Ingrediente, quantidade: String, medida: String)]
+                ingredientes: ingredientesAdicionados,
+                passos: passosAdicionados
             )
             print("Receita e ingredientes salvos perfeitamente!")
         } catch {

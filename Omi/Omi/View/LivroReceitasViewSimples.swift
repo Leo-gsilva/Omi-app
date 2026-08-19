@@ -9,6 +9,7 @@ import SwiftUI
 import CoreData
 
 struct LivroReceitasViewSimples: View {
+    @State private var viewModel = LivroReceitasViewModel()
     
     @FetchRequest(
         sortDescriptors: [
@@ -20,24 +21,24 @@ struct LivroReceitasViewSimples: View {
     )
     private var receitas: FetchedResults<Receita>
     
-    @State private var categoriaSelecionada = "Sobremesa"
-
-    private let categorias = ["sobremesa", "salgado", "bebida", "massa", "lanche"]
+//    @State private var categoriaSelecionada = "Sobremesa"
+//
+//    private let categorias = ["sobremesa", "salgado", "bebida", "massa", "lanche"]
     
     private var receitasFiltradas: [Receita] {
         receitas.filter{
-            $0.categoria == categoriaSelecionada
+            $0.categoria == viewModel.categoriaAtual.rawValue
         }
     }
 
     
     var body: some View {
-//        Picker("Categoria", selection: $categoria) {
-//            ForEach(categorias, id: \.self) { categoria in
-//                Text(categoria).tag(categoria)
-//            }
-//        }
-//        .pickerStyle(.segmented)
+        Picker("Categoria", selection: $viewModel.categoriaAtual) {
+            ForEach(CategoriaReceita.allCases) { categoria in
+                Text(categoria.rawValue).tag(categoria)
+            }
+        }
+        .pickerStyle(.segmented)
         
         TabView {
             ForEach(receitasFiltradas) { receita in
