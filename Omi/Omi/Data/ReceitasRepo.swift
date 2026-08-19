@@ -131,4 +131,56 @@ final class ReceitasRepo {
         context.delete(passo)
         try context.save()
     }
+    
+    //Update
+    func atualizarReceita(
+                receita: Receita,
+                novoTitulo: String,
+                novaCategoria: String,
+                novaDescricao: String,
+                novaImagem: String,
+                novoTempoDePreparo: Int,
+                novasPorcoes: String,
+                novaDificuldade: String?
+    )throws{
+        receita.titulo = novoTitulo
+        receita.categoria = novaCategoria
+        receita.descricao = novaDescricao
+        receita.imagem = novaImagem
+        receita.tempoDePreparo = Int16(novoTempoDePreparo)
+        receita.porcoes = novasPorcoes
+        receita.dificuldade = novaDificuldade
+        
+        try context.save()
+    }
+    
+    func atualizarPasso(
+                        passo: PassoReceita,
+                        novaEtapa: Int16,
+                        novoTexto: String,
+                        novoNome: String,
+                        novaImagem: String,
+                        novoTempoEstimado: Int16
+                
+    )throws{
+        passo.etapa = novaEtapa
+        passo.texto = novoTexto
+        passo.nome = novoNome
+        passo.imagem = novaImagem
+        passo.tempoEstimado = novoTempoEstimado
+        
+        try context.save()
+    }
+    
+    func atualizarIngredienteDaReceita(
+                        relacao: IngredienteDaReceita,
+                        novaQuantidade: String,
+                        novoMedida: String
+    )throws{
+        relacao.quantidade = novaQuantidade
+        relacao.medida = novoMedida
+        
+        try context.save()
+    }
+    
 }
