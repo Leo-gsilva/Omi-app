@@ -1,21 +1,21 @@
-//
-//  OmiApp.swift
-//  Omi
-//
-//  Created by Leonardo Gonçalves da Silva on 14/08/26.
-//
+    //
+    //  OmiApp.swift
+    //  Omi
+    //
+    //  Created by Leonardo Gonçalves da Silva on 14/08/26.
+    //
 
-import SwiftUI
-import CoreData
+    import SwiftUI
+    import CoreData
 
-@main
-struct OmiApp: App {
-    let persistenceController = PersistenceController.shared
+    @main
+    struct OmiApp: App {
+        let persistentController = PersistenceController.shared
 
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+        var body: some Scene {
+            WindowGroup {
+                ContentViewCoreDataTestes()
+                    .environment(\.managedObjectContext, persistentController.container.viewContext)
+            }
         }
     }
-}
