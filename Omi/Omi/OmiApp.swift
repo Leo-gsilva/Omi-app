@@ -14,7 +14,7 @@
 
         var body: some Scene {
             WindowGroup {
-                ContentView()
+                ContentViewCoreDataTestes()
                     .environment(\.managedObjectContext, persistentController.container.viewContext)
             }
         }

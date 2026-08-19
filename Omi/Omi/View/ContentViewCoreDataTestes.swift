@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreData
 
-struct ContentView: View {
+struct ContentViewCoreDataTestes: View {
     // É o contexto do Persistence, lida com a persistência no CoreData
     @Environment(\.managedObjectContext) private var context
     
@@ -56,7 +56,7 @@ struct ContentView: View {
 
 #Preview {
     // recebe o .preview que é uma inicialização em ambiente controlado, ambiente de pre-visualização. Em ambiente de produção/buildado o banco tem outros elementos.
-    ContentView()
+    ContentViewCoreDataTestes()
         .environment(
             \.managedObjectContext,
             PersistenceController.preview.container.viewContext
