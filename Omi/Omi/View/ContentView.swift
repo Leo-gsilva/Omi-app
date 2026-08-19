@@ -22,64 +22,35 @@ struct ContentView: View {
         ]
     )
     private var receitas: FetchedResults<Receita>
-            
+    
+    @State private var paginaAtual: Int = 0
     @State private var mostrarForm: Bool = false
+    
+    //let receita = receitas[paginaAtual]
     
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(receitas) { receita in
-                    NavigationLink {
-                        // CRIAR DetalheReceitaView(receita: receita)
-                    } label: {
-                        VStack(alignment: .leading) {
-                            Text(receita.titulo ?? "Sem título")
-                                .font(.headline)
-                                .bold()
-                            
-                            Text(receita.descricao ?? "Vazio")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                                .lineLimit(2)
+            LivroReceitasViewSimples()
+                .navigationTitle("Minhas Receitas")
+                .toolbar {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button{
+                            mostrarForm.toggle()
+                        } label: {
+                            Image(systemName: "plus")
+                        }
+                        .sheet(isPresented: $mostrarForm) {
+                            CriarReceitaView(
+                                viewModel: CriarReceitaViewModel(
+                                    repo: ReceitasRepo(
+                                        context: context
+                                    )
+                                )
+                            )
                         }
                     }
                 }
-                .onDelete(perform: deletarReceita)
-            }
-            .navigationTitle("Receitas")
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button{
-                        mostrarForm.toggle()
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                    .sheet(isPresented: $mostrarForm) {
-                        CriarReceitaView(
-                            viewModel: CriarReceitaViewModel(
-                                repo: ReceitasRepo(
-                                    context: context
-                                )
-                            )
-                        )
-                    }
-                }
-            }
         }
-    }
-    
-    private func deletarReceita(at offsets: IndexSet) {
-        // Cria a variável repo que recebe o ReceitasRepo e o contexto em questão - que é o do Persistence
-        // ReceitasRepo cuida de operações da entidade Receita no CoreData
-        let repo = ReceitasRepo(context: context)
-        offsets.map{ receitas[$0] }
-            .forEach { receita in
-                do {
-                    try repo.deletarReceita(receita: receita)
-                } catch {
-                    print("ERRO AO DELETAR RECEITA: \(error.localizedDescription)")
-                }
-            }
     }
 }
 

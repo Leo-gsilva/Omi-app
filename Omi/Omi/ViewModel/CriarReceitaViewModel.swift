@@ -18,11 +18,11 @@ struct IngredienteAdicionado: Identifiable {
 @Observable
 class CriarReceitaViewModel {
     var titulo = ""
-    var categoria = ""
+    var categoria: CategoriaReceita = .almoco
     var descricao = ""
     var tempoDePreparoTexto = ""
     var porcoesTexto = ""
-    var dificuldade = "Fácil"
+    var dificuldade = ""
     
     // Lista dos itens que o usuário foi adicionando na tela
     var ingredientesAdicionados: [IngredienteAdicionado] = []
@@ -66,7 +66,7 @@ class CriarReceitaViewModel {
             
             try repo.criarReceita(
                 titulo: titulo,
-                categoria: categoria,
+                categoria: categoria.rawValue,
                 descricao: descricao,
                 imagem: "imagem_padrao",
                 tempoDePreparo: tempo,

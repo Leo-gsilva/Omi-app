@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct DetalhesReceitaView: View {
+    @State var receita: Receita
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text(receita.titulo ?? "")
     }
 }
 
-#Preview {
-    DetalhesReceitaView()
-}
+//#Preview {
+//    DetalhesReceitaView()
+//}
