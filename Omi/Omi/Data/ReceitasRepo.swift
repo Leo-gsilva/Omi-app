@@ -139,7 +139,7 @@ final class ReceitasRepo {
                 novaCategoria: String,
                 novaDescricao: String,
                 novaImagem: String,
-                novoTempoDePreparo: Int,
+                novoTempoDePreparo: Int16,
                 novasPorcoes: String,
                 novaDificuldade: String?
     )throws{
@@ -147,7 +147,7 @@ final class ReceitasRepo {
         receita.categoria = novaCategoria
         receita.descricao = novaDescricao
         receita.imagem = novaImagem
-        receita.tempoDePreparo = Int16(novoTempoDePreparo)
+        receita.tempoDePreparo = novoTempoDePreparo
         receita.porcoes = novasPorcoes
         receita.dificuldade = novaDificuldade
         

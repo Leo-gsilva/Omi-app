@@ -11,7 +11,7 @@ import Observation
 struct IngredienteAdicionado: Identifiable {
     let id = UUID()
     let nome: String
-    let quantidade: Double
+    let quantidade: String
     let medida: String
 }
 
@@ -22,7 +22,7 @@ class CriarReceitaViewModel {
     var descricao = ""
     var tempoDePreparoTexto = ""
     var porcoesTexto = ""
-    var dificuldade = "Fácil"
+    var dificuldade = ""
     
     // Lista dos itens que o usuário foi adicionando na tela
     var ingredientesAdicionados: [IngredienteAdicionado] = []
@@ -40,10 +40,10 @@ class CriarReceitaViewModel {
     
     func adicionarNaLista() {
         guard !nomeIngredienteTexto.isEmpty,
-              let quantidade = Double(quantidadeTexto),
-              !medidaTexto.isEmpty else { return }
+                      !quantidadeTexto.isEmpty, // Just check if it is not empty
+                      !medidaTexto.isEmpty else { return }
         
-        let novoItem = IngredienteAdicionado(nome: nomeIngredienteTexto, quantidade: quantidade, medida: medidaTexto)
+        let novoItem = IngredienteAdicionado(nome: nomeIngredienteTexto, quantidade: quantidadeTexto, medida: medidaTexto)
         ingredientesAdicionados.append(novoItem)
         
         // Limpa os campos para o próximo ingrediente
@@ -58,7 +58,7 @@ class CriarReceitaViewModel {
         
         do {
             // AQUI ACONTECE A MÁGICA: Transformamos os textos digitados em objetos do CoreData!
-            let tuplas = try ingredientesAdicionados.map { item -> (Ingrediente, Double, String) in
+            let tuplas = try ingredientesAdicionados.map { item -> (Ingrediente, String, String) in
                 // O repo procura o texto. Se achar, vincula. Se não, cria!
                 let ingredienteCoreData = try repo.buscarOuCriarIngrediente(nome: item.nome)
                 return (ingredienteCoreData, item.quantidade, item.medida)
