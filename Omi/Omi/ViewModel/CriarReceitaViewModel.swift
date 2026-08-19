@@ -53,7 +53,7 @@ class CriarReceitaViewModel {
     }
     
     func salvarReceitaNoBanco() {
-        let tempo = Int(tempoDePreparoTexto) ?? 0
+        let tempo = Int16(tempoDePreparoTexto) ?? 0
         let porcoes = porcoesTexto
         
         do {
@@ -72,7 +72,7 @@ class CriarReceitaViewModel {
                 tempoDePreparo: tempo,
                 porcoes: porcoes,
                 dificuldade: dificuldade,
-                ingredientesComMedida: tuplas
+                //ingredientesComMedida: tuplas as! [(ingrediente: Ingrediente, quantidade: String, medida: String)]
             )
             print("Receita e ingredientes salvos perfeitamente!")
         } catch {

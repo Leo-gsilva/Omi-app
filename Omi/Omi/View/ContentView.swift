@@ -9,77 +9,85 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-    // Just declare the State here. The init will handle assigning it!
-    @State private var viewModel: IngredientesViewModel
-    @State private var novoNomeIngrediente: String = ""
-
-    // Inject the ViewModel
-    init(viewModel: IngredientesViewModel) {
-        self.viewModel = viewModel
-    }
-
+    // É o contexto do Persistence, lida com a persistência no CoreData
+    @Environment(\.managedObjectContext) private var context
+    
+    // Faz o request do que está salvo no banco a partir de, no caso, .dataCriacao e quem recebe o resultado é a var receitas.
+    @FetchRequest(
+        sortDescriptors: [
+            NSSortDescriptor(
+                keyPath: \Receita.dataCriacao,
+                ascending: false
+            )
+        ]
+    )
+    private var receitas: FetchedResults<Receita>
+            
+    @State private var mostrarForm: Bool = false
+    
     var body: some View {
-        NavigationView {
-            VStack {
-                HStack {
-                    TextField("Nome do ingrediente", text: $novoNomeIngrediente)
-                        .textFieldStyle(.roundedBorder)
-                    
-                    Button {
-                        viewModel.adicionar(nome: novoNomeIngrediente)
-                        novoNomeIngrediente = ""
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title2)
-                            .foregroundColor(.orange)
-                    }
-                    .disabled(novoNomeIngrediente.trimmingCharacters(in: .whitespaces).isEmpty)
-                }
-                .padding()
-                
-                List {
-                    ForEach(viewModel.itens) { item in
-                        Text(item.nome ?? "Sem nome")
-                            .font(.system(.body, design: .rounded))
-                    }
-                    .onDelete(perform: viewModel.deletar)
-                }
-            }
-            .navigationTitle("Ingredientes")
-            .toolbar {
-                // 1. Moved the EditButton to the left side
-                ToolbarItem(placement: .navigationBarLeading) {
-                    EditButton()
-                }
-                
-                // 2. Added the NavigationLink to the right side
-                ToolbarItem(placement: .navigationBarTrailing) {
+        NavigationStack {
+            List {
+                ForEach(receitas) { receita in
                     NavigationLink {
-                        // We instantiate the new Repo and ViewModel for the next screen right here
-                        let repoParaNovaTela = ReceitasRepo(context: PersistenceController.shared.container.viewContext)
-                        let criarReceitaVM = CriarReceitaViewModel(repo: repoParaNovaTela)
-                        
-                        CriarReceitaView(viewModel: criarReceitaVM)
+                        // CRIAR DetalheReceitaView(receita: receita)
                     } label: {
-                        // Using a cooking icon for the "Create Recipe" button!
-                        Image(systemName: "frying.pan.fill")
-                            .foregroundColor(.orange)
+                        VStack(alignment: .leading) {
+                            Text(receita.titulo ?? "Sem título")
+                                .font(.headline)
+                                .bold()
+                            
+                            Text(receita.descricao ?? "Vazio")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(2)
+                        }
+                    }
+                }
+                .onDelete(perform: deletarReceita)
+            }
+            .navigationTitle("Receitas")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button{
+                        mostrarForm.toggle()
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                    .sheet(isPresented: $mostrarForm) {
+                        CriarReceitaView(
+                            viewModel: CriarReceitaViewModel(
+                                repo: ReceitasRepo(
+                                    context: context
+                                )
+                            )
+                        )
                     }
                 }
             }
         }
     }
+    
+    private func deletarReceita(at offsets: IndexSet) {
+        // Cria a variável repo que recebe o ReceitasRepo e o contexto em questão - que é o do Persistence
+        // ReceitasRepo cuida de operações da entidade Receita no CoreData
+        let repo = ReceitasRepo(context: context)
+        offsets.map{ receitas[$0] }
+            .forEach { receita in
+                do {
+                    try repo.deletarReceita(receita: receita)
+                } catch {
+                    print("ERRO AO DELETAR RECEITA: \(error.localizedDescription)")
+                }
+            }
+    }
 }
 
 #Preview {
-    let previewContext = PersistenceController.preview.container.viewContext
-        
-    // 2. Create a repo using that preview context
-    let previewRepo = ReceitasRepo(context: previewContext)
-        
-    // 3. Create the ViewModel using the preview repo
-    let previewViewModel = IngredientesViewModel(repo: previewRepo)
-        
-    // 4. Inject it into the View!
-    return ContentView(viewModel: previewViewModel)
+    // recebe o .preview que é uma inicialização em ambiente controlado, ambiente de pre-visualização. Em ambiente de produção/buildado o banco tem outros elementos.
+    ContentView()
+        .environment(
+            \.managedObjectContext,
+            PersistenceController.preview.container.viewContext
+        )
 }

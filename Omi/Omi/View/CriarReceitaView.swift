@@ -5,49 +5,57 @@
 //  Created by Leonardo Gonçalves da Silva on 18/08/26.
 //
 import SwiftUI
+import CoreData
 
 struct CriarReceitaView: View {
-    @State private var viewModel: CriarReceitaViewModel
-        
-    init(viewModel: CriarReceitaViewModel) {
-        self.viewModel = viewModel
-    } // <--- 1. We closed the init right here!
+    // Declaração para informar o context a ser observado (o mesmo em todas as views que precisam de contexto)
+    @Environment(\.managedObjectContext) private var context
+    @Environment(\.dismiss) private var voltar
+    
+    @Bindable var viewModel: CriarReceitaViewModel // Pq é um ObservableObject, então não precisa de init no viewModel aqui
     
     var body: some View {
-        // 2. We wrap everything inside a Form so the Sections know how to draw themselves
-        Form {
-            // MARK: - Adicionar Ingrediente
-            Section(header: Text("Adicionar Ingredientes")) {
-                
-                // Um campo de texto livre para o usuário digitar o que quiser!
-                TextField("O que vai na receita? (Ex: Chocolate)", text: $viewModel.nomeIngredienteTexto)
-                
-                HStack {
-                    TextField("Qtd (ex: 2.5)", text: $viewModel.quantidadeTexto)
-                        .keyboardType(.decimalPad)
-                    TextField("Medida (ex: Gramas)", text: $viewModel.medidaTexto)
+        NavigationView{
+            Form{
+                Section("Título") {
+                    TextField("Titulo:", text: $viewModel.titulo)
                 }
-                
-                Button("Adicionar à Receita") {
-                    viewModel.adicionarNaLista()
+                Section("Descrição") {
+                    TextEditor(text: $viewModel.descricao)
+                        .frame(minHeight: 200)
                 }
-                .foregroundColor(.orange)
-                .disabled(viewModel.nomeIngredienteTexto.isEmpty || viewModel.quantidadeTexto.isEmpty || viewModel.medidaTexto.isEmpty)
             }
-            
-            // MARK: - Lista de Ingredientes Adicionados
-            if !viewModel.ingredientesAdicionados.isEmpty {
-                Section(header: Text("Ingredientes na Receita")) {
-                    ForEach(viewModel.ingredientesAdicionados) { item in
-                        HStack {
-                            Text(item.nome) // Mostra o nome que ele digitou
-                            Spacer()
-                            Text("\(item.quantidade, specifier: "%.1f") \(item.medida)")
-                                .foregroundColor(.gray)
-                        }
+            .navigationTitle("Anotar receita")
+            .toolbar{
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Salvar") {
+                        viewModel.salvarReceitaNoBanco()
+                        voltar()
+                    }
+                }
+                
+                ToolbarItem(placement: .topBarLeading) {
+                    Button{
+                        voltar()
+                    } label: {
+                        Image(systemName: "xmark")
                     }
                 }
             }
         }
     }
 }
+
+
+#Preview {
+    //Criando contexto fake pro preview
+    let context = PersistenceController.preview.container.viewContext
+    // Repo teste para o preview
+    let repo = ReceitasRepo(context: context)
+    //Criando viewModels fake pro preview
+    let viewModel = CriarReceitaViewModel(repo: repo)
+    // Gerando o preview com dados fake
+    CriarReceitaView(viewModel: viewModel)
+        .environment(\.managedObjectContext, context)
+}
+

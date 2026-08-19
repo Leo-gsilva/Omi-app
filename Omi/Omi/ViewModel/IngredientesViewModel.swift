@@ -41,7 +41,7 @@ class IngredientesViewModel {
     func deletar(offsets: IndexSet) {
         offsets.map { itens[$0] }.forEach { ingrediente in
             do {
-                try repo.deletar(ingrediente: ingrediente)
+                try repo.deletarIngrediente(ingrediente: ingrediente)
             } catch {
                 print("Erro ao deletar: \(error)")
             }

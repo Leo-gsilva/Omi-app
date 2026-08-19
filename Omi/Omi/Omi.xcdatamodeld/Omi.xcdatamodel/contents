@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24902" systemVersion="25G76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24902" systemVersion="25F84" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Autor" representedClassName="Autor" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="nome" optional="YES" attributeType="String"/>
-        <relationship name="receitas" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Receita" inverseName="autor" inverseEntity="Receita"/>
     </entity>
     <entity name="Ingrediente" representedClassName="Ingrediente" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -37,7 +36,6 @@
         <attribute name="porcoes" optional="YES" attributeType="String"/>
         <attribute name="tempoDePreparo" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="titulo" optional="YES" attributeType="String"/>
-        <relationship name="autor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Autor" inverseName="receitas" inverseEntity="Autor"/>
         <relationship name="ingredientesDaReceita" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="IngredienteDaReceita" inverseName="receita" inverseEntity="IngredienteDaReceita"/>
         <relationship name="passo" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PassoReceita" inverseName="receita" inverseEntity="PassoReceita"/>
     </entity>
