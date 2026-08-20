@@ -7,16 +7,42 @@
 
 import CoreData
 
+// O NSPersistentContainer monta o NSManagedObjectModel, o NSPersistentStoreCoordinator e entrega um NSManagedObjectContext
+// assim o container guarda contexto (rascunho)
 struct PersistenceController {
-    static let shared = PersistenceController()
+    static let shared = PersistenceController() // É um container que cuida do viewContext do CoreData
     
+    // Declara-se o container e precisa ter o mesmo nome do arquivo.xdatamodeld
+    let container: NSPersistentContainer
+    
+    // Inicializa o container e lida com possível erro
+    init(emMemoria: Bool = false) {
+        container = NSPersistentContainer(name: "Omi")
+        
+        if emMemoria {
+            container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "dev/null")
+        }
+        
+        container.loadPersistentStores { descricao, erro in
+            if let erro = erro {
+                fatalError("ERRO AO CARREGAR CORE DATA: \(erro.localizedDescription)")
+            }
+        }
+        
+        // Configura o container para mesclar automaticamente as mudanças vindas de outros contextos
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+    }
+    
+    // Para aplicar nas #Previews das views filhas do App.swift
     @MainActor
     static let preview: PersistenceController = {
-
-        let controller = PersistenceController(inMemory: true)
-
+        
+        let controller = PersistenceController()
+        
         let context = controller.container.viewContext
-
+        
         let categorias = ["sobremesa", "salgado", "bebida", "massa", "lanche"]
         
         for i in 1...5 {
@@ -30,27 +56,11 @@ struct PersistenceController {
             receita.porcoes = "8"
             receita.dataCriacao = Date()
         }
-
-        try? context.save()
-
-        return controller
-    }() // Para aplicar nas #Previews das views filhas do App.swift
-
-    let container: NSPersistentContainer
-
-    init(inMemory: Bool = false) {
-        container = NSPersistentContainer(name: "Omi")
         
-        if inMemory {
-            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
-        }
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("ERRO AO CARREGAR CORE DATA \(error), \(error.userInfo)")
-            }
-        })
-        container.viewContext.automaticallyMergesChangesFromParent = true
-        print(container.managedObjectModel.entitiesByName.keys)
-    }
+        try? context.save()
+        
+        return controller
+    }()
 }
+
 

@@ -15,6 +15,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				View/Untitled.swift,
 			);
 			target = 37507E8B302FB99100B9BBF7 /* Omi */;
 		};

@@ -4,53 +4,37 @@
 ////
 ////  Created by Igor Carrasco on 19/08/26.
 ////
-//
+
 import SwiftUI
-import CoreData
 
 struct LivroReceitasViewSimples: View {
-    
-    @FetchRequest(
-        sortDescriptors: [
-            NSSortDescriptor(
-                keyPath: \Receita.titulo,
-                ascending: true
-            )
-        ]
-    )
-    private var receitas: FetchedResults<Receita>
-    
-    @State private var categoriaSelecionada = "Sobremesa"
+    // repo j[a vem injetado por fora
+    // @Bindable permite usar o $viewModel.categoriaAtual com Picker/conteole
+    @Bindable var viewModel: LivroReceitasViewModel
 
-    private let categorias = ["sobremesa", "salgado", "bebida", "massa", "lanche"]
-    
-    private var receitasFiltradas: [Receita] {
-        receitas.filter{
-            $0.categoria == categoriaSelecionada
-        }
-    }
-
-    
     var body: some View {
-//        Picker("Categoria", selection: $categoria) {
-//            ForEach(categorias, id: \.self) { categoria in
-//                Text(categoria).tag(categoria)
-//            }
-//        }
-//        .pickerStyle(.segmented)
-        
-        TabView {
-            ForEach(receitasFiltradas) { receita in
-                ReceitaPageView(
-                    receita: receita
-                )
+        Picker("Categoria", selection: $viewModel.categoriaAtual) {
+            ForEach(CategoriaReceita.allCases) { categoria in
+                Text(categoria.rawValue).tag(categoria)
             }
         }
-        .tabViewStyle(.page)
+        .pickerStyle(.segmented)
+        
+        if viewModel.receitasFiltradas.isEmpty {
+            ContentUnavailableView("Nenhuma receita nessa categoria", systemImage: "book")
+        } else {
+            TabView {
+                ForEach(viewModel.receitasFiltradas) { receita in
+                    ReceitaPageView(
+                        receita: receita
+                    )
+                }
+            }
+            .tabViewStyle(.page)
+        }
     }
 }
 
 #Preview {
-    LivroReceitasViewSimples()
-        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    LivroReceitasViewSimples(viewModel: .preview)
 }

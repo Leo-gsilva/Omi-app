@@ -8,7 +8,6 @@
 import SwiftUI
 import Observation
 
-
 @Observable
 @MainActor
 final class OnboardingViewModel {

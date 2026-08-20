@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import CoreData
 
 enum CategoriaReceita: String, CaseIterable, Identifiable {
     case cafeDaManha = "Café da Manhã"
