@@ -17,7 +17,7 @@ struct Onboarding1: View {
     
     var body: some View {
         GeometryReader { geo in
-            VStack(spacing: 0) {
+            VStack{
                 ProgressoOnboarding(
                     paginaAtual: viewModel.paginaAtual,
                     totalDePaginas: viewModel.totalDePaginas
