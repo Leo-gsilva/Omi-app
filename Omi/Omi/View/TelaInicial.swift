@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TelaInicial: View {
     
-    @State private var viewModel = TelaInicialViewModel()
+    @Bindable var viewModel: TelaInicialViewModel
     @State private var pesquisa = ""
     @State private var mostrarLivroAberto = false
     
@@ -180,5 +180,5 @@ struct TelaInicial: View {
 
 
 #Preview {
-    TelaInicial()
+    TelaInicial(viewModel: TelaInicialViewModel.preview)
 }

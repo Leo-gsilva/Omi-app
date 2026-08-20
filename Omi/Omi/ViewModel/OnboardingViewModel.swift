@@ -13,6 +13,7 @@ import Observation
 final class OnboardingViewModel {
     var postitAtivo: Int? = nil
     var paginaAtual: Int = 0
+    var finalizado: Bool = false
     
     let paginas: [OnboardingModel] = [
         OnboardingModel(
@@ -102,6 +103,7 @@ final class OnboardingViewModel {
     }
     
     private func finalizarOnboarding() {
+        finalizado = true
         print("Onboarding finalizado")
     }
 }
