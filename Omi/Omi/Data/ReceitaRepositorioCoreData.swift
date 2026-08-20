@@ -26,7 +26,7 @@ final class ReceitaRepositorioCoreData: ReceitaRepositorio {
     // MARK: - Create
     
     // O segredo para não duplicar dados!
-    func buscarOuCriarIngrediente(nome: String) throws -> Ingrediente {
+    private func buscarOuCriarIngrediente(nome: String) throws -> Ingrediente {
         let nomeLimpo = nome.trimmingCharacters(in: .whitespaces)
         
         let request = NSFetchRequest<Ingrediente>(entityName: "Ingrediente")

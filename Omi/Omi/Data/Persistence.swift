@@ -10,7 +10,7 @@ import CoreData
 // O NSPersistentContainer monta o NSManagedObjectModel, o NSPersistentStoreCoordinator e entrega um NSManagedObjectContext
 // assim o container guarda contexto (rascunho)
 struct PersistenceController {
-    static let shared = PersistenceController()
+    static let shared = PersistenceController() // É um container que cuida do viewContext do CoreData
     
     // Declara-se o container e precisa ter o mesmo nome do arquivo.xdatamodeld
     let container: NSPersistentContainer
@@ -62,4 +62,5 @@ struct PersistenceController {
         return controller
     }()
 }
+
 
