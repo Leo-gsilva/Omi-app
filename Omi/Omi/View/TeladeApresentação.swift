@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TeladeApresentação: View {
+    @Environment(\.managedObjectContext) private var contexto
     
     @Bindable var viewModel: OnboardingViewModel
     
@@ -16,44 +17,49 @@ struct TeladeApresentação: View {
     }
     
     var body: some View {
-        GeometryReader { geo in
-            VStack(spacing: 0) {
-                Spacer()
-                Text("Bem-Vindo(a) ao OVÔ")
-                    .font(FontesApp.titulo)
-                    .foregroundStyle(.black.opacity(0.7))
-                    .padding(.top, geo.size.height * 0.035)
-                
-                Spacer()
-                
-                    Text("O seu app para\n anotar as receitas\n do dia a dia!")
-                    .multilineTextAlignment(.center)
-                    .font(FontesApp.tituloComTexto)
-                    .foregroundStyle(Color.cordosTextos)
+        NavigationStack{
+            GeometryReader { geo in
+                VStack(spacing: 0) {
+                    Spacer()
+                    Text("Bem-Vindo(a) ao OVÔ")
+                        .font(FontesApp.titulo)
+                        .foregroundStyle(.black.opacity(0.7))
+                        .padding(.top, geo.size.height * 0.035)
                     
-                Spacer()
-                
+                    Spacer()
+                    
+                    Text("O seu app para\n anotar as receitas\n do dia a dia!")
+                        .multilineTextAlignment(.center)
+                        .font(FontesApp.tituloComTexto)
+                        .foregroundStyle(Color.cordosTextos)
+                    
+                    Spacer()
+                    
                     Image("Ovo0")
                         .resizable()
                         .scaledToFit()
                         .frame(width:geo.size.height * 0.35)
-                
-                        Spacer()
-                
-                
-                BotaoOnboarding(textoBotao: "Continuar") {
-                    viewModel.continuar()
+                    
+                    Spacer()
+                    
+                    
+                    BotaoOnboarding(textoBotao: "Continuar") {
+                        viewModel.continuar()
+                    }
                 }
                 .frame(width: geo.size.width * 0.80)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.cordoFundo)
+            .navigationDestination(isPresented: $viewModel.finalizado) {
+                TelaInicial(viewModel: TelaInicialViewModel(repo: ReceitaRepositorioCoreData(context: contexto)))
+            }
         }
     }
 }
 
+
 #Preview{
-    TeladeApresentação(
-        viewModel: OnboardingViewModel()
-    )
+    TeladeApresentação(viewModel: OnboardingViewModel())
+        .environment(\.managedObjectContext, ReceitaRepositorioCoreData.preview)
 }

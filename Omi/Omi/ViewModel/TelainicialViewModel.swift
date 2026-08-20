@@ -10,6 +10,11 @@ import Observation
 
 @Observable
 class TelaInicialViewModel {
+    private let repo: ReceitaRepositorio
+    
+    init(repo: ReceitaRepositorio) {
+        self.repo = repo
+    }
     
     var paginaAtual = 1
     let totalPaginas = 2
