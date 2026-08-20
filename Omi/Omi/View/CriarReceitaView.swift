@@ -5,11 +5,8 @@
 //  Created by Leonardo Gonçalves da Silva on 18/08/26.
 //
 import SwiftUI
-import CoreData
 
 struct CriarReceitaView: View {
-    // Declaração para informar o context a ser observado (o mesmo em todas as views que precisam de contexto)
-    @Environment(\.managedObjectContext) private var context
     @Environment(\.dismiss) private var voltar
     
     @Bindable var viewModel: CriarReceitaViewModel // Pq é um ObservableObject, então não precisa de init no viewModel aqui
@@ -77,14 +74,6 @@ struct CriarReceitaView: View {
 
 
 #Preview {
-    //Criando contexto fake pro preview
-    let context = PersistenceController.preview.container.viewContext
-    // Repo teste para o preview
-    let repo = ReceitaRepositorioCoreData(context: context)
-    //Criando viewModels fake pro preview
-    let viewModel = CriarReceitaViewModel(repo: repo)
-    // Gerando o preview com dados fake
-    CriarReceitaView(viewModel: viewModel)
-        .environment(\.managedObjectContext, context)
+    CriarReceitaView(viewModel: .preview)
 }
 

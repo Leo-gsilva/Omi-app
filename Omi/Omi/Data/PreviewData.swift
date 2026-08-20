@@ -27,8 +27,16 @@ extension LivroReceitasViewModel {
         LivroReceitasViewModel(repo: ReceitaRepositorioCoreData(context: PersistenceController.preview.container.viewContext))
     }
 }
-//extension LivroReceitasViewModel {
-//    static var preview: LivroReceitasViewModel {
-//        LivroReceitasViewModel(repo: ReceitaRepositorioCoreData(context: PersistenceController.preview.container.viewContext))
-//    }
-//}
+
+// .preview para o ContentViewCoreDataTestes
+extension ReceitaRepositorioCoreData {
+    static var preview: NSManagedObjectContext {
+        PersistenceController.preview.container.viewContext
+    }
+}
+
+extension CriarReceitaViewModel {
+    static var preview: CriarReceitaViewModel {
+        CriarReceitaViewModel(repo: ReceitaRepositorioCoreData(context: PersistenceController.preview.container.viewContext))
+    }
+}

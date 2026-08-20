@@ -14,13 +14,25 @@ struct ReceitaPageView: View {
     var body: some View {
         ScrollView{
             VStack(alignment: .leading, spacing: 12) {
-                Text(receita.titulo)
-                    .font(.title)
-                    .bold()
+                Section{
+                    Text(receita.titulo)
+                        .font(.title)
+                        .bold()
+                    
+                    Text("data de criação: \(receita.dataCriacao.formatted(.dateTime))")
+                            .font(.caption)
+                    
+                    Text(receita.categoria.rawValue)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    HStack{
+                        Text("Tempo: \(receita.tempoDePreparo) min")
+                        Text("Porções: \(receita.porcoes)")
+                    }
+                    Text("Categoria: \(receita.categoria.rawValue)")
+                }
                 
-                Text(receita.categoria.rawValue)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                Divider()
                 
                 Text(receita.descricao)
                             
@@ -34,12 +46,9 @@ struct ReceitaPageView: View {
                         Text(passo.texto)
                     }
                 }
-//                Text("Tempo: \(receita.tempoDePreparo) min")
-//                Text("Porções: \(receita.porcoes ?? "")")
-//                Text("Categoria: \(receita.categoria ?? "")")
             }
-            .padding()
         }
+        .padding()
     }
 }
 

@@ -7,6 +7,22 @@
 
 import Foundation
 
+// Agora a struct temporária guarda apenas a String do nome!
+struct IngredienteAdicionado: Identifiable {
+    let id = UUID()
+    let nome: String
+    let quantidade: Double
+    let medida: String
+}
+
+struct PassoAdicionado: Identifiable {
+    let id = UUID()
+    let etapa: Int
+    let nome: String
+    let texto: String
+    let tempoEstimado: Int
+}
+
 // Versão de leitura de uma receita, só para exibição
 // Nenhuma View deve conhecer a entity `Receita` Core Data
 struct ReceitaModel: Identifiable, Hashable {

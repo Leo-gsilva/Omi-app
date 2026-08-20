@@ -6,7 +6,7 @@
 //
 
 import Observation
-import CoreData
+import CoreData // PQ esse viewModel importa o coreData? Ta certo?
 
 @Observable
 final class LivroReceitasViewModel {
