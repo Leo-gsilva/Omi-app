@@ -11,13 +11,14 @@
     @main
     struct OmiApp: App {
         let persistentController = PersistenceController.shared
-        //@State private var viewModel = OnboardingViewModel()
+//        @State private var viewModel = OnboardingViewModel()
 
         var body: some Scene {
             WindowGroup {
                 ContentViewCoreDataTestes()
                     .environment(\.managedObjectContext, persistentController.container.viewContext)
-                //TeladeApresentação(viewModel: viewModel)
+//                TeladeApresentação(viewModel: viewModel)
+//                    .environment(\.managedObjectContext, persistentController.container.viewContext)
             }
         }
     }

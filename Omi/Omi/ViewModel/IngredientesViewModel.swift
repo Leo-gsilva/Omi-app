@@ -10,12 +10,12 @@ import Observation
 @Observable
 class IngredientesViewModel {
     // Look how clean this is! No @Published needed.
-    var itens: [Ingrediente] = []
+    var itens: [IngredienteCadastradoModel] = []
     
     // We make the repo private so the View can't touch it directly.
-    private let repo: ReceitasRepo
+    private let repo: ReceitaRepositorio
     
-    init(repo: ReceitasRepo) {
+    init(repo: ReceitaRepositorio) {
         self.repo = repo
         carregarIngredientes()
     }
@@ -31,7 +31,7 @@ class IngredientesViewModel {
     func adicionar(nome: String) {
         guard !nome.isEmpty else { return }
         do {
-            try repo.buscarOuCriarIngrediente(nome: nome)
+            _ = try repo.criarIngredienteAvulso(nome: nome)
             carregarIngredientes()
         } catch {
             print("Erro ao adicionar: \(error)")
@@ -41,7 +41,7 @@ class IngredientesViewModel {
     func deletar(offsets: IndexSet) {
         offsets.map { itens[$0] }.forEach { ingrediente in
             do {
-                try repo.deletarIngrediente(ingrediente: ingrediente)
+                try repo.deletarIngrediente(id: ingrediente.id)
             } catch {
                 print("Erro ao deletar: \(error)")
             }

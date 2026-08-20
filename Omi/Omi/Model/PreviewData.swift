@@ -20,3 +20,15 @@ enum PreviewData {
         try? context.save()
     }
 }
+
+// Como aqui é sobre Preview e també importa o CoreData, posso chamar extensions do que preciso criar para passar chamar no preview
+extension LivroReceitasViewModel {
+    static var preview: LivroReceitasViewModel {
+        LivroReceitasViewModel(repo: ReceitaRepositorioCoreData(context: PersistenceController.preview.container.viewContext))
+    }
+}
+//extension LivroReceitasViewModel {
+//    static var preview: LivroReceitasViewModel {
+//        LivroReceitasViewModel(repo: ReceitaRepositorioCoreData(context: PersistenceController.preview.container.viewContext))
+//    }
+//}

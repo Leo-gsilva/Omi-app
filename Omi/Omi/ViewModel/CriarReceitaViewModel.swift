@@ -50,9 +50,9 @@ final class CriarReceitaViewModel {
     var descricaoDoPasso: String = ""
     var tempoPassoTexto: String = ""
     
-    private let repo: ReceitasRepo
+    private let repo: ReceitaRepositorioCoreData
     
-    init(repo: ReceitasRepo) {
+    init(repo: ReceitaRepositorioCoreData) {
         self.repo = repo
     }
     

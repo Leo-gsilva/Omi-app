@@ -6,30 +6,24 @@
 ////
 //
 import SwiftUI
-import CoreData
+import Observation
 
 struct LivroReceitasViewSimples: View {
-    @State private var viewModel = LivroReceitasViewModel()
+    // repo j[a vem injetado por fora
+    // @Bindable permite usar o $viewModel.categoriaAtual com Picker/conteole
+    @Bindable var viewModel: LivroReceitasViewModel
     
-    @FetchRequest(
-        sortDescriptors: [
-            NSSortDescriptor(
-                keyPath: \Receita.titulo,
-                ascending: true
-            )
-        ]
-    )
-    private var receitas: FetchedResults<Receita>
+//    let receitas: FetchedResults<Receita>
     
 //    @State private var categoriaSelecionada = "Sobremesa"
 //
 //    private let categorias = ["sobremesa", "salgado", "bebida", "massa", "lanche"]
     
-    private var receitasFiltradas: [Receita] {
-        receitas.filter{
-            $0.categoria == viewModel.categoriaAtual.rawValue
-        }
-    }
+//    private var receitasFiltradas: [Receita] {
+//        receitas.filter{
+//            $0.categoria == viewModel.categoriaAtual.rawValue
+//        }
+//    }
 
     
     var body: some View {
@@ -40,18 +34,21 @@ struct LivroReceitasViewSimples: View {
         }
         .pickerStyle(.segmented)
         
-        TabView {
-            ForEach(receitasFiltradas) { receita in
-                ReceitaPageView(
-                    receita: receita
-                )
+        if viewModel.receitasFiltradas.isEmpty {
+            ContentUnavailableView("Nenhuma receita nessa categoria", systemImage: "book")
+        } else {
+            TabView {
+                ForEach(viewModel.receitasFiltradas) { receita in
+                    ReceitaPageView(
+                        receita: receita
+                    )
+                }
             }
+            .tabViewStyle(.page)
         }
-        .tabViewStyle(.page)
     }
 }
 
 #Preview {
-    LivroReceitasViewSimples()
-        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    LivroReceitasViewSimples(viewModel: .preview)
 }

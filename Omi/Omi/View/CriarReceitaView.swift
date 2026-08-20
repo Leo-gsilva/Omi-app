@@ -80,7 +80,7 @@ struct CriarReceitaView: View {
     //Criando contexto fake pro preview
     let context = PersistenceController.preview.container.viewContext
     // Repo teste para o preview
-    let repo = ReceitasRepo(context: context)
+    let repo = ReceitaRepositorioCoreData(context: context)
     //Criando viewModels fake pro preview
     let viewModel = CriarReceitaViewModel(repo: repo)
     // Gerando o preview com dados fake
