@@ -53,6 +53,12 @@ enum FontesApp {
     )
         .weight(.heavy)
     
+    static let Semibold = Font.custom(
+        "Dosis",
+        size: 14,
+        relativeTo: .body
+    )
+        .weight(.semibold)
 }
 
 
