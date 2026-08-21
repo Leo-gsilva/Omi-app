@@ -38,6 +38,9 @@ protocol ReceitaRepositorio {
     func deletarReceita(id: UUID) throws
     
     // Passo
+    
+    func buscarPassos(para receita: Receita) throws -> [PassoReceita] 
+    
     func criarPasso(
         receitaId: UUID,
         etapa: Int16,

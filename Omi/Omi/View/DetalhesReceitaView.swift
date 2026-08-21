@@ -5,106 +5,95 @@
 //    //  Created by Igor Carrasco on 19/08/26.
 //    //
 //
-//    import SwiftUI
-//    import CoreData
-//
-//struct DetalhesReceitaView: View {
-//    @State var viewModel: DetalhesReceitaViewModel
-//    
-//    init(viewModel: DetalhesReceitaViewModel) {
-//        self.viewModel = viewModel
-//    }
-//    
-//    var body: some View {
-//        ZStack{
-//            
-//            Color(.cordoFundo) // Use your custom color asset here
-//            .ignoresSafeArea()
-//            
-//            VStack(alignment: .leading){
-//                
-//                ZStack {
-//                    // 1. Added resizable and scaledToFill so the image fills the entire 308x188 box!
-//                    Image(viewModel.receita.imagem ?? "Ovo0")
-//                        .resizable()
-//                        .scaledToFill()
-//                        .frame(width: 308, height: 188) // Constrain the image size
-//                        .clipped() // Cut off any extra image that spills out
-//                    
-//                    VStack {
-//                        Spacer() // Pushes everything to the bottom
-//                        
-//                        HStack {
-//                            // 2. REMOVED the left Spacer() that was here!
-//                            
-//                            HStack(spacing: 8){
-//                                Image(systemName: "clock")
-//                                    .font(FontesApp.Semibold)
-//                                Text("\(viewModel.receita.tempoDePreparo) min")
-//                                    .font(FontesApp.Semibold)
-//                                    .foregroundStyle(.cordosTextos)
-//                            }
-//                            .padding(.horizontal, 16)
-//                            .padding(.vertical, 8)
-//                            .background(Color(.cordoFundo).opacity(0.9))
-//                            .clipShape(Capsule())
-//                            .shadow(radius: 4)
-//                            
-//                            HStack(spacing: 8){
-//                                Image(systemName: "chart.pie")
-//                                    .font(FontesApp.Semibold)
-//                                Text("\(viewModel.receita.porcoes ?? "1") pessoas")
-//                                    .font(FontesApp.Semibold)
-//                                    .foregroundStyle(.cordosTextos)
-//                            }
-//                            .padding(.horizontal, 16)
-//                            .padding(.vertical, 8)
-//                            .background(Color(.cordoFundo).opacity(0.9))
-//                            .clipShape(Capsule())
-//                            .shadow(radius: 4)
-//                            
-//                            // 3. KEPT the right Spacer to push the badges to the left
-//                            Spacer()
-//                        }
-//                        .padding(.leading, 16) // Adds breathing room from the left edge
-//                        .padding(.bottom, 16)  // Adds breathing room from the bottom edge
-//                    }
-//                }
-//                .frame(width: 308, height: 188)
-//                .clipShape(RoundedRectangle(cornerRadius: 18))
-//                
-//                Text(viewModel.receita.titulo ?? "Titulo")
-//                
-//                    .font(FontesApp.titulo)
-//                    .foregroundStyle(.cordosTextos)
-//                    .padding(.horizontal)
-//                    .background(.cordoFundoTexto)
-//                    .clipShape(RoundedRectangle(cornerRadius: 11))
-//                
-//                Spacer()
-//            }
-//            
-//        }
-//        
-//    }
-//}
-//
-//    #Preview {
-//        // 1. Grab the safe, fake "in-memory" context
-//            let context = PersistenceController.preview.container.viewContext
-//            let previewRepo = ReceitasRepo(context: context)
-//            
-//            // 2. Create a "Dummy" Recipe just for the canvas
-//            let receitaFake = Receita(context: context)
-//            receitaFake.id = UUID()
-//            receitaFake.titulo = "Bolo de Cenoura"
-//            receitaFake.imagem = "Etiqueta vermelha"
-//            receitaFake.tempoDePreparo = 10
-//            receitaFake.porcoes = "4"
-//            
-//            // 3. Initialize the ViewModel with our fake data
-//            let previewViewModel = DetalhesReceitaViewModel(receita: receitaFake, repo: previewRepo)
-//            
-//            // 4. Inject the initialized ViewModel into the View
-//            return DetalhesReceitaView(viewModel: previewViewModel)
-//    }
+import SwiftUI
+import CoreData
+
+struct DetalhesReceitaView: View {
+    let receita: ReceitaModel
+
+    
+    var body: some View {
+        ZStack {
+            Color(.cordoFundo)
+                .ignoresSafeArea()
+
+           
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        
+
+                        ReceitaHeroView(
+                            imagemData: receita.imagem,
+                            titulo: receita.titulo
+                        )
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            TituloSecao(texto: "Descrição:")
+                            CartaoClaro {
+                                Text(receita.descricao)
+                                    .font(FontesApp.corpo)
+                                    .foregroundStyle(.cordosTextos)
+                            }
+                        }
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            TituloSecao(texto: "Ingredientes:")
+                            CartaoClaro {
+                                ForEach(receita.ingredientes) { item in
+                                    HStack(alignment: .top, spacing: 6) {
+                                        Text("•")
+                                        Text("\(item.quantidade) \(item.medida) de \(item.nome)")
+                                    }
+                                    .font(FontesApp.corpo)
+                                    .foregroundStyle(.cordosTextos)
+                                }
+                            }
+                        }
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            TituloSecao(texto: "Modo de Preparo:")
+                            VStack(spacing: 16) {
+                                ForEach(receita.passos) { passo in
+                                    ReceitaEtapaCardView(
+                                        numero: passo.etapa,
+                                        nome: passo.nome,
+                                        texto: passo.texto,
+                                        imagemData: passo.texto
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
+                    .padding(.bottom, 32)
+                }
+        }
+    }
+}
+
+#Preview {
+    DetalhesReceitaView(
+        receita: ReceitaModel(
+            id: UUID(),
+            titulo: "Bolo de Cenoura",
+            categoria: .sobremesa,
+            descricao: "O bolo de cenoura é uma receita clássica e amada por todos! Com sua massa fofinha e saborosa, esse bolo é perfeito para um lanche da tarde ou como sobremesa em qualquer ocasião.",
+            imagem: "Bolo",
+            tempoDePreparo: 40,
+            porcoes: "8",
+            dificuldade: nil,
+            dataCriacao: Date(),
+            dataAtualizacao: nil,
+            ingredientes: [
+                IngredienteModel(id: UUID(), nome: "cenouras médias", quantidade: "3", medida: "unidades"),
+                IngredienteModel(id: UUID(), nome: "ovos", quantidade: "4", medida: "unidades")
+            ],
+            passos: [
+                PassoModel(id: UUID(), etapa: 1, nome: "Massa do Bolo", texto: "Bata as cenouras, os ovos e o óleo no liquidificador.", tempoEstimado: 40),
+                PassoModel(id: UUID(), etapa: 2, nome: "Massa do Bolo", texto: "Bata as cenouras, os ovos e o óleo no liquidificador.", tempoEstimado: 40)
+                
+            ]
+        )
+    )
+}
