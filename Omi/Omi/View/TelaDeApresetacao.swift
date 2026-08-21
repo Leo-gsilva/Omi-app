@@ -8,14 +8,7 @@
 import SwiftUI
 
 struct TelaDeApresetacao: View {
-    //@Environment(\.managedObjectContext) private var contexto
-    //@Environment(AppRouter.self) private var router
-    
     @Bindable var viewModel: OnboardingViewModel
-    
-    //    private var pagina: OnboardingModel {
-    //        viewModel.paginas[0]
-    //    }
     
     var body: some View {
         GeometryReader { geo in
@@ -47,19 +40,15 @@ struct TelaDeApresetacao: View {
 //                    router.push(.onboarding)
                     viewModel.continuar()
                 }
+                .frame(width: geo.size.width * 0.80)
             }
-            .frame(width: geo.size.width * 0.80)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.cordoFundo)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.cordoFundo)
     }
 }
 
 
 #Preview{
-    NavigationStack {
-        TelaDeApresetacao(viewModel: OnboardingViewModel())
-    }
-    .environment(\.managedObjectContext, ReceitaRepositorioCoreData.preview)
-    //.environment(AppRouter())
+    TelaDeApresetacao(viewModel: OnboardingViewModel())
 }
