@@ -20,7 +20,7 @@ struct Onboarding5: View {
             VStack(spacing: 0) {
                 ProgressoOnboarding(
                     paginaAtual: viewModel.paginaAtual,
-                    totalDePaginas: viewModel.totalDePaginas
+                    totalDePaginas: viewModel.totalDePaginas - 1
                 )
                 
                 
@@ -56,6 +56,7 @@ struct Onboarding5: View {
                 
                 BotaoOnboarding(textoBotao: "Continuar") {
                     viewModel.continuar()
+//                    router.push(.telaInicial)
                 }
                 .frame(width: geo.size.width * 0.80)
             }

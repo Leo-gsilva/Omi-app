@@ -29,7 +29,7 @@ struct Onboarding2: View {
                 
                 ProgressoOnboarding(
                     paginaAtual: viewModel.paginaAtual,
-                    totalDePaginas: viewModel.totalDePaginas
+                    totalDePaginas: viewModel.totalDePaginas - 1
                 )
                 
                 Text(pagina.titulo)

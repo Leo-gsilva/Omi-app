@@ -7,13 +7,8 @@
 
 import SwiftUI
 
-struct TeladeApresentação: View {
-    
+struct TelaDeApresetacao: View {
     @Bindable var viewModel: OnboardingViewModel
-    
-    private var pagina: OnboardingModel {
-        viewModel.paginas[0]
-    }
     
     var body: some View {
         GeometryReader { geo in
@@ -26,22 +21,23 @@ struct TeladeApresentação: View {
                 
                 Spacer()
                 
-                    Text("O seu app para\n anotar as receitas\n do dia a dia!")
+                Text("O seu app para\n anotar as receitas\n do dia a dia!")
                     .multilineTextAlignment(.center)
                     .font(FontesApp.tituloComTexto)
                     .foregroundStyle(Color.cordosTextos)
-                    
+                
                 Spacer()
                 
-                    Image("Ovo0")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width:geo.size.height * 0.35)
+                Image("Ovo0")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width:geo.size.height * 0.35)
                 
-                        Spacer()
+                Spacer()
                 
                 
                 BotaoOnboarding(textoBotao: "Continuar") {
+//                    router.push(.onboarding)
                     viewModel.continuar()
                 }
                 .frame(width: geo.size.width * 0.80)
@@ -52,8 +48,7 @@ struct TeladeApresentação: View {
     }
 }
 
+
 #Preview{
-    TeladeApresentação(
-        viewModel: OnboardingViewModel()
-    )
+    TelaDeApresetacao(viewModel: OnboardingViewModel())
 }

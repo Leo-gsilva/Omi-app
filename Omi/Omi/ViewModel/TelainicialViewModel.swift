@@ -10,11 +10,21 @@ import Observation
 
 @Observable
 class TelaInicialViewModel {
+    private let repo: ReceitaRepositorio
     
-    var paginaAtual = 1
-    let totalPaginas = 2
+    init(repo: ReceitaRepositorio) {
+        self.repo = repo
+    }
     
-    var livroAberto = false
+    var receitas: [ReceitaModel] = []
+    var paginaAtual: Int = 0
+    var totalPaginas = 1
+    
+    var livroAberto: Bool = false
+    
+    func getTotalPaginas() -> Int {
+        return receitas.count
+    }
     
     func abrirLivro() {
         guard !livroAberto else {

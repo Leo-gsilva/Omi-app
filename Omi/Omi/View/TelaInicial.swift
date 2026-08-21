@@ -9,7 +9,8 @@ import SwiftUI
 
 struct TelaInicial: View {
     
-    @State private var viewModel = TelaInicialViewModel()
+    @Bindable var viewModel: LivroReceitasViewModel
+//    @Bindable var viewModelLivroSimples: LivroReceitasViewModel
     @State private var pesquisa = ""
     @State private var mostrarLivroAberto = false
     
@@ -46,10 +47,21 @@ struct TelaInicial: View {
                             .opacity(viewModel.livroAberto ? 1 : 0)
                             .ignoresSafeArea(edges: .all)
                         
+                        if viewModel.livroAberto {
+                            LivroReceitasViewSimples(viewModel: viewModel)
+                                .frame(
+                                    width: geo.size.width * 0.75,
+                                    height: geo.size.height * 0.55
+                                )
+                                .padding(.leading, geo.size.width * 0.12)
+                                .transition(.opacity)
+                                .zIndex(2)
+                        }
+                        
                         Image("ReceitaTelaInicial")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: geo.size.width * 0.85)
+                            .frame(width: geo.size.width * 0.90)
                             .rotation3DEffect(
                                 .degrees(viewModel.livroAberto ? -90 : 0),
                                 axis: (x: 0, y: 1, z: 0),
@@ -58,14 +70,16 @@ struct TelaInicial: View {
                             )
                             .shadow(color: .black.opacity(0.25), radius: 14, x: 8, y: 10)
                             .zIndex(1)
+                            .padding(.horizontal, 30)
                     }
+                    
                     .clipped()
                     .contentShape(Rectangle())
+                                        
                     .onTapGesture {
                         
                         abrirLivro()
                     }
-                    
                     .animation(
                         .easeInOut(duration: 0.4),
                         value: viewModel.paginaAtual
@@ -76,7 +90,6 @@ struct TelaInicial: View {
                         totalPaginas: viewModel.totalPaginas,
                         
                         voltar: {
-                            
                             withAnimation(
                                 .easeInOut(duration: 0.4)
                             ) {
@@ -85,14 +98,10 @@ struct TelaInicial: View {
                         },
                         
                         avancar: {
-                            
                             if !viewModel.livroAberto {
-                                
                                 abrirLivro()
-                                
                                 return
                             }
-                            
                             withAnimation(
                                 .easeInOut(duration: 0.4)
                             ) {
@@ -180,5 +189,5 @@ struct TelaInicial: View {
 
 
 #Preview {
-    TelaInicial()
+    TelaInicial(viewModel: LivroReceitasViewModel.preview)
 }

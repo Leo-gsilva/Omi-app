@@ -13,6 +13,9 @@ import Observation
 final class OnboardingViewModel {
     var postitAtivo: Int? = nil
     var paginaAtual: Int = 0
+    var finalizado: Bool = false
+    
+    let totalDePaginas = 6
     
     let paginas: [OnboardingModel] = [
         OnboardingModel(
@@ -57,21 +60,21 @@ final class OnboardingViewModel {
         )
     ]
     
-    var totalDePaginas: Int {
-        paginas.count
-    }
+//    var totalDePaginas: Int {
+//        paginas.count
+//    }
     
-    var paginaAtualModel: OnboardingModel {
-        paginas[paginaAtual]
-    }
+//    var paginaAtualModel: OnboardingModel {
+//        paginas[paginaAtual+1]
+//    }
     
     func continuar() {
-        guard paginaAtual < totalDePaginas - 1 else {
-            finalizarOnboarding()
-            return
+        if paginaAtual < totalDePaginas - 1 {
+            paginaAtual += 1
+            print(paginaAtual)
+        } else {
+            finalizado = true
         }
-        
-        paginaAtual += 1
     }
     
     func voltar() {
@@ -101,7 +104,8 @@ final class OnboardingViewModel {
         }
     }
     
-    private func finalizarOnboarding() {
-        print("Onboarding finalizado")
-    }
+//    private func finalizarOnboarding() {
+//        finalizado = true
+//        print("Onboarding finalizado")
+//    }
 }
