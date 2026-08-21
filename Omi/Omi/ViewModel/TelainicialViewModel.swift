@@ -16,10 +16,15 @@ class TelaInicialViewModel {
         self.repo = repo
     }
     
-    var paginaAtual = 1
-    let totalPaginas = 2
+    var receitas: [ReceitaModel] = []
+    var paginaAtual: Int = 0
+    var totalPaginas = 1
     
-    var livroAberto = false
+    var livroAberto: Bool = false
+    
+    func getTotalPaginas() -> Int {
+        return receitas.count
+    }
     
     func abrirLivro() {
         guard !livroAberto else {

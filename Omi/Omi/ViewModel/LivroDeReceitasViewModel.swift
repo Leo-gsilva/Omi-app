@@ -17,6 +17,8 @@ final class LivroReceitasViewModel {
     private var observer: NSObjectProtocol?
     // Recebe protocolo e não a classe
     
+    var livroAberto: Bool = false
+    
     init(repo: ReceitaRepositorio) {
         self.repo = repo
         carregarReceitas()
@@ -26,6 +28,12 @@ final class LivroReceitasViewModel {
     var receitasFiltradas: [ReceitaModel] {
         receitas.filter { $0.categoria == categoriaAtual }
     }
+
+    var totalPaginas: Int {
+        receitasFiltradas.count
+    }
+    
+    var paginaAtual = 0
     
     func carregarReceitas() {
         do {
@@ -71,6 +79,31 @@ final class LivroReceitasViewModel {
             queue: .main ){ [weak self] _ in
                 self?.carregarReceitas()
             }
+    }
+    
+    // Funcs do antigo TelaInicialViewModel
+    func abrirLivro() {
+        guard !livroAberto else {
+            return
+        }
+
+        livroAberto = true
+    }
+
+    func avancar() {
+        guard paginaAtual < totalPaginas else {
+            return
+        }
+
+        paginaAtual += 1
+    }
+    
+    func voltar() {
+        guard paginaAtual > 1 else {
+            return
+        }
+        
+        paginaAtual -= 1
     }
     
     deinit {

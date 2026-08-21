@@ -21,7 +21,7 @@
             WindowGroup {
                 if onboardingConcluido {
                     NavigationStack(path: $router.path) {
-                        TelaInicial(viewModel: TelaInicialViewModel(repo: ReceitaRepositorioCoreData(context: persistentController.container.viewContext)))
+                        TelaInicial(viewModel: LivroReceitasViewModel(repo: ReceitaRepositorioCoreData(context: persistentController.container.viewContext)))
                     }
                     .navigationDestination(for: Rota.self) { rota in
                         RotasDestinoView(rota: rota)
