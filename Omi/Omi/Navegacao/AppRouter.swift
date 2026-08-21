@@ -34,4 +34,9 @@ final class AppRouter {
     func fecharSheet() {
         sheetAtual = nil
     }
+    
+    // não é push ou pop, ele troca a raiz do app inteiro
+    func finalizarOnboarding() {
+        UserDefaults.standard.set(true, forKey: "onboardingConcluido")
+    }
 }

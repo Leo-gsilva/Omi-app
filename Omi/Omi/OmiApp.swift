@@ -12,19 +12,30 @@
     struct OmiApp: App {
         let persistentController = PersistenceController.shared
         @State private var router = AppRouter()
+        
+        // Le do UserDefaults quando é finalizado pelo finalizarOnboarding()
+        // @AppStorage observa a notificação de mudança
+        @AppStorage("onboardingConcluido") private var onboardingConcluido: Bool = false
 
         var body: some Scene {
             WindowGroup {
-                NavigationStack(path: $router.path) {
-                    TeladeApresentação()
-                        .navigationDestination(for: Rota.self) { rota in
-                            RotasDestinoView(rota: rota)
-                        }
+                if onboardingConcluido {
+                    NavigationStack(path: $router.path) {
+                        TelaInicial(viewModel: TelaInicialViewModel(repo: ReceitaRepositorioCoreData(context: persistentController.container.viewContext)))
+                    }
+                    .navigationDestination(for: Rota.self) { rota in
+                        RotasDestinoView(rota: rota)
+                    }
+                } else {
+                    NavigationStack(path: $router.path) {
+                        OnboardingView(viewModel: OnboardingViewModel())
+                            .navigationDestination(for: Rota.self) { rota in
+                                RotasDestinoView(rota: rota)
+                            }
+                    }
                 }
-                .environment(\.managedObjectContext, persistentController.container.viewContext)
-                .environment(router)
-//                ContentViewCoreDataTestes()
-//                    .environment(\.managedObjectContext, persistentController.container.viewContext)
             }
+            .environment(\.managedObjectContext, persistentController.container.viewContext)
+            .environment(router)
         }
     }

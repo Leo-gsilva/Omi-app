@@ -15,7 +15,7 @@ final class OnboardingViewModel {
     var paginaAtual: Int = 0
     var finalizado: Bool = false
     
-    let totalDePaginas = 5
+    let totalDePaginas = 6
     
     let paginas: [OnboardingModel] = [
         OnboardingModel(
@@ -64,13 +64,14 @@ final class OnboardingViewModel {
 //        paginas.count
 //    }
     
-    var paginaAtualModel: OnboardingModel {
-        paginas[paginaAtual]
-    }
+//    var paginaAtualModel: OnboardingModel {
+//        paginas[paginaAtual+1]
+//    }
     
     func continuar() {
         if paginaAtual < totalDePaginas - 1 {
             paginaAtual += 1
+            print(paginaAtual)
         } else {
             finalizado = true
         }
@@ -103,8 +104,8 @@ final class OnboardingViewModel {
         }
     }
     
-    private func finalizarOnboarding() {
-        finalizado = true
-        print("Onboarding finalizado")
-    }
+//    private func finalizarOnboarding() {
+//        finalizado = true
+//        print("Onboarding finalizado")
+//    }
 }

@@ -15,14 +15,16 @@ struct OnboardingView: View {
         Group{
             switch viewModel.paginaAtual {
             case 0:
-                Onboarding1(viewModel: viewModel)
+                TelaDeApresetacao(viewModel: viewModel)
             case 1:
-                Onboarding2(viewModel: viewModel)
+                Onboarding1(viewModel: viewModel)
             case 2:
-                Onboarding3(viewModel: viewModel)
+                Onboarding2(viewModel: viewModel)
             case 3:
-                Onboarding4(viewModel: viewModel)
+                Onboarding3(viewModel: viewModel)
             case 4:
+                Onboarding4(viewModel: viewModel)
+            case 5:
                 Onboarding5(viewModel: viewModel)
             default:
                 EmptyView()
@@ -30,8 +32,7 @@ struct OnboardingView: View {
         }
         .onChange(of: viewModel.finalizado) { _, finalizado in
             if finalizado {
-                router.popATodas()
-                router.push(.telaInicial)
+                router.finalizarOnboarding()
             }
         }
     }
@@ -39,4 +40,5 @@ struct OnboardingView: View {
 
 #Preview {
     OnboardingView()
+        .environment(AppRouter())
 }

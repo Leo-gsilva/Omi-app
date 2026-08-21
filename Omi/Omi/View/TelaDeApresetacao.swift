@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct TeladeApresentação: View {
+struct TelaDeApresetacao: View {
     //@Environment(\.managedObjectContext) private var contexto
-    @Environment(AppRouter.self) private var router
+    //@Environment(AppRouter.self) private var router
     
-    //@Bindable var viewModel: OnboardingViewModel
+    @Bindable var viewModel: OnboardingViewModel
     
     //    private var pagina: OnboardingModel {
     //        viewModel.paginas[0]
@@ -44,7 +44,8 @@ struct TeladeApresentação: View {
                 
                 
                 BotaoOnboarding(textoBotao: "Continuar") {
-                    router.push(.onboarding)
+//                    router.push(.onboarding)
+                    viewModel.continuar()
                 }
             }
             .frame(width: geo.size.width * 0.80)
@@ -57,8 +58,8 @@ struct TeladeApresentação: View {
 
 #Preview{
     NavigationStack {
-        TeladeApresentação()
+        TelaDeApresetacao(viewModel: OnboardingViewModel())
     }
     .environment(\.managedObjectContext, ReceitaRepositorioCoreData.preview)
-    .environment(AppRouter())
+    //.environment(AppRouter())
 }
