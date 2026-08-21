@@ -45,11 +45,11 @@ struct TelaInicial: View {
                             .frame(width: geo.size.width * 1.00)
                             .opacity(viewModel.livroAberto ? 1 : 0)
                             .ignoresSafeArea(edges: .all)
-                        
+                            
                         Image("ReceitaTelaInicial")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: geo.size.width * 0.85)
+                            .frame(width: geo.size.width * 0.90)
                             .rotation3DEffect(
                                 .degrees(viewModel.livroAberto ? -90 : 0),
                                 axis: (x: 0, y: 1, z: 0),
@@ -58,9 +58,12 @@ struct TelaInicial: View {
                             )
                             .shadow(color: .black.opacity(0.25), radius: 14, x: 8, y: 10)
                             .zIndex(1)
+                            .padding(.horizontal, 30)
                     }
+                    
                     .clipped()
                     .contentShape(Rectangle())
+                                        
                     .onTapGesture {
                         
                         abrirLivro()
