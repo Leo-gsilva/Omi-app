@@ -6,7 +6,7 @@
 //    //
 //
 import SwiftUI
-import CoreData
+//import CoreData
 
 struct DetalhesReceitaView: View {
     let receita: ReceitaModel

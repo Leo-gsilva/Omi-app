@@ -23,7 +23,7 @@ struct RotasDestinoView: View {
             TelaInicial(viewModel: LivroReceitasViewModel(repo: ReceitaRepositorioCoreData(context: contexto)))
         
         case .detalheReceita(let receita):
-            DetalhesReceitaView(viewModel: DetalhesReceitaViewModel(receita: receita, repo: ReceitaRepositorioCoreData(context: contexto)))
+            DetalhesReceitaView(receita: receita)
             
         case .criarReceita:
             CriarReceitaView(viewModel: CriarReceitaViewModel(repo: ReceitaRepositorioCoreData(context: contexto)))
