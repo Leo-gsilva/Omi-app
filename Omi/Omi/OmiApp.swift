@@ -11,14 +11,31 @@
     @main
     struct OmiApp: App {
         let persistentController = PersistenceController.shared
-        @Bindable private var viewModel = OnboardingViewModel()
+        @State private var router = AppRouter()
+        
+        // Le do UserDefaults quando é finalizado pelo finalizarOnboarding()
+        // @AppStorage observa a notificação de mudança
+        @AppStorage("onboardingConcluido") private var onboardingConcluido: Bool = false
 
         var body: some Scene {
             WindowGroup {
-//                ContentViewCoreDataTestes()
-//                    .environment(\.managedObjectContext, persistentController.container.viewContext)
-                TeladeApresentação(viewModel: viewModel)
-                    .environment(\.managedObjectContext, persistentController.container.viewContext)
+                if onboardingConcluido {
+                    NavigationStack(path: $router.path) {
+                        TelaInicial(viewModel: TelaInicialViewModel(repo: ReceitaRepositorioCoreData(context: persistentController.container.viewContext)))
+                    }
+                    .navigationDestination(for: Rota.self) { rota in
+                        RotasDestinoView(rota: rota)
+                    }
+                } else {
+                    NavigationStack(path: $router.path) {
+                        OnboardingView(viewModel: OnboardingViewModel())
+                            .navigationDestination(for: Rota.self) { rota in
+                                RotasDestinoView(rota: rota)
+                            }
+                    }
+                }
             }
+            .environment(\.managedObjectContext, persistentController.container.viewContext)
+            .environment(router)
         }
     }

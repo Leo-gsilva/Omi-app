@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProgressoOnboarding: View {
-    
+
     let paginaAtual: Int
     let totalDePaginas: Int
     
@@ -19,7 +19,7 @@ struct ProgressoOnboarding: View {
                 
                 Capsule()
                     .fill(
-                        index == paginaAtual
+                        index == paginaAtual - 1
                         ? (Color.cordoBotao)
                         : Color.gray.opacity(0.5)
                     )

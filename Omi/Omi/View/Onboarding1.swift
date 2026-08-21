@@ -20,7 +20,7 @@ struct Onboarding1: View {
             VStack{
                 ProgressoOnboarding(
                     paginaAtual: viewModel.paginaAtual,
-                    totalDePaginas: viewModel.totalDePaginas
+                    totalDePaginas: viewModel.totalDePaginas - 1
                 )
                 
                 

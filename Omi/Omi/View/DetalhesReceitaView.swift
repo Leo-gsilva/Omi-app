@@ -108,3 +108,17 @@
 //            // 4. Inject the initialized ViewModel into the View
 //            return DetalhesReceitaView(viewModel: previewViewModel)
 //    }
+
+import SwiftUI
+
+struct DetalhesReceitaView: View {
+    @Bindable var viewModel: DetalhesReceitaViewModel
+    
+    var body: some View {
+        Text("Hello World")
+    }
+}
+
+//#Preview {
+//    DetalhesReceitaView()
+//}
