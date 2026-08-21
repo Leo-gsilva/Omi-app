@@ -20,9 +20,7 @@ struct ReceitaEtapaCardView: View {
                         .font(FontesApp.subtitulo)
                         .foregroundStyle(.cordosTextos)
 
-                    Rectangle()
-                        .fill(Color(.corDivider))
-                        .frame(height: 2)
+                    DividerPersonalizado()
 
                     Text(texto)
                         .font(FontesApp.corpo)
