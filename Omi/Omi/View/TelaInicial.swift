@@ -46,6 +46,7 @@ struct TelaInicial: View {
                             .opacity(viewModel.livroAberto ? 1 : 0)
                             .ignoresSafeArea(edges: .all)
                         
+                        
                         Image("ReceitaTelaInicial")
                             .resizable()
                             .scaledToFit()
@@ -58,6 +59,8 @@ struct TelaInicial: View {
                             )
                             .shadow(color: .black.opacity(0.25), radius: 14, x: 8, y: 10)
                             .zIndex(1)
+                            .padding(.horizontal, 40) // pra empurrar o livro fechado para a direita, deixando-o na mesma posição em que ele esta deitado, arrumando ate o problema da borda que dobrava
+
                     }
                     .clipped()
                     .contentShape(Rectangle())
