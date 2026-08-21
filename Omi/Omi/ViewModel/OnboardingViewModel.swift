@@ -15,6 +15,8 @@ final class OnboardingViewModel {
     var paginaAtual: Int = 0
     var finalizado: Bool = false
     
+    let totalDePaginas = 5
+    
     let paginas: [OnboardingModel] = [
         OnboardingModel(
             titulo: "O que o app faz?",
@@ -58,21 +60,20 @@ final class OnboardingViewModel {
         )
     ]
     
-    var totalDePaginas: Int {
-        paginas.count
-    }
+//    var totalDePaginas: Int {
+//        paginas.count
+//    }
     
     var paginaAtualModel: OnboardingModel {
         paginas[paginaAtual]
     }
     
     func continuar() {
-        guard paginaAtual < totalDePaginas - 1 else {
-            finalizarOnboarding()
-            return
+        if paginaAtual < totalDePaginas - 1 {
+            paginaAtual += 1
+        } else {
+            finalizado = true
         }
-        
-        paginaAtual += 1
     }
     
     func voltar() {

@@ -11,14 +11,20 @@
     @main
     struct OmiApp: App {
         let persistentController = PersistenceController.shared
-        @Bindable private var viewModel = OnboardingViewModel()
+        @State private var router = AppRouter()
 
         var body: some Scene {
             WindowGroup {
+                NavigationStack(path: $router.path) {
+                    TeladeApresentação()
+                        .navigationDestination(for: Rota.self) { rota in
+                            RotasDestinoView(rota: rota)
+                        }
+                }
+                .environment(\.managedObjectContext, persistentController.container.viewContext)
+                .environment(router)
 //                ContentViewCoreDataTestes()
 //                    .environment(\.managedObjectContext, persistentController.container.viewContext)
-                TeladeApresentação(viewModel: viewModel)
-                    .environment(\.managedObjectContext, persistentController.container.viewContext)
             }
         }
     }

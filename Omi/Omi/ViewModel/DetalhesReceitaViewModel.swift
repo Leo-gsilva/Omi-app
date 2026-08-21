@@ -4,24 +4,23 @@
 ////
 ////  Created by Leonardo Gonçalves da Silva on 19/08/26.
 ////
-//import SwiftUI
-//import Observation
+import SwiftUI
+import Observation
 //
 //// pelo que li, é mais tranquilo implementar o coredata usando o ObservedObject
-//@Observable
-//class DetalhesReceitaViewModel {
-//    let receita: Receita
+@Observable
+class DetalhesReceitaViewModel {
+    let receita: ReceitaModel
 //    var passo: [PassoReceita] = []
 //    var ingredientes: [IngredienteDaReceita] = []
-//    
-//    private let repo: ReceitasRepo
-//    
-//    init(receita: Receita, repo: ReceitasRepo) {
-//        self.receita = receita
-//        self.repo = repo
-//        carregarDetalhes()
-//    }
-//    
+    
+    private let repo: ReceitaRepositorioCoreData
+    
+    init(receita: ReceitaModel, repo: ReceitaRepositorioCoreData) {
+        self.receita = receita
+        self.repo = repo
+    }
+    
 //    func carregarDetalhes() {
 //        do{
 //            self.passo = try repo.buscarPassos(para: receita)
@@ -35,4 +34,4 @@
 //            print("Erro ao carregar detalhes: \(error)")
 //        }
 //    }
-//}
+}

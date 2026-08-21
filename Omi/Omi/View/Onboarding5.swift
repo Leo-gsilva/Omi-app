@@ -56,6 +56,7 @@ struct Onboarding5: View {
                 
                 BotaoOnboarding(textoBotao: "Continuar") {
                     viewModel.continuar()
+//                    router.push(.telaInicial)
                 }
                 .frame(width: geo.size.width * 0.80)
             }
