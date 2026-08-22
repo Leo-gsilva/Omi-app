@@ -8,9 +8,9 @@ import Observation
 
 @Observable
 final class CriarReceitaViewModel {
-    private let repo: ReceitaRepositorioCoreData
+    private let repo: ReceitaRepositorio
     
-    init(repo: ReceitaRepositorioCoreData) {
+    init(repo: ReceitaRepositorio) {
         self.repo = repo
     }
     

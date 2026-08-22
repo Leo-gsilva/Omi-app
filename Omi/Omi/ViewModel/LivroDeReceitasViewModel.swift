@@ -99,7 +99,7 @@ final class LivroReceitasViewModel {
     }
     
     func voltar() {
-        guard paginaAtual > 1 else {
+        guard paginaAtual > 0 else {
             return
         }
         

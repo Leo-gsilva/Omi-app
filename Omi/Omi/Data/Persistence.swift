@@ -43,21 +43,21 @@ struct PersistenceController {
         
         let context = controller.container.viewContext
         
-        let categorias = ["sobremesa", "salgado", "bebida", "massa", "lanche"]
-        
-        for i in 1...5 {
-            let receita = Receita(context: context)
-            
-            receita.id = UUID()
-            receita.titulo = "Receita \(i)"
-            receita.descricao = "Descrição da receita: \(i)"
-            receita.categoria = categorias.randomElement()
-            receita.tempoDePreparo = Int16(20 + i)
-            receita.porcoes = "8"
-            receita.dataCriacao = Date()
-        }
-        
-        try? context.save()
+//        let categorias = ["sobremesa", "salgado", "bebida", "massa", "lanche"]
+//        
+//        for i in 1...5 {
+//            let receita = Receita(context: context)
+//            
+//            receita.id = UUID()
+//            receita.titulo = "Receita \(i)"
+//            receita.descricao = "Descrição da receita: \(i)"
+//            receita.categoria = categorias.randomElement()
+//            receita.tempoDePreparo = Int16(20 + i)
+//            receita.porcoes = "8"
+//            receita.dataCriacao = Date()
+//        }
+//        
+//        try? context.save()
         
         return controller
     }()

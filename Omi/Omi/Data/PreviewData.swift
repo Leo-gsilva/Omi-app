@@ -46,3 +46,32 @@ extension CriarReceitaViewModel {
         CriarReceitaViewModel(repo: ReceitaRepositorioCoreData(context: PersistenceController.preview.container.viewContext))
     }
 }
+
+extension DetalhesReceitaViewModel {
+    static var preview: DetalhesReceitaViewModel {
+        DetalhesReceitaViewModel(
+            receita: ReceitaModel(
+                id: UUID(),
+                titulo: "Bolo de Cenoura",
+                categoria: .sobremesa,
+                descricao: "O bolo de cenoura é uma receita clássica e amada por todos! Com sua massa fofinha e saborosa, esse bolo é perfeito para um lanche da tarde ou como sobremesa em qualquer ocasião.",
+                imagem: "Bolo",
+                tempoDePreparo: 40,
+                porcoes: "8",
+                dificuldade: nil,
+                dataCriacao: Date(),
+                dataAtualizacao: nil,
+                ingredientes: [
+                    IngredienteModel(id: UUID(), nome: "cenouras médias", quantidade: "3", medida: "unidades"),
+                    IngredienteModel(id: UUID(), nome: "ovos", quantidade: "4", medida: "unidades")
+                ],
+                passos: [
+                    PassoModel(id: UUID(), etapa: 1, nome: "Massa do Bolo", texto: "Bata as cenouras, os ovos e o óleo no liquidificador.", tempoEstimado: 40),
+                    PassoModel(id: UUID(), etapa: 2, nome: "Massa do Bolo", texto: "Bata as cenouras, os ovos e o óleo no liquidificador.", tempoEstimado: 40)
+                    
+                ]
+            ),
+            repo: ReceitaRepositorioCoreData(context: PersistenceController.preview.container.viewContext)
+        )
+    }
+}
