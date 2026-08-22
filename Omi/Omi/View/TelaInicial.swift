@@ -143,7 +143,7 @@ struct TelaInicial: View {
                 
                 Button {
                     // Colocar o router e passar pra ele a view
-                    router.push(.criarReceita)
+                    router.apresentarSheet(.criarReceita)
                     print("Adicionar receita")
                 } label: {
                     

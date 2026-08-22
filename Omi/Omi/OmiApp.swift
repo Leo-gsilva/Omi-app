@@ -33,6 +33,12 @@ struct OmiApp: App {
             }
             .environment(\.managedObjectContext, persistentController.container.viewContext)
             .environment(router)
+            // Aprensenta o criatReceita como um modal, separada da pilha (path). Usa o mesmo RotasDestinoView
+            // Muda só como a tela aparece (como sheet, não empurrada na pilha).
+            .sheet(item: $router.sheetAtual) { rota in
+                RotasDestinoView(rota: rota)
+                    .environment(\.managedObjectContext, persistentController.container.viewContext) // Passa o environment novamente pra evitar perda de contexto no futuro, explicitando qual é o contexto a ser observado
+            }
         }
     }
 }

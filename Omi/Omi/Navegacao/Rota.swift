@@ -14,3 +14,8 @@ enum Rota: Hashable {
 //    case listaIngredientes
     case onboarding
 }
+
+extension Rota: Identifiable {
+    // Como Rota já é hashable, ela serve como seu próprio id
+    var id: Self { self }
+}

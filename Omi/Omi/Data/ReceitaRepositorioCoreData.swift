@@ -115,6 +115,10 @@ final class ReceitaRepositorioCoreData: ReceitaRepositorio {
         return entities.map { $0.toModel() }
     }
     
+    func buscarReceita(id: UUID) throws -> ReceitaModel? {
+        try buscarReceitaEntity(id: id)?.toModel()
+    }
+    
     func buscarIngredientes() throws -> [IngredienteCadastradoModel] {
         let request = NSFetchRequest<Ingrediente>(entityName: "Ingrediente")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Ingrediente.nome, ascending: true)]
