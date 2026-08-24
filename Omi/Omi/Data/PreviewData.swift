@@ -28,11 +28,7 @@ extension LivroReceitasViewModel {
     }
 }
 
-extension TelaInicialViewModel {
-    static var preview: TelaInicialViewModel {
-        TelaInicialViewModel(repo: ReceitaRepositorioCoreData(context: PersistenceController.preview.container.viewContext))
-    }
-}
+
 
 // .preview para o ContentViewCoreDataTestes
 extension ReceitaRepositorioCoreData {

@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct TrocarPagina: View {
+    @Bindable var viewModel: LivroReceitasViewModel
     
-    let paginaAtual: Int
-    let totalPaginas: Int
-    
+//    var paginaAtual: Int
+//    var totalPaginas: Int
+//    
     let voltar: () -> Void
     let avancar: () -> Void
     
@@ -37,7 +38,7 @@ struct TrocarPagina: View {
                 .contentShape(Rectangle())
                 .glassEffect()
                 
-                Text("\(paginaAtual)/\(totalPaginas)")
+                Text("\(viewModel.livroAberto ? viewModel.paginaAtual : 0)/\(viewModel.totalPaginas)")
                     .font(
                         .system(
                             size: 20,
@@ -73,8 +74,7 @@ struct TrocarPagina: View {
 
 #Preview {
     TrocarPagina(
-        paginaAtual: 1,
-        totalPaginas: 5,
+        viewModel: LivroReceitasViewModel.preview,
         voltar: {},
         avancar: {}
     )
