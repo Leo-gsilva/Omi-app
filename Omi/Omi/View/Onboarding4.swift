@@ -12,7 +12,7 @@ struct Onboarding4: View {
     @Bindable var viewModel: OnboardingViewModel
     
     private var pagina: OnboardingModel {
-        viewModel.paginas[2]
+        viewModel.paginas[3]
     }
     
     var body: some View {

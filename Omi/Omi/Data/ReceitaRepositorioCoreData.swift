@@ -53,7 +53,7 @@ final class ReceitaRepositorioCoreData: ReceitaRepositorio {
         titulo: String,
         categoria: String,
         descricao: String,
-        imagem: String,
+        imagem: Data?,
         tempoDePreparo: Int16,
         porcoes: String,
         dificuldade: String?,
@@ -95,7 +95,7 @@ final class ReceitaRepositorioCoreData: ReceitaRepositorio {
             passo.etapa = Int16(item.etapa)
             passo.nome = item.nome
             passo.texto = item.texto
-            passo.imagem = ""
+            passo.imagem = imagem
             passo.tempoEstimado = Int16(item.tempoEstimado)
             passo.receita = receita
         }
@@ -113,6 +113,10 @@ final class ReceitaRepositorioCoreData: ReceitaRepositorio {
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Receita.dataCriacao, ascending: false)]
         let entities = try contexto.fetch(request)
         return entities.map { $0.toModel() }
+    }
+    
+    func buscarReceita(id: UUID) throws -> ReceitaModel? {
+        try buscarReceitaEntity(id: id)?.toModel()
     }
     
     func buscarIngredientes() throws -> [IngredienteCadastradoModel] {
@@ -171,7 +175,7 @@ final class ReceitaRepositorioCoreData: ReceitaRepositorio {
         novoTitulo: String,
         novaCategoria: String,
         novaDescricao: String,
-        novaImagem: String,
+        novaImagem: Data?,
         novoTempoDePreparo: Int16,
         novasPorcoes: String,
         novaDificuldade: String?
@@ -196,7 +200,7 @@ final class ReceitaRepositorioCoreData: ReceitaRepositorio {
         novaEtapa: Int16,
         novoNome: String,
         novoTexto: String,
-        novaImagem: String,
+        novaImagem: Data?,
         novoTempoEstimado: Int16
         
     )throws{
@@ -232,7 +236,7 @@ final class ReceitaRepositorioCoreData: ReceitaRepositorio {
         etapa: Int16,
         nome: String,
         texto: String,
-        imagem: String,
+        imagem: Data?,
         tempoEstimado: Int16
     ) throws {
         guard let receita = try buscarReceitaEntity(id: receitaId) else { return }

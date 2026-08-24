@@ -24,10 +24,11 @@ struct OnboardingView: View {
                 Onboarding3(viewModel: viewModel)
             case 4:
                 Onboarding4(viewModel: viewModel)
-            case 5:
-                Onboarding5(viewModel: viewModel)
+//            case 5:
             default:
-                EmptyView()
+                Onboarding5(viewModel: viewModel)
+//            default:
+//                EmptyView()
             }
         }
         .onChange(of: viewModel.finalizado) { _, finalizado in

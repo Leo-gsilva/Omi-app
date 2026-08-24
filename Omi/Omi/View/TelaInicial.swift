@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct TelaInicial: View {
-    
+    @Environment(AppRouter.self) private var router // necessária para navegação
     @Bindable var viewModel: LivroReceitasViewModel
-//    @Bindable var viewModelLivroSimples: LivroReceitasViewModel
     @State private var pesquisa = ""
     @State private var mostrarLivroAberto = false
     
@@ -18,6 +17,14 @@ struct TelaInicial: View {
         response: 0.65,
         dampingFraction: 0.78
     )
+    
+    var naviTitle: String {
+        if !mostrarLivroAberto {
+            return "Receita"
+        } else {
+            return "\(viewModel.categoriaAtual.rawValue)"
+        }
+    }
     
     var body: some View {
         
@@ -114,10 +121,10 @@ struct TelaInicial: View {
             }
         }
         
-        .searchable(
-            text: $pesquisa,
-            prompt: "Pesquisar receitas"
-        )
+//        .searchable(
+//            text: $pesquisa,
+//            prompt: "Pesquisar receitas"
+//        )
         
         .toolbar {
             
@@ -143,6 +150,8 @@ struct TelaInicial: View {
                 Spacer()
                 
                 Button {
+                    // Colocar o router e passar pra ele a view
+                    router.apresentarSheet(.criarReceita)
                     print("Adicionar receita")
                 } label: {
                     
@@ -158,6 +167,7 @@ struct TelaInicial: View {
                 }
             }
         }
+        .navigationTitle(naviTitle)
     }
     
     private func abrirLivro() {
@@ -189,5 +199,8 @@ struct TelaInicial: View {
 
 
 #Preview {
-    TelaInicial(viewModel: LivroReceitasViewModel.preview)
+    NavigationStack{
+        TelaInicial(viewModel: LivroReceitasViewModel.preview)
+    }
+    .environment(AppRouter())
 }

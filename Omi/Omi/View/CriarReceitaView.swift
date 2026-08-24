@@ -4,178 +4,146 @@
 //
 //  Created by Leonardo Gonçalves da Silva on 18/08/26.
 //
-//import SwiftUI
-//
-//struct CriarReceitaView: View {
-//    @Environment(\.dismiss) private var voltar
-//    
-//    @Bindable var viewModel: CriarReceitaViewModel // Pq é um ObservableObject, então não precisa de init no viewModel aqui
-//    
-//    var body: some View {
-//        ZStack{
-//            
-//        NavigationView{
-//            
-//               
-//                
-//                Form{
-//                    Section("Título da receita") {
-//                        TextField("Ex: Bolo de chocolate", text: $viewModel.titulo)
-//                    }
-//                    Section("Porções (pessoas)") {
-//                        TextField("Ex: 5", text: $viewModel.porcoesTexto)
-//                    }
-//                    Section("Tempo de preparo (minutos)") {
-//                        TextField("Ex: 30", text: $viewModel.tempoDePreparoTexto)
-//                    }
-//                    Section("Descrição") {
-//                        TextEditor(text: $viewModel.descricao)
-//                            .frame(minHeight: 200)
-//                    }
-//                    //categorias
-//                    
-//                    
-//                    Section("Ingredientes") {
-//                        TextField("Ingrediente", text: $viewModel.nomeIngredienteTexto)
-//                        TextField("Quantidade", text: $viewModel.quantidadeTexto)
-//                        TextField("Medida", text: $viewModel.medidaTexto)
-//                        
-//                        Button("Adicionar Ingrediente") {
-//                            viewModel.adicionarIngrediente()
-//                        }
-//                        
-//                        ForEach(viewModel.ingredientesAdicionados) { item in
-//                            Text("\(item.quantidade) \(item.medida) - \(item.nome)")
-//                        }
-//                    }
-//                    
-//                    Section("Teste"){
-//                        TextEditor(text: $viewModel.descricaoDoPasso)
-//                            .font(FontesApp.corpo)
-//                            .frame(minHeight: 200)
-//                    }
-//                    
-//                    Section("Passos") {
-//                        TextField("Nome do passo", text: $viewModel.nomeDoPasso)
-//                        
-//                   
-//                           
-//                        
-//                        Button("Adicionar Passo") {
-//                            viewModel.adicionarPasso()
-//                        }
-//                        
-//                        ForEach(viewModel.passosAdicionados) { passo in
-//                            Text("\(passo.etapa). \(passo.nome)")
-//                        }
-//                    }
-//                }
-//                .navigationTitle("Anotar receita")
-//                .toolbar{
-//                    ToolbarItem(placement: .topBarTrailing) {
-//                        Button("Salvar") {
-//                            viewModel.salvarReceitaNoBanco()
-//                            voltar()
-//                        }
-//                    }
-//                    
-//                }
-//            }
-//        .backgroundStyle(.cordoFundo)
-//        }
-//    }
-//}
-//
-//
-//#Preview {
-//    CriarReceitaView(viewModel: .preview)
-//}
 import SwiftUI
+import PhotosUI
 
 struct CriarReceitaView: View {
+    //@Environment(AppRouter.self) private var router
     @Environment(\.dismiss) private var voltar
     @Bindable var viewModel: CriarReceitaViewModel
-    
+    @State private var itemSelecionado: PhotosPickerItem?   // ✅ estado local do picker
+    @State private var itemPassoSelecionado: PhotosPickerItem?
+
     var body: some View {
         NavigationStack {
             ZStack {
-                // 1. Screen background color
                 Color(.cordoFundo)
                     .ignoresSafeArea()
-                
+
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
-                        
-                        // Photo Picker Section
+
+                        // MARK: Foto (agora funcional, ligada a viewModel.imagem: Data?)
                         VStack(alignment: .leading, spacing: 6) {
                             Text("Adicionar foto")
                                 .font(FontesApp.Semibold)
                                 .foregroundStyle(.cordosTextos)
-                            
-                            HStack(spacing: 12) {
-                                Image(systemName: "photo")
-                                    .font(.title2)
-                                Text("Selecione uma imagem")
-                                    .font(FontesApp.corpo)
+
+                            PhotosPicker(selection: $itemSelecionado, matching: .images) {
+                                HStack(spacing: 12) {
+                                    if let dados = viewModel.imagem, let uiImage = UIImage(data: dados) {
+                                        Image(uiImage: uiImage)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 32, height: 32)
+                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    } else {
+                                        Image(systemName: "photo")
+                                            .font(.title2)
+                                    }
+
+                                    Text(viewModel.imagem == nil ? "Selecione uma imagem" : "Imagem selecionada")
+                                        .font(FontesApp.corpo)
+
+                                    Spacer()
+                                }
+                                .foregroundStyle(.cordosTextos.opacity(0.7))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 14)
+                                .background(Color(.corFundoCapsula))
+                                .clipShape(Capsule())
                             }
-                            .foregroundStyle(.cordosTextos.opacity(0.7))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 14)
-                            .background(Color(.corFundoCapsula))
-                            .clipShape(Capsule())
+                            .onChange(of: itemSelecionado) { _, novoItem in
+                                Task {
+                                    if let dados = try? await novoItem?.loadTransferable(type: Data.self) {
+                                        viewModel.imagem = dados
+                                    }
+                                }
+                            }
                         }
-                        
+
                         // Recipe Title
                         VStack(alignment: .leading, spacing: 6) {
                             Text("Título da Receita")
                                 .font(FontesApp.Semibold)
                                 .foregroundStyle(.cordosTextos)
-                            
+
                             TextField("Ex: Bolo de chocolate", text: $viewModel.titulo)
                                 .padding(.horizontal, 16)
                                 .padding(.vertical, 12)
                                 .background(Color(.corFundoCapsula))
                                 .clipShape(Capsule())
                         }
-                        
+
                         // Portions
                         VStack(alignment: .leading, spacing: 6) {
                             Text("Porções")
                                 .font(FontesApp.Semibold)
                                 .foregroundStyle(.cordosTextos)
-                            
+
                             TextField("Ex: 5 pessoas", text: $viewModel.porcoesTexto)
                                 .padding(.horizontal, 16)
                                 .padding(.vertical, 12)
                                 .background(Color(.corFundoCapsula))
                                 .clipShape(Capsule())
                         }
-                        
+
                         // Prep Time
                         VStack(alignment: .leading, spacing: 6) {
                             Text("Tempo de preparo")
                                 .font(FontesApp.Semibold)
                                 .foregroundStyle(.cordosTextos)
-                            
+
                             TextField("Ex: 30 min", text: $viewModel.tempoDePreparoTexto)
                                 .padding(.horizontal, 16)
                                 .padding(.vertical, 12)
                                 .background(Color(.corFundoCapsula))
                                 .clipShape(Capsule())
                         }
+
+                        // MARK: Categoria (estava faltando na sua versão — necessário pra salvar corretamente)
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Categoria")
+                                .font(FontesApp.Semibold)
+                                .foregroundStyle(.cordosTextos)
+
+//                            Button("BBB") {
+//                                router.apresentarSheet(.categoriaSheetView)
+//                            }
+//                            Picker("Categoria", selection: $viewModel.categoria) {
+//                                ForEach(CategoriaReceita.allCases) { cat in
+//                                    Text(cat.nomeExibicao).tag(cat)
+//                                }
+//                            }
+//                            .pickerStyle(.menu)
+//                            .padding(.horizontal, 16)
+//                            .padding(.vertical, 8)
+//                            .background(Color(.corFundoCapsula))
+//                            .clipShape(Capsule())
+                        }
                         
+                        // MARK: - Descrição
+                        VStack(alignment: .leading) {
+                            Text("Descrição:")
+                                .font(FontesApp.corpo)
+                            TextEditor(text: $viewModel.descricao)
+                                .frame(minHeight: 200)
+                        }
+
                         // Ingredients Section
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Ingredientes:")
                                 .font(FontesApp.Semibold)
                                 .foregroundStyle(.cordosTextos)
-                            
+
                             VStack(spacing: 8) {
                                 TextField("Ingrediente (ex: Chocolate)", text: $viewModel.nomeIngredienteTexto)
+                                Divider()
                                 TextField("Quantidade (ex: 1)", text: $viewModel.quantidadeTexto)
+                                Divider()
                                 TextField("Medida (ex: xícara)", text: $viewModel.medidaTexto)
-                                
+
                                 Button(action: {
                                     viewModel.adicionarIngrediente()
                                 }) {
@@ -188,30 +156,34 @@ struct CriarReceitaView: View {
                             .padding(16)
                             .background(Color(.corFundoCapsula))
                             .clipShape(RoundedRectangle(cornerRadius: 20))
-                            
-                            // Added Ingredients List
+
                             ForEach(viewModel.ingredientesAdicionados) { item in
-                                Text("• \(item.quantidade) \(item.medida) - \(item.nome)")
+                                Text("• \(item.quantidade.formatted()) \(item.medida) - \(item.nome)")
                                     .font(FontesApp.corpo)
                                     .foregroundStyle(.cordosTextos)
                                     .padding(.leading, 8)
                             }
                         }
-                        
-                        // Preparation Steps Section
+
+                        // MARK: - Modo de preparo Section
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Modo de Preparo:")
                                 .font(FontesApp.Semibold)
                                 .foregroundStyle(.cordosTextos)
                             
-                            VStack(spacing: 8) {
+                            
+
+                            VStack(alignment: .leading, spacing: 8) {
                                 TextField("Nome da etapa", text: $viewModel.nomeDoPasso)
+                                Divider()
+                                Text("Descrição do Passo")
+                                    .font(FontesApp.corpo)
                                 TextEditor(text: $viewModel.descricaoDoPasso)
                                     .frame(minHeight: 80)
                                     .scrollContentBackground(.hidden)
                                     .background(Color.white.opacity(0.5))
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                                
+
                                 Button(action: {
                                     viewModel.adicionarPasso()
                                 }) {
@@ -223,8 +195,7 @@ struct CriarReceitaView: View {
                             .padding(16)
                             .background(Color(.corFundoCapsula))
                             .clipShape(RoundedRectangle(cornerRadius: 20))
-                            
-                            // Added Steps List
+
                             ForEach(viewModel.passosAdicionados) { passo in
                                 Text("Etapa \(passo.etapa): \(passo.nome)")
                                     .font(FontesApp.corpo)
@@ -236,27 +207,24 @@ struct CriarReceitaView: View {
                     .padding(20)
                 }
             }
-            .navigationTitle("Anotar receita")
+            .navigationTitle(viewModel.modo ? "Editar Receita" : "Anotar Receita")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                // Top Left: Close Button (X)
                 ToolbarItem(placement: .topBarLeading) {
                     Button(action: { voltar() }) {
                         Image(systemName: "xmark")
-                        
                     }
                 }
-                
-                // Top Right: Save Button (Checkmark)
+
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
                         viewModel.salvarReceitaNoBanco()
                         voltar()
                     }) {
                         Image(systemName: "checkmark")
-                          
-                   
-                      
+                        
+                        
+                        
                     }
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.circle)
@@ -266,7 +234,12 @@ struct CriarReceitaView: View {
         }
     }
 }
+//
+//#Preview("Criar") {
+//    CriarReceitaView(viewModel: .preview)
+//}
 
 #Preview {
     CriarReceitaView(viewModel: .preview)
+        .environment(AppRouter())
 }

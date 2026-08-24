@@ -6,15 +6,27 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum CategoriaReceita: String, CaseIterable, Identifiable {
     case cafeDaManha = "Café da Manhã"
-    case almoco = "Almoço"
-    case jantar = "Jantar"
+    case refeicao = "Refeição"
+    case saudavel = "Saudável"
     case sobremesa = "Sobremesa"
-    case lanches = "Lanches"
+    case lanche = "Lanche"
 
     var id: String {
         rawValue
+    }
+    
+    // Ajuste os RGB pra bater com os hex exatos do Figma se tiver acesso a eles
+    var cor: Color {
+        switch self {
+        case .sobremesa: return Color(.corSobremesa)
+        case .refeicao: return Color(.corRefeicao)
+        case .saudavel: return Color(.corSaudavel)
+        case .lanche: return Color(.corLanche)
+        case .cafeDaManha: return Color(.corCafe)
+        }
     }
 }

@@ -19,6 +19,8 @@ final class LivroReceitasViewModel {
     
     var livroAberto: Bool = false
     
+    var paginaAtual = 0
+    
     init(repo: ReceitaRepositorio) {
         self.repo = repo
         carregarReceitas()
@@ -33,7 +35,12 @@ final class LivroReceitasViewModel {
         receitasFiltradas.count
     }
     
-    var paginaAtual = 0
+    // Receita correspondete a página atual
+    // Usar para alimentar o tabView
+    var receitaAtual: ReceitaModel? {
+        guard paginaAtual >= 1, paginaAtual <= receitasFiltradas.count else { return nil }
+        return receitasFiltradas[paginaAtual - 1]
+    }
     
     func carregarReceitas() {
         do {
@@ -83,28 +90,66 @@ final class LivroReceitasViewModel {
     
     // Funcs do antigo TelaInicialViewModel
     func abrirLivro() {
-        guard !livroAberto else {
-            return
-        }
+        guard !livroAberto else { return }
 
         livroAberto = true
     }
 
+    // Agora avan;a dentro da categoria atual
     func avancar() {
-        guard paginaAtual < totalPaginas else {
+        if totalPaginas == 0 {
+            let categoriaAntes = categoriaAtual
+            proximaCategoria()
+            if categoriaAtual != categoriaAntes {
+                paginaAtual = totalPaginas > 0 ? 1 : 0
+            }
+            
             return
         }
-
-        paginaAtual += 1
+        if paginaAtual < totalPaginas {
+            paginaAtual += 1
+        } else {
+            let categoriaAntes = categoriaAtual
+            proximaCategoria()
+            if categoriaAtual != categoriaAntes {
+                paginaAtual = 1
+            }
+        }
     }
     
     func voltar() {
-        guard paginaAtual > 1 else {
+        if totalPaginas == 0 {
+            let categoriaAntes = categoriaAtual
+            categoriaAnterior()
+            if categoriaAtual != categoriaAntes {
+                paginaAtual = totalPaginas > 0 ? totalPaginas : 0
+            }
+            
             return
         }
-        
-        paginaAtual -= 1
+        if paginaAtual > 1 {
+            paginaAtual -= 1
+        } else {
+            let categoriaAntes = categoriaAtual
+            categoriaAnterior()
+            if categoriaAtual != categoriaAntes {
+                paginaAtual = max(totalPaginas, 1)
+            }
+        }
     }
+    
+//    func tratarPaginaSentinela(_ pagina: Int) {
+//        guard totalPaginas > 0 else { return }
+//        if pagina == 0 {
+//            let categoriaAntes = categoriaAtual
+//            categoriaAnterior()
+//            paginaAtual = categoriaAtual != categoriaAntes ? max(totalPaginas, 1) : 1
+//        } else if pagina == totalPaginas + 1 {
+//            let categoriaAntes = categoriaAtual
+//            proximaCategoria()
+//            paginaAtual = categoriaAtual != categoriaAntes ? (totalPaginas > 0 ? 1 : 0) : totalPaginas
+//        }
+//    }
     
     deinit {
         if let observer {
