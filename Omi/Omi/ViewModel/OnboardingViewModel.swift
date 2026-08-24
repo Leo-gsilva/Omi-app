@@ -44,10 +44,10 @@ final class OnboardingViewModel {
         ),
         
         OnboardingModel(
-            titulo: "Edite suas receitas",
-            descricao: "No botão Editar, você pode  no álbum.   ",
-            palavraDestaque: "mudar suas receitas",
-            palavraDestaque2: nil,
+            titulo: "Edite as receitas",
+            descricao: "Adicione ",
+            palavraDestaque: "fotos, \n",
+            palavraDestaque2: "etapas na sua receita.",
             imagem: "Editarpag4",
         ),
         

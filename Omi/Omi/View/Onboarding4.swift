@@ -35,7 +35,7 @@ struct Onboarding4: View {
                     Image(pagina.imagem)
                         .resizable()
                         .scaledToFit()
-                        .frame(width:geo.size.height * 0.25)
+                        .frame(width:geo.size.height * 0.35)
                 
                 
                 Spacer()
@@ -46,9 +46,18 @@ struct Onboarding4: View {
                     +
                     Text(pagina.palavraDestaque)
                         .font(FontesApp.ExtraBold)
+                    
+                    +
+                    Text("Ingredientes ")
+                        .font(FontesApp.ExtraBold)
+                    +
+                    Text("e\n")
+                        .font(FontesApp.tituloComTexto)
                     +
                     (pagina.palavraDestaque2.map { Text($0) } ?? Text(""))
                         .font(FontesApp.tituloComTexto)
+                    
+                    
                 }
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.black.opacity(0.7))
