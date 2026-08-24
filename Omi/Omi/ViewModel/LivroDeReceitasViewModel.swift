@@ -17,7 +17,12 @@ final class LivroReceitasViewModel {
 
     private let repo: ReceitaRepositorio
     private var observer: NSObjectProtocol?
-
+    // Recebe protocolo e não a classe
+    
+    var livroAberto: Bool = false
+    
+    var paginaAtual = 0
+    
     init(repo: ReceitaRepositorio) {
         self.repo = repo
         carregarReceitas()
@@ -31,7 +36,14 @@ final class LivroReceitasViewModel {
     var totalPaginas: Int {
         receitasFiltradas.count
     }
-
+    
+    // Receita correspondete a página atual
+    // Usar para alimentar o tabView
+    var receitaAtual: ReceitaModel? {
+        guard paginaAtual >= 1, paginaAtual <= receitasFiltradas.count else { return nil }
+        return receitasFiltradas[paginaAtual - 1]
+    }
+    
     func carregarReceitas() {
         do {
             receitas = try repo.buscarReceitas()
@@ -74,12 +86,74 @@ final class LivroReceitasViewModel {
         observer = NotificationCenter.default.addObserver(
             forName: .NSManagedObjectContextDidSave,
             object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.carregarReceitas()
-        }
+            queue: .main ){ [weak self] _ in
+                self?.carregarReceitas()
+            }
+    }
+    
+    // Funcs do antigo TelaInicialViewModel
+    func abrirLivro() {
+        guard !livroAberto else { return }
+
+        livroAberto = true
     }
 
+    // Agora avan;a dentro da categoria atual
+    func avancar() {
+        if totalPaginas == 0 {
+            let categoriaAntes = categoriaAtual
+            proximaCategoria()
+            if categoriaAtual != categoriaAntes {
+                paginaAtual = totalPaginas > 0 ? 1 : 0
+            }
+            
+            return
+        }
+        if paginaAtual < totalPaginas {
+            paginaAtual += 1
+        } else {
+            let categoriaAntes = categoriaAtual
+            proximaCategoria()
+            if categoriaAtual != categoriaAntes {
+                paginaAtual = 1
+            }
+        }
+    }
+    
+    func voltar() {
+        if totalPaginas == 0 {
+            let categoriaAntes = categoriaAtual
+            categoriaAnterior()
+            if categoriaAtual != categoriaAntes {
+                paginaAtual = totalPaginas > 0 ? totalPaginas : 0
+            }
+            
+            return
+        }
+        if paginaAtual > 1 {
+            paginaAtual -= 1
+        } else {
+            let categoriaAntes = categoriaAtual
+            categoriaAnterior()
+            if categoriaAtual != categoriaAntes {
+                paginaAtual = max(totalPaginas, 1)
+            }
+        }
+    }
+    
+//    func tratarPaginaSentinela(_ pagina: Int) {
+//        guard totalPaginas > 0 else { return }
+//        if pagina == 0 {
+//            let categoriaAntes = categoriaAtual
+//            categoriaAnterior()
+//            paginaAtual = categoriaAtual != categoriaAntes ? max(totalPaginas, 1) : 1
+//        } else if pagina == totalPaginas + 1 {
+//            let categoriaAntes = categoriaAtual
+//            proximaCategoria()
+//            paginaAtual = categoriaAtual != categoriaAntes ? (totalPaginas > 0 ? 1 : 0) : totalPaginas
+//        }
+//    }
+    
     deinit {
         if let observer {
             NotificationCenter.default.removeObserver(observer)

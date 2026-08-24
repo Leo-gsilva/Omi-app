@@ -1,9 +1,17 @@
 import SwiftUI
 
 struct TelaInicial: View {
-    
+    @Environment(AppRouter.self) private var router // necessária para navegação
     @Bindable var viewModel: LivroReceitasViewModel
     @State private var pesquisa = ""
+    
+    var naviTitle: String {
+        if !mostrarLivroAberto {
+            return "Receita"
+        } else {
+            return "\(viewModel.categoriaAtual.rawValue)"
+        }
+    }
     
     var body: some View {
         
@@ -80,6 +88,8 @@ struct TelaInicial: View {
                 Spacer()
                 
                 Button {
+                    // Colocar o router e passar pra ele a view
+                    router.apresentarSheet(.criarReceita)
                     print("Adicionar receita")
                 } label: {
                     
@@ -95,11 +105,13 @@ struct TelaInicial: View {
                 }
             }
         }
+        .navigationTitle(naviTitle)
     }
 }
 
 #Preview {
-    TelaInicial(
-        viewModel: LivroReceitasViewModel.preview
-    )
+    NavigationStack{
+        TelaInicial(viewModel: LivroReceitasViewModel.preview)
+    }
+    .environment(AppRouter())
 }

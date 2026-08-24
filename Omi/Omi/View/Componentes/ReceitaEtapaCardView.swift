@@ -10,7 +10,7 @@ struct ReceitaEtapaCardView: View {
     let numero: Int16
     let nome: String
     let texto: String
-    let imagemData: String?
+//    let imagemData: Data?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -20,9 +20,7 @@ struct ReceitaEtapaCardView: View {
                         .font(FontesApp.subtitulo)
                         .foregroundStyle(.cordosTextos)
 
-                    Rectangle()
-                        .fill(Color(.corDivider))
-                        .frame(height: 2)
+                    DividerPersonalizado()
 
                     Text(texto)
                         .font(FontesApp.corpo)
@@ -30,21 +28,21 @@ struct ReceitaEtapaCardView: View {
                 }
             }
 
-            //if let imagemData, let uiImage = UIImage(data: imagemData) {
-                GeometryReader { geo in
-                  //  Image(uiImage: uiImage)
-                    Image("Bolo")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: geo.size.width, height: geo.size.height)
-                        .clipped()
-                }
-                .aspectRatio(308.0 / 188.0, contentMode: .fit)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-           // }
+//            if let imagemData, let uiImage = UIImage(data: imagemData) {
+//                GeometryReader { geo in
+//                    Image(uiImage: uiImage)
+//                    
+//                        .resizable()
+//                        .scaledToFill()
+//                        .frame(width: geo.size.width, height: geo.size.height)
+//                        .clipped()
+//                }
+//                .aspectRatio(308.0 / 188.0, contentMode: .fit)
+//                .clipShape(RoundedRectangle(cornerRadius: 16))
+//           }
         }
     }
 }
 #Preview {
-    ReceitaEtapaCardView(numero: 1, nome: "Leo", texto: "ola", imagemData: nil)
+    ReceitaEtapaCardView(numero: 1, nome: "Leo", texto: "ola")
 }

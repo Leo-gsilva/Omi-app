@@ -5,22 +5,31 @@
 //  Created by Leonardo Gonçalves da Silva on 18/08/26.
 //
 import Observation
+import Foundation
 
 @Observable
 final class CriarReceitaViewModel {
-    private let repo: ReceitaRepositorioCoreData
+    private let repo: ReceitaRepositorio
+//    var receita: ReceitaModel?
     
-    init(repo: ReceitaRepositorioCoreData) {
+    init(repo: ReceitaRepositorio) {
         self.repo = repo
+        
+//        if modo {
+//            preencherComReceitaExistente(receita)
+//        }
     }
+    
+    var modo: Bool = false
     
     // Receita
     var titulo = ""
-    var categoria: CategoriaReceita = .almoco
+    var categoria: CategoriaReceita = .refeicao
     var descricao = ""
     var tempoDePreparoTexto = ""
     var porcoesTexto = ""
     var dificuldade = ""
+    var imagem: Data?
     
     // Ingredientes
     // Lista dos itens que o usuário foi adicionando na tela
@@ -37,6 +46,7 @@ final class CriarReceitaViewModel {
     var nomeDoPasso: String = ""
     var descricaoDoPasso: String = ""
     var tempoPassoTexto: String = ""
+    var imagemPasso: Data?
     
     // FUNÇÕES
     // INGREDIENTE
@@ -67,13 +77,32 @@ final class CriarReceitaViewModel {
         tempoPassoTexto = ""
     }
     
+    // MARK: - Actions
+    func preencherComReceitaExistente(_ receita: ReceitaModel) {
+        titulo = receita.titulo
+        categoria = receita.categoria
+        descricao = receita.descricao
+        tempoDePreparoTexto = String(receita.tempoDePreparo)
+        porcoesTexto = receita.porcoes
+        dificuldade = receita.dificuldade ?? ""
+        
+        ingredientesAdicionados = receita.ingredientes.compactMap {
+            guard let qtd = Double($0.quantidade) else { return nil }
+            return IngredienteAdicionado(nome: $0.nome, quantidade: qtd, medida: $0.medida)
+        }
+        
+        passosAdicionados = receita.passos.map {
+            PassoAdicionado(etapa: Int($0.etapa), nome: $0.nome, texto: $0.texto, tempoEstimado: Int($0.tempoEstimado))
+        }
+    }
+    
     func salvarReceitaNoBanco() {
         do {
             try repo.criarReceita(
                 titulo: titulo,
                 categoria: categoria.rawValue,
                 descricao: descricao,
-                imagem: "imagem_padrao",
+                imagem: imagem,
                 tempoDePreparo: Int16(tempoDePreparoTexto) ?? 0,
                 porcoes: porcoesTexto,
                 dificuldade: dificuldade,
