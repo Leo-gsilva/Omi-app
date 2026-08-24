@@ -21,7 +21,7 @@ struct PassoAdicionado: Identifiable {
     let nome: String
     let texto: String
     let tempoEstimado: Int
-    let imagem: Data?
+//    let imagem: Data?
 }
 
 // Versão de leitura de uma receita, só para exibição
@@ -54,7 +54,7 @@ struct PassoModel: Identifiable, Hashable {
     var nome: String
     var texto: String
     var tempoEstimado: Int16
-    var imagem: Data?
+//    var imagem: Data?
 }
 
 // Representa a entitidade Ingrediente pura
@@ -98,8 +98,8 @@ extension Receita {
                     etapa: passo.etapa + 1,
                     nome: passo.nome ?? "",
                     texto: passo.texto ?? "",
-                    tempoEstimado: passo.tempoEstimado,
-                    imagem: passo.imagem
+                    tempoEstimado: passo.tempoEstimado
+                    //imagem: passo.imagem
                 )
             }
             .sorted { $0.etapa < $1.etapa }

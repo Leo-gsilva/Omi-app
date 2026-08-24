@@ -67,8 +67,8 @@ struct DetalhesReceitaView: View {
                                     ReceitaEtapaCardView(
                                         numero: passo.etapa,
                                         nome: passo.nome,
-                                        texto: passo.texto,
-                                        imagemData: passo.texto
+                                        texto: passo.texto
+                                        //imagemData: passo.imagemPasso
                                     )
                                 }
                             }

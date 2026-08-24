@@ -13,6 +13,7 @@ enum Rota: Hashable {
     case criarReceita
 //    case listaIngredientes
     case onboarding
+    //case categoriaSheetView
 }
 
 extension Rota: Identifiable {

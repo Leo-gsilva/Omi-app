@@ -68,7 +68,7 @@ final class CriarReceitaViewModel {
     func adicionarPasso() {
         guard !nomeDoPasso.isEmpty, !descricaoDoPasso.isEmpty else { return }
         
-        let passo = PassoAdicionado(etapa: passosAdicionados.count + 1, nome: nomeDoPasso, texto: descricaoDoPasso, tempoEstimado: Int(tempoPassoTexto) ?? 0, imagem: imagem)
+        let passo = PassoAdicionado(etapa: passosAdicionados.count + 1, nome: nomeDoPasso, texto: descricaoDoPasso, tempoEstimado: Int(tempoPassoTexto) ?? 0)
         
         passosAdicionados.append(passo)
         
@@ -92,7 +92,7 @@ final class CriarReceitaViewModel {
         }
         
         passosAdicionados = receita.passos.map {
-            PassoAdicionado(etapa: Int($0.etapa), nome: $0.nome, texto: $0.texto, tempoEstimado: Int($0.tempoEstimado), imagem: imagem)
+            PassoAdicionado(etapa: Int($0.etapa), nome: $0.nome, texto: $0.texto, tempoEstimado: Int($0.tempoEstimado))
         }
     }
     

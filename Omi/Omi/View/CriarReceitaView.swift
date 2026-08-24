@@ -8,6 +8,7 @@ import SwiftUI
 import PhotosUI
 
 struct CriarReceitaView: View {
+    //@Environment(AppRouter.self) private var router
     @Environment(\.dismiss) private var voltar
     @Bindable var viewModel: CriarReceitaViewModel
     @State private var itemSelecionado: PhotosPickerItem?   // ✅ estado local do picker
@@ -107,6 +108,9 @@ struct CriarReceitaView: View {
                                 .font(FontesApp.Semibold)
                                 .foregroundStyle(.cordosTextos)
 
+//                            Button("BBB") {
+//                                router.apresentarSheet(.categoriaSheetView)
+//                            }
 //                            Picker("Categoria", selection: $viewModel.categoria) {
 //                                ForEach(CategoriaReceita.allCases) { cat in
 //                                    Text(cat.nomeExibicao).tag(cat)
@@ -121,7 +125,8 @@ struct CriarReceitaView: View {
                         
                         // MARK: - Descrição
                         VStack(alignment: .leading) {
-                            Text("Descrição: ESTILIZAR")
+                            Text("Descrição:")
+                                .font(FontesApp.corpo)
                             TextEditor(text: $viewModel.descricao)
                                 .frame(minHeight: 200)
                         }
@@ -134,7 +139,9 @@ struct CriarReceitaView: View {
 
                             VStack(spacing: 8) {
                                 TextField("Ingrediente (ex: Chocolate)", text: $viewModel.nomeIngredienteTexto)
+                                Divider()
                                 TextField("Quantidade (ex: 1)", text: $viewModel.quantidadeTexto)
+                                Divider()
                                 TextField("Medida (ex: xícara)", text: $viewModel.medidaTexto)
 
                                 Button(action: {
@@ -164,48 +171,13 @@ struct CriarReceitaView: View {
                                 .font(FontesApp.Semibold)
                                 .foregroundStyle(.cordosTextos)
                             
-                            VStack(alignment: .leading, spacing: 6) {
-                                Text("Adicionar foto")
-                                    .font(FontesApp.Semibold)
-                                    .foregroundStyle(.cordosTextos)
-
-                                PhotosPicker(selection: $itemPassoSelecionado, matching: .images) {
-                                    HStack(spacing: 12) {
-                                        if let dados = viewModel.imagemPasso, let uiImage = UIImage(data: dados) {
-                                            Image(uiImage: uiImage)
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 32, height: 32)
-                                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                                        } else {
-                                            Image(systemName: "photo")
-                                                .font(.title2)
-                                        }
-
-                                        Text(viewModel.imagemPasso == nil ? "Selecione uma imagem" : "Imagem selecionada")
-                                            .font(FontesApp.corpo)
-
-                                        Spacer()
-                                    }
-                                    .foregroundStyle(.cordosTextos.opacity(0.7))
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.horizontal, 16)
-                                    .padding(.vertical, 14)
-                                    .background(Color(.corFundoCapsula))
-                                    .clipShape(Capsule())
-                                }
-                                .onChange(of: itemPassoSelecionado) { _, novoItem in
-                                    Task {
-                                        if let dados = try? await novoItem?.loadTransferable(type: Data.self) {
-                                            viewModel.imagemPasso = dados
-                                        }
-                                    }
-                                }
-                            }
+                            
 
                             VStack(alignment: .leading, spacing: 8) {
                                 TextField("Nome da etapa", text: $viewModel.nomeDoPasso)
-                                Text("Descrição Passo: ESTLIZAR")
+                                Divider()
+                                Text("Descrição do Passo")
+                                    .font(FontesApp.corpo)
                                 TextEditor(text: $viewModel.descricaoDoPasso)
                                     .frame(minHeight: 80)
                                     .scrollContentBackground(.hidden)
@@ -269,4 +241,5 @@ struct CriarReceitaView: View {
 
 #Preview {
     CriarReceitaView(viewModel: .preview)
+        .environment(AppRouter())
 }

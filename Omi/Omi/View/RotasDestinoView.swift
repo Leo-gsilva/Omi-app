@@ -28,6 +28,9 @@ struct RotasDestinoView: View {
         case .criarReceita:
             CriarReceitaView(viewModel: CriarReceitaViewModel(repo: ReceitaRepositorioCoreData(context: contexto)))
             
+//        case .categoriaSheetView:
+//            CategoriaSheetView(categoriaSelecionada: .refeicao, aoSelecionar: { _ in } )
+            
 //        case .listaIngredientes:
 //            ListaIngredientesView(viewModel: IngredientesViewModel(repo: ReceitaRepositorioCoreData(context: contexto)))
         }
