@@ -43,6 +43,6 @@ extension ReceitaRepositorioCoreData {
 
 extension CriarReceitaViewModel {
     static var preview: CriarReceitaViewModel {
-        CriarReceitaViewModel(repo: ReceitaRepositorioCoreData(context: PersistenceController.preview.container.viewContext))
+        CriarReceitaViewModel(modo: .criar, repo: ReceitaRepositorioCoreData(context: PersistenceController.preview.container.viewContext))
     }
 }

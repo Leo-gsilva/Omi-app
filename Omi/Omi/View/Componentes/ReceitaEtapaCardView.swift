@@ -10,7 +10,7 @@ struct ReceitaEtapaCardView: View {
     let numero: Int16
     let nome: String
     let texto: String
-    let imagemData: String?
+    let imagemData: Data?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -27,11 +27,9 @@ struct ReceitaEtapaCardView: View {
                         .foregroundStyle(.cordosTextos)
                 }
             }
-
-            //if let imagemData, let uiImage = UIImage(data: imagemData) {
-                GeometryReader { geo in
-                  //  Image(uiImage: uiImage)
-                    Image("Bolo")
+            if let imagemData, let uiImage = UIImage(data: imagemData) {
+              GeometryReader { geo in
+                  Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFill()
                         .frame(width: geo.size.width, height: geo.size.height)
@@ -39,7 +37,7 @@ struct ReceitaEtapaCardView: View {
                 }
                 .aspectRatio(308.0 / 188.0, contentMode: .fit)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
-           // }
+            }
         }
     }
 }

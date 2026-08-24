@@ -10,6 +10,7 @@ import SwiftUI
 struct TelaInicial: View {
     
     @Bindable var viewModel: LivroReceitasViewModel
+    @Environment(AppRouter.self) private var router
 //    @Bindable var viewModelLivroSimples: LivroReceitasViewModel
     @State private var pesquisa = ""
     @State private var mostrarLivroAberto = false
@@ -20,6 +21,8 @@ struct TelaInicial: View {
     )
     
     var body: some View {
+        
+    
         
         GeometryReader { geo in
             
@@ -112,6 +115,15 @@ struct TelaInicial: View {
                     .frame(height: geo.size.width * 0.18)
                 }
             }
+            .searchable(
+                        text: $pesquisa,
+                        prompt: "Pesquisar receitas"
+                    )
+                    .toolbar {
+                        ToolbarItemGroup(placement: .bottomBar) {
+                            // ... your search bar and plus button ...
+                        }
+                    }
         }
         
         .searchable(
@@ -143,7 +155,7 @@ struct TelaInicial: View {
                 Spacer()
                 
                 Button {
-                    print("Adicionar receita")
+                    router.apresentarSheet(.criarOuEditarReceita(nil))
                 } label: {
                     
                     Image(

@@ -25,8 +25,18 @@ struct RotasDestinoView: View {
         case .detalheReceita(let receita):
             DetalhesReceitaView(receita: receita)
             
-        case .criarReceita:
-            CriarReceitaView(viewModel: CriarReceitaViewModel(repo: ReceitaRepositorioCoreData(context: contexto)))
+        case .criarOuEditarReceita(let receita):
+                    // Check if a recipe was passed. If yes, it's edit mode. If nil, it's create mode.
+                    let modo: CriarReceitaViewModel.Modo = (receita != nil) ? .editar(receita!) : .criar
+                    
+                    CriarReceitaView(
+                        viewModel: CriarReceitaViewModel(
+                            modo: modo,
+                            repo: ReceitaRepositorioCoreData(context: contexto)
+                        )
+                    )
+            
+
             
 //        case .listaIngredientes:
 //            ListaIngredientesView(viewModel: IngredientesViewModel(repo: ReceitaRepositorioCoreData(context: contexto)))

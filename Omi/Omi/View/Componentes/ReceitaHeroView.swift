@@ -7,22 +7,22 @@
 import SwiftUI
 
 struct ReceitaHeroView: View {
-    let imagemData: String?
+    let imagemData: Data?
     let titulo: String
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             GeometryReader { geo in
               Group {
-//                    if let imagemData, let uiImage = UIImage(data: imagemData) {
-//                        Image(uiImage: uiImage)
-//                            .resizable()
-//                            .scaledToFill()
-//                    } else {
+                    if let imagemData, let uiImage = UIImage(data: imagemData) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFill()
+                    } else {
                         Image("Bolo")
                             .resizable()
                             .scaledToFill()
-                //    }
+                    }
                 }
                 .frame(width: geo.size.width, height: geo.size.height)
                 .clipped()

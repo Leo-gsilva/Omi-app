@@ -30,7 +30,7 @@ struct ReceitaModel: Identifiable, Hashable {
     var titulo: String
     var categoria: CategoriaReceita
     var descricao: String
-    var imagem: String
+    var imagem: Data?
     var tempoDePreparo: Int16
     var porcoes: String
     var dificuldade: String?
@@ -53,6 +53,7 @@ struct PassoModel: Identifiable, Hashable {
     var nome: String
     var texto: String
     var tempoEstimado: Int16
+    var imagem: Data?
 }
 
 // Representa a entitidade Ingrediente pura
@@ -69,7 +70,7 @@ extension Ingrediente {
 
 extension PassoReceita {
     func toModel() -> PassoModel {
-        PassoModel(id: id ?? UUID(), etapa: etapa, nome: nome ?? "", texto: texto ?? "", tempoEstimado: tempoEstimado)
+        PassoModel(id: id ?? UUID(), etapa: etapa, nome: nome ?? "", texto: texto ?? "", tempoEstimado: tempoEstimado,  imagem: imagem)
     }
 }
 
@@ -96,7 +97,8 @@ extension Receita {
                     etapa: passo.etapa + 1,
                     nome: passo.nome ?? "",
                     texto: passo.texto ?? "",
-                    tempoEstimado: passo.tempoEstimado
+                    tempoEstimado: passo.tempoEstimado,
+                    imagem: imagem
                 )
             }
             .sorted { $0.etapa < $1.etapa }
@@ -107,7 +109,7 @@ extension Receita {
             categoria: CategoriaReceita(
                 rawValue: categoria ?? "") ?? .sobremesa,
             descricao: descricao ?? "",
-            imagem: imagem ?? "",
+            imagem: imagem,
             tempoDePreparo: tempoDePreparo,
             porcoes: porcoes ?? "",
             dataCriacao: dataCriacao ?? Date(),
