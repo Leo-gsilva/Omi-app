@@ -23,7 +23,7 @@ struct RotasDestinoView: View {
             TelaInicial(viewModel: LivroReceitasViewModel(repo: ReceitaRepositorioCoreData(context: contexto)))
         
         case .detalheReceita(let receita):
-            DetalhesReceitaView(receita: receita)
+            DetalhesReceitaView(viewModel: DetalhesReceitaViewModel(receita: receita, repo: ReceitaRepositorioCoreData(context: contexto)))
             
         case .criarOuEditarReceita(let receita):
                     // Check if a recipe was passed. If yes, it's edit mode. If nil, it's create mode.

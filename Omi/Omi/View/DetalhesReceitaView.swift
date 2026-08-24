@@ -9,9 +9,8 @@ import SwiftUI
 //import CoreData
 
 struct DetalhesReceitaView: View {
-    let receita: ReceitaModel
-    @Environment(AppRouter.self) private var router
-
+    @Bindable var viewModel: DetalhesReceitaViewModel
+    
     
     var body: some View {
         GeometryReader { geo in
@@ -28,21 +27,21 @@ struct DetalhesReceitaView: View {
                         
                         ZStack(alignment: .bottomLeading){
                             ReceitaHeroView(
-                                imagemData: receita.imagem,
-                                titulo: receita.titulo
+                                imagemData: viewModel.receita?.imagem,
+                                titulo: viewModel.receita?.titulo ?? ""
                             )
                             HStack(){
-                                CapsulaDetalhes(detalhe: .tempo(receita.tempoDePreparo))
+                                CapsulaDetalhes(detalhe: .tempo(viewModel.receita?.tempoDePreparo ?? 1))
                                     .position(
                                         x: geo.size.width * 0.15,y: geo.size.width * 0.48)
-                                CapsulaDetalhes(detalhe: .pessoas(receita.porcoes))
+                                CapsulaDetalhes(detalhe: .pessoas(viewModel.receita?.porcoes ?? "1"))
                                     .position(x: geo.size.width * -0.03,y: geo.size.width * 0.48)
                             }
                         }
                         VStack(alignment: .leading, spacing: 8) {
                             TituloSecao(texto: "Descrição:")
                             CartaoClaro {
-                                Text(receita.descricao)
+                                Text(viewModel.receita?.descricao ?? "")
                                     .font(FontesApp.corpo)
                                     .foregroundStyle(.cordosTextos)
                             }
@@ -51,7 +50,7 @@ struct DetalhesReceitaView: View {
                         VStack(alignment: .leading, spacing: 8) {
                             TituloSecao(texto: "Ingredientes:")
                             CartaoClaro {
-                                ForEach(receita.ingredientes) { item in
+                                ForEach(viewModel.receita?.ingredientes ?? [IngredienteModel(id: UUID(), nome: "None", quantidade: "0", medida: "ml")]) { item in
                                     HStack(alignment: .top, spacing: 6) {
                                         Text("•")
                                         Text("\(item.quantidade) \(item.medida) de \(item.nome)")
@@ -65,7 +64,7 @@ struct DetalhesReceitaView: View {
                         VStack(alignment: .leading, spacing: 8) {
                             TituloSecao(texto: "Modo de Preparo:")
                             VStack(spacing: 16) {
-                                ForEach(receita.passos) { passo in
+                                ForEach(viewModel.receita?.passos ?? [PassoModel(id: UUID(), etapa: 0, nome: "None", texto: "None", tempoEstimado: 1)]) { passo in
                                     ReceitaEtapaCardView(
                                         numero: passo.etapa,
                                         nome: passo.nome,
@@ -85,8 +84,8 @@ struct DetalhesReceitaView: View {
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 ShareLink(
-                    item: "Confira a receita de \(receita.titulo) no Omi!\n\n\(receita.descricao)",
-                    subject: Text(receita.titulo),
+                    item: "Confira a receita de \(viewModel.receita?.titulo ?? "") no Omi!\n\n\(viewModel.receita?.descricao ?? "")",
+                    subject: Text(viewModel.receita?.titulo ?? ""),
                     message: Text("Enviado via Omi App")
                 ) {
                     Image(systemName: "square.and.arrow.up")

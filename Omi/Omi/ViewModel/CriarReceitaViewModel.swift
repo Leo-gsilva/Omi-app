@@ -26,6 +26,10 @@ final class CriarReceitaViewModel {
     
     var tituloDaTela: String {
         estaEditando ? "Editar receita" : "Anotar receita"
+    private let repo: ReceitaRepositorio
+    
+    init(repo: ReceitaRepositorio) {
+        self.repo = repo
     }
     
     // Recipe Fields

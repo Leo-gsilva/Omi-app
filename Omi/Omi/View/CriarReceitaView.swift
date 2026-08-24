@@ -202,6 +202,9 @@ struct CriarReceitaView: View {
                         voltar()
                     }) {
                         Image(systemName: "checkmark")
+                        
+                        
+                        
                     }
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.circle)

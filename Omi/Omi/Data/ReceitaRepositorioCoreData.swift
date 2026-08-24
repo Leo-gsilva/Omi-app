@@ -109,11 +109,22 @@ final class ReceitaRepositorioCoreData: ReceitaRepositorio {
     // Como devolve um [ReceitaModel] e não um [Receita], ele fecha o "vazamento"
     
     func buscarReceitas() throws -> [ReceitaModel] {
-            let request = NSFetchRequest<Receita>(entityName: "Receita")
-            request.sortDescriptors = [NSSortDescriptor(keyPath: \Receita.dataCriacao, ascending: false)]
-            let entities = try contexto.fetch(request)
-            return entities.map { $0.toModel() }
-        }
+        let request = NSFetchRequest<Receita>(entityName: "Receita")
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Receita.dataCriacao, ascending: false)]
+        let entities = try contexto.fetch(request)
+        return entities.map { $0.toModel() }
+    }
+    
+    func buscarReceita(id: UUID) throws -> ReceitaModel? {
+        try buscarReceitaEntity(id: id)?.toModel()
+    }
+    
+    func buscarIngredientes() throws -> [IngredienteCadastradoModel] {
+        let request = NSFetchRequest<Ingrediente>(entityName: "Ingrediente")
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Ingrediente.nome, ascending: true)]
+        let entities = try contexto.fetch(request)
+        return entities.map { $0.toModel() }
+    }
 
         func buscarReceita(id: UUID) throws -> ReceitaModel? {
             try buscarReceitaEntity(id: id)?.toModel()

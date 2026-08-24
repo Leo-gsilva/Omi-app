@@ -11,6 +11,8 @@ struct ReceitaPageView: View {
     //ReceitaModel, não Receita (entidade) - Não chama CoreData
     let receita: ReceitaModel
     
+    @Environment(AppRouter.self) private var router
+    
     var body: some View {
         ScrollView{
             VStack(alignment: .leading, spacing: 12) {
@@ -47,8 +49,19 @@ struct ReceitaPageView: View {
                     }
                 }
             }
+            
+            Button{
+                router.push(.detalheReceita(receita))
+            } label: {
+                Label("Ver mais detalhes", systemImage: "arrow.up.right")
+            }
+            .padding(.top)
         }
+        .contentShape(Rectangle())
         .padding()
+        .onTapGesture {
+            router.push(.detalheReceita(receita))
+        }
     }
 }
 
@@ -74,5 +87,6 @@ struct ReceitaPageView: View {
                 PassoModel(id: UUID(), etapa: 2, nome: "Asse", texto: "Leve ao forno por 40 min.", tempoEstimado: 40, imagem: nil)
             ]
         )
-    )
+    }
+    .environment(AppRouter())
 }
