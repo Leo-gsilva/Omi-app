@@ -11,6 +11,7 @@ struct CriarReceitaView: View {
     @Environment(\.dismiss) private var voltar
     @Bindable var viewModel: CriarReceitaViewModel
     @State private var itemSelecionado: PhotosPickerItem?   // ✅ estado local do picker
+    @State private var itemPassoSelecionado: PhotosPickerItem?
 
     var body: some View {
         NavigationStack {
@@ -162,6 +163,45 @@ struct CriarReceitaView: View {
                             Text("Modo de Preparo:")
                                 .font(FontesApp.Semibold)
                                 .foregroundStyle(.cordosTextos)
+                            
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("Adicionar foto")
+                                    .font(FontesApp.Semibold)
+                                    .foregroundStyle(.cordosTextos)
+
+                                PhotosPicker(selection: $itemPassoSelecionado, matching: .images) {
+                                    HStack(spacing: 12) {
+                                        if let dados = viewModel.imagemPasso, let uiImage = UIImage(data: dados) {
+                                            Image(uiImage: uiImage)
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 32, height: 32)
+                                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                        } else {
+                                            Image(systemName: "photo")
+                                                .font(.title2)
+                                        }
+
+                                        Text(viewModel.imagemPasso == nil ? "Selecione uma imagem" : "Imagem selecionada")
+                                            .font(FontesApp.corpo)
+
+                                        Spacer()
+                                    }
+                                    .foregroundStyle(.cordosTextos.opacity(0.7))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 14)
+                                    .background(Color(.corFundoCapsula))
+                                    .clipShape(Capsule())
+                                }
+                                .onChange(of: itemPassoSelecionado) { _, novoItem in
+                                    Task {
+                                        if let dados = try? await novoItem?.loadTransferable(type: Data.self) {
+                                            viewModel.imagemPasso = dados
+                                        }
+                                    }
+                                }
+                            }
 
                             VStack(alignment: .leading, spacing: 8) {
                                 TextField("Nome da etapa", text: $viewModel.nomeDoPasso)

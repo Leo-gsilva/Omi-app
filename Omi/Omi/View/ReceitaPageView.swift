@@ -73,7 +73,7 @@ struct ReceitaPageView: View {
                 titulo: "Bolo de Cenoura",
                 categoria: .sobremesa,
                 descricao: "Receita de teste para Preview.",
-                imagem: "",
+                imagem: nil,
                 tempoDePreparo: 45,
                 porcoes: "8",
                 dificuldade: "Fácil",

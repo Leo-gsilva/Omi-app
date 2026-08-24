@@ -55,7 +55,7 @@ extension DetalhesReceitaViewModel {
                 titulo: "Bolo de Cenoura",
                 categoria: .sobremesa,
                 descricao: "O bolo de cenoura é uma receita clássica e amada por todos! Com sua massa fofinha e saborosa, esse bolo é perfeito para um lanche da tarde ou como sobremesa em qualquer ocasião.",
-                imagem: "Bolo",
+                imagem: nil,
                 tempoDePreparo: 40,
                 porcoes: "8",
                 dificuldade: nil,

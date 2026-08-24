@@ -46,6 +46,7 @@ final class CriarReceitaViewModel {
     var nomeDoPasso: String = ""
     var descricaoDoPasso: String = ""
     var tempoPassoTexto: String = ""
+    var imagemPasso: Data?
     
     // FUNÇÕES
     // INGREDIENTE
@@ -67,7 +68,7 @@ final class CriarReceitaViewModel {
     func adicionarPasso() {
         guard !nomeDoPasso.isEmpty, !descricaoDoPasso.isEmpty else { return }
         
-        let passo = PassoAdicionado(etapa: passosAdicionados.count + 1, nome: nomeDoPasso, texto: descricaoDoPasso, tempoEstimado: Int(tempoPassoTexto) ?? 0)
+        let passo = PassoAdicionado(etapa: passosAdicionados.count + 1, nome: nomeDoPasso, texto: descricaoDoPasso, tempoEstimado: Int(tempoPassoTexto) ?? 0, imagem: imagem)
         
         passosAdicionados.append(passo)
         
@@ -91,7 +92,7 @@ final class CriarReceitaViewModel {
         }
         
         passosAdicionados = receita.passos.map {
-            PassoAdicionado(etapa: Int($0.etapa), nome: $0.nome, texto: $0.texto, tempoEstimado: Int($0.tempoEstimado))
+            PassoAdicionado(etapa: Int($0.etapa), nome: $0.nome, texto: $0.texto, tempoEstimado: Int($0.tempoEstimado), imagem: imagem)
         }
     }
     
@@ -101,7 +102,7 @@ final class CriarReceitaViewModel {
                 titulo: titulo,
                 categoria: categoria.rawValue,
                 descricao: descricao,
-                imagem: "imagem_padrao",
+                imagem: imagem,
                 tempoDePreparo: Int16(tempoDePreparoTexto) ?? 0,
                 porcoes: porcoesTexto,
                 dificuldade: dificuldade,
