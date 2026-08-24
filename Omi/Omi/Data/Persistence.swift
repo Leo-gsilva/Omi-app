@@ -45,7 +45,7 @@ struct PersistenceController {
         
         let categorias = ["sobremesa", "salgado", "bebida", "massa", "lanche"]
         
-        for i in 1...5 {
+        for i in 1...2 {
             let receita = Receita(context: context)
             
             receita.id = UUID()

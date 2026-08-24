@@ -6,25 +6,24 @@
 //
 
 import Observation
-import CoreData // PQ esse viewModel importa o coreData? Ta certo?
+import CoreData
 
 @Observable
 final class LivroReceitasViewModel {
-    var categoriaAtual: CategoriaReceita = .sobremesa
+    var paginaAtual: Int = 0                          // índice da RECEITA dentro da categoria
+    var categoriaAtual: CategoriaReceita = .sobremesa // setada pelas tags
     private(set) var receitas: [ReceitaModel] = []
-    
+    var livroAberto: Bool = false
+
     private let repo: ReceitaRepositorio
     private var observer: NSObjectProtocol?
-    // Recebe protocolo e não a classe
-    
-    var livroAberto: Bool = false
-    
+
     init(repo: ReceitaRepositorio) {
         self.repo = repo
         carregarReceitas()
         observarMudancas()
     }
-    
+
     var receitasFiltradas: [ReceitaModel] {
         receitas.filter { $0.categoria == categoriaAtual }
     }
@@ -32,9 +31,7 @@ final class LivroReceitasViewModel {
     var totalPaginas: Int {
         receitasFiltradas.count
     }
-    
-    var paginaAtual = 0
-    
+
     func carregarReceitas() {
         do {
             receitas = try repo.buscarReceitas()
@@ -43,7 +40,7 @@ final class LivroReceitasViewModel {
             receitas = []
         }
     }
-    
+
     func deletar(_ receita: ReceitaModel) {
         do {
             try repo.deletarReceita(id: receita.id)
@@ -52,60 +49,37 @@ final class LivroReceitasViewModel {
             print("Erro ao deletar receita \(error)")
         }
     }
-    
-    func proximaCategoria() {
-        guard let indiceAtual = CategoriaReceita.allCases.firstIndex(of: categoriaAtual)
-        else { return }
 
-        let proximoIndice = min(indiceAtual + 1, CategoriaReceita.allCases.count - 1)
-
-        categoriaAtual = CategoriaReceita.allCases[proximoIndice]
+    func abrirLivro() {
+        guard !livroAberto else { return }
+        livroAberto = true
     }
 
-    func categoriaAnterior() {
-        guard let indiceAtual = CategoriaReceita.allCases.firstIndex(of: categoriaAtual)
-        else { return }
-
-        let indiceAnterior = max(indiceAtual - 1, 0)
-
-        categoriaAtual = CategoriaReceita.allCases[indiceAnterior]
+    func selecionarCategoria(_ categoria: CategoriaReceita) {
+        categoriaAtual = categoria
+        paginaAtual = 0
     }
-    
-    // Substitui o que o @fetchRequest faz de graça: reage a saves no contexto e busca novamente
+
+    func avancar() {
+        guard paginaAtual < totalPaginas - 1 else { return }
+        paginaAtual += 1
+    }
+
+    func voltar() {
+        guard paginaAtual > 0 else { return }
+        paginaAtual -= 1
+    }
+
     private func observarMudancas() {
         observer = NotificationCenter.default.addObserver(
             forName: .NSManagedObjectContextDidSave,
             object: nil,
-            queue: .main ){ [weak self] _ in
-                self?.carregarReceitas()
-            }
-    }
-    
-    // Funcs do antigo TelaInicialViewModel
-    func abrirLivro() {
-        guard !livroAberto else {
-            return
+            queue: .main
+        ) { [weak self] _ in
+            self?.carregarReceitas()
         }
-
-        livroAberto = true
     }
 
-    func avancar() {
-        guard paginaAtual < totalPaginas else {
-            return
-        }
-
-        paginaAtual += 1
-    }
-    
-    func voltar() {
-        guard paginaAtual > 1 else {
-            return
-        }
-        
-        paginaAtual -= 1
-    }
-    
     deinit {
         if let observer {
             NotificationCenter.default.removeObserver(observer)
