@@ -18,6 +18,14 @@ struct TelaInicial: View {
         dampingFraction: 0.78
     )
     
+    var naviTitle: String {
+        if !mostrarLivroAberto {
+            return "Receita"
+        } else {
+            return "\(viewModel.categoriaAtual.rawValue)"
+        }
+    }
+    
     var body: some View {
         
         GeometryReader { geo in
@@ -159,6 +167,7 @@ struct TelaInicial: View {
                 }
             }
         }
+        .navigationTitle(naviTitle)
     }
     
     private func abrirLivro() {
