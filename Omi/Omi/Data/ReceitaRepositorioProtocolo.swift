@@ -17,7 +17,7 @@ protocol ReceitaRepositorio {
         titulo: String,
         categoria: String,
         descricao: String,
-        imagem: String,
+        imagem: Data?,
         tempoDePreparo: Int16,
         porcoes: String,
         dificuldade: String?,
@@ -25,16 +25,31 @@ protocol ReceitaRepositorio {
         passos: [PassoAdicionado]
     ) throws
     
+    
+    
     func atualizarReceita(
         id: UUID,
         novoTitulo: String,
         novaCategoria: String,
         novaDescricao: String,
-        novaImagem: String,
+        novaImagem: Data?,
         novoTempoDePreparo: Int16,
         novasPorcoes: String,
         novaDificuldade: String?
     ) throws
+    
+    func atualizarReceitaCompleta(
+            id: UUID,
+            titulo: String,
+            categoria: String,
+            descricao: String,
+            imagem: Data?,
+            tempoDePreparo: Int16,
+            porcoes: String,
+            dificuldade: String?,
+            ingredientes: [IngredienteAdicionado],
+            passos: [PassoAdicionado]
+        ) throws
     
     func deletarReceita(id: UUID) throws
     
@@ -47,7 +62,7 @@ protocol ReceitaRepositorio {
         etapa: Int16,
         nome: String,
         texto: String,
-        imagem: String,
+        imagem: Data?,
         tempoEstimado: Int16
     ) throws
     
@@ -56,7 +71,7 @@ protocol ReceitaRepositorio {
         novaEtapa: Int16,
         novoNome: String,
         novoTexto: String,
-        novaImagem: String,
+        novaImagem: Data?,
         novoTempoEstimado: Int16
     ) throws
     
@@ -75,3 +90,4 @@ protocol ReceitaRepositorio {
     
     func criarIngredienteAvulso(nome: String) throws -> IngredienteCadastradoModel
 }
+

@@ -66,28 +66,26 @@ struct ReceitaPageView: View {
 }
 
 #Preview {
-    NavigationStack{
-        ReceitaPageView(
-            receita: ReceitaModel(
-                id: UUID(),
-                titulo: "Bolo de Cenoura",
-                categoria: .sobremesa,
-                descricao: "Receita de teste para Preview.",
-                imagem: "",
-                tempoDePreparo: 45,
-                porcoes: "8",
-                dificuldade: "Fácil",
-                dataCriacao: Date(),
-                dataAtualizacao: nil,
-                ingredientes: [
-                    IngredienteModel(id: UUID(), nome: "Cenoura", quantidade: "3", medida: "unidades"),
-                    IngredienteModel(id: UUID(), nome: "Farinha", quantidade: "2", medida: "xícaras")
-                ],
-                passos: [
-                    PassoModel(id: UUID(), etapa: 1, nome: "Misture", texto: "Bata tudo no liquidificador.", tempoEstimado: 5),
-                    PassoModel(id: UUID(), etapa: 2, nome: "Asse", texto: "Leve ao forno por 40 min.", tempoEstimado: 40)
-                ]
-            )
+    ReceitaPageView(
+        receita: ReceitaModel(
+            id: UUID(),
+            titulo: "Bolo de Cenoura",
+            categoria: .sobremesa,
+            descricao: "Receita de teste para Preview.",
+            imagem: nil,
+            tempoDePreparo: 45,
+            porcoes: "8",
+            dificuldade: "Fácil",
+            dataCriacao: Date(),
+            dataAtualizacao: nil,
+            ingredientes: [
+                IngredienteModel(id: UUID(), nome: "Cenoura", quantidade: "3", medida: "unidades"),
+                IngredienteModel(id: UUID(), nome: "Farinha", quantidade: "2", medida: "xícaras")
+            ],
+            passos: [
+                PassoModel(id: UUID(), etapa: 1, nome: "Misture", texto: "Bata tudo no liquidificador.", tempoEstimado: 5, imagem: nil),
+                PassoModel(id: UUID(), etapa: 2, nome: "Asse", texto: "Leve ao forno por 40 min.", tempoEstimado: 40, imagem: nil)
+            ]
         )
     }
     .environment(AppRouter())

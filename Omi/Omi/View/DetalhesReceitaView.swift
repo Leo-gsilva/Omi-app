@@ -16,6 +16,7 @@ struct DetalhesReceitaView: View {
         GeometryReader { geo in
             
             
+            
             ZStack {
                 Color(.cordoFundo)
                     .ignoresSafeArea()
@@ -68,7 +69,7 @@ struct DetalhesReceitaView: View {
                                         numero: passo.etapa,
                                         nome: passo.nome,
                                         texto: passo.texto,
-                                        imagemData: passo.texto
+                                        imagemData: passo.imagem
                                     )
                                 }
                             }
@@ -93,7 +94,7 @@ struct DetalhesReceitaView: View {
             
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Editar") {
-                    // Action for edit
+                    router.apresentarSheet(.criarOuEditarReceita(receita))
                 }
             }
         }
@@ -103,7 +104,27 @@ struct DetalhesReceitaView: View {
 #Preview {
     NavigationStack{
         DetalhesReceitaView(
-            viewModel: DetalhesReceitaViewModel.preview
+            receita: ReceitaModel(
+                id: UUID(),
+                titulo: "Bolo de Cenoura",
+                categoria: .sobremesa,
+                descricao: "O bolo de cenoura é uma receita clássica e amada por todos! Com sua massa fofinha e saborosa, esse bolo é perfeito para um lanche da tarde ou como sobremesa em qualquer ocasião.",
+                imagem: nil,
+                tempoDePreparo: 40,
+                porcoes: "8",
+                dificuldade: nil,
+                dataCriacao: Date(),
+                dataAtualizacao: nil,
+                ingredientes: [
+                    IngredienteModel(id: UUID(), nome: "cenouras médias", quantidade: "3", medida: "unidades"),
+                    IngredienteModel(id: UUID(), nome: "ovos", quantidade: "4", medida: "unidades")
+                ],
+                passos: [
+                    PassoModel(id: UUID(), etapa: 1, nome: "Massa do Bolo", texto: "Bata as cenouras, os ovos e o óleo no liquidificador.", tempoEstimado: 40, imagem: nil),
+                    PassoModel(id: UUID(), etapa: 2, nome: "Massa do Bolo", texto: "Bata as cenouras, os ovos e o óleo no liquidificador.", tempoEstimado: 40, imagem: nil)
+                    
+                ]
+            )
         )
     }
 }
