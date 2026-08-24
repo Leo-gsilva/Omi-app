@@ -3,10 +3,11 @@ import SwiftUI
 struct TelaInicial: View {
     @Environment(AppRouter.self) private var router // necessária para navegação
     @Bindable var viewModel: LivroReceitasViewModel
+//    @Bindable var viewModelDetalhes: DetalhesReceitaViewModel
     @State private var pesquisa = ""
     
     var naviTitle: String {
-        if !mostrarLivroAberto {
+        if !viewModel.livroAberto {
             return "Receita"
         } else {
             return "\(viewModel.categoriaAtual.rawValue)"
@@ -25,15 +26,17 @@ struct TelaInicial: View {
                 
                 VStack {
                     
-                    Text("Receitas")
-                        .font(FontesApp.titulo)
-                        .padding(.trailing, geo.size.width * 0.45)
-                        .padding(geo.size.width * 0.04)
+//                    Text("Receitas")
+//                        .font(FontesApp.titulo)
+//                        .padding(.trailing, geo.size.width * 0.45)
+//                        .padding(geo.size.width * 0.04)
                     
                     // Livro
                     LivroInterativo(
                         viewModel: viewModel
                     )
+                    
+//                    DetalhesReceitaView(viewModel: viewModelDetalhes)
                     
                     // Botões de trocar página
                     TrocarPagina(

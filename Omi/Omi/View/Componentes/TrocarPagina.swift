@@ -9,10 +9,7 @@ import SwiftUI
 
 struct TrocarPagina: View {
     @Bindable var viewModel: LivroReceitasViewModel
-    
-//    var paginaAtual: Int
-//    var totalPaginas: Int
-//    
+      
     let voltar: () -> Void
     let avancar: () -> Void
     

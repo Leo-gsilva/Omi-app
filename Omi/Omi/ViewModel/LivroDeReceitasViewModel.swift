@@ -18,11 +18,7 @@ final class LivroReceitasViewModel {
     private let repo: ReceitaRepositorio
     private var observer: NSObjectProtocol?
     // Recebe protocolo e não a classe
-    
-    var livroAberto: Bool = false
-    
-    var paginaAtual = 0
-    
+            
     init(repo: ReceitaRepositorio) {
         self.repo = repo
         carregarReceitas()
@@ -72,15 +68,15 @@ final class LivroReceitasViewModel {
         paginaAtual = 0
     }
 
-    func avancar() {
-        guard paginaAtual < totalPaginas - 1 else { return }
-        paginaAtual += 1
-    }
-
-    func voltar() {
-        guard paginaAtual > 0 else { return }
-        paginaAtual -= 1
-    }
+//    func avancar() {
+//        guard paginaAtual < totalPaginas - 1 else { return }
+//        paginaAtual += 1
+//    }
+//
+//    func voltar() {
+//        guard paginaAtual > 0 else { return }
+//        paginaAtual -= 1
+//    }
 
     private func observarMudancas() {
         observer = NotificationCenter.default.addObserver(
@@ -92,11 +88,11 @@ final class LivroReceitasViewModel {
     }
     
     // Funcs do antigo TelaInicialViewModel
-    func abrirLivro() {
-        guard !livroAberto else { return }
-
-        livroAberto = true
-    }
+//    func abrirLivro() {
+//        guard !livroAberto else { return }
+//
+//        livroAberto = true
+//    }
 
     // Agora avan;a dentro da categoria atual
     func avancar() {
@@ -115,7 +111,7 @@ final class LivroReceitasViewModel {
             let categoriaAntes = categoriaAtual
             proximaCategoria()
             if categoriaAtual != categoriaAntes {
-                paginaAtual = 1
+                paginaAtual = 0
             }
         }
     }
@@ -136,7 +132,7 @@ final class LivroReceitasViewModel {
             let categoriaAntes = categoriaAtual
             categoriaAnterior()
             if categoriaAtual != categoriaAntes {
-                paginaAtual = max(totalPaginas, 1)
+                paginaAtual = max(totalPaginas, 0)
             }
         }
     }
@@ -153,6 +149,24 @@ final class LivroReceitasViewModel {
 //            paginaAtual = categoriaAtual != categoriaAntes ? (totalPaginas > 0 ? 1 : 0) : totalPaginas
 //        }
 //    }
+    
+    func proximaCategoria() {
+        guard let indiceAtual = CategoriaReceita.allCases.firstIndex(of: categoriaAtual)
+        else { return }
+        
+        let proximoIndice = min(indiceAtual + 1, CategoriaReceita.allCases.count - 1)
+        
+        categoriaAtual = CategoriaReceita.allCases[proximoIndice]
+    }
+    
+    func categoriaAnterior() {
+        guard let indiceAtual = CategoriaReceita.allCases.firstIndex(of: categoriaAtual)
+        else { return }
+        
+        let indiceAnterior = max(indiceAtual - 1, 0)
+        
+        categoriaAtual = CategoriaReceita.allCases[indiceAnterior]
+    }
     
     deinit {
         if let observer {

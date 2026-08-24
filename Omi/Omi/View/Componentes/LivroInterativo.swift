@@ -10,8 +10,9 @@ import SwiftUI
 
 struct LivroInterativo: View {
     @Bindable var viewModel: LivroReceitasViewModel
+//    @Bindable var viewModelDetalhes:
     @State private var pesquisa = ""
-    @State private var mostrarLivroAberto = false
+//    @State private var mostrarLivroAberto = false
     
     private let animacaoLivro = Animation.spring(
         response: 0.65,
@@ -19,10 +20,10 @@ struct LivroInterativo: View {
     )
     private let coresPorCategoria: [CategoriaReceita: String] = [
         .cafeDaManha: "albumAbertoVermelho",
-        .almoco:      "albumAbertoAzul",
-        .jantar:      "albumAbertoVerde",
+        .refeicao:      "albumAbertoAzul",
+        .saudavel:      "albumAbertoVerde",
         .sobremesa:   "albumAbertoAmarelo",
-        .lanches:     "albumAbertoLaranja"
+        .lanche:     "albumAbertoLaranja"
     ]
 
     private var nomePaginaAtual: String {
@@ -46,6 +47,17 @@ struct LivroInterativo: View {
                     .transition(.opacity)
                     .animation(.easeInOut(duration: 0.35), value: nomePaginaAtual)
                     .allowsHitTesting(false)
+                
+                if viewModel.livroAberto {
+                    LivroReceitasViewSimples(viewModel: viewModel)
+                        .frame(
+                            width: geo.size.width * 0.75,
+                            height: geo.size.height * 0.55
+                        )
+                        .padding(.leading, geo.size.width * 0.12)
+                        .transition(.opacity)
+                        .zIndex(2)
+                }
                 
                 Image("ReceitaTelaInicial")
                     .resizable()
@@ -89,10 +101,14 @@ struct LivroInterativo: View {
             deadline: .now() + 0.50
         ) {
             withAnimation(.easeInOut(duration: 0.15)) {
-                mostrarLivroAberto = true
+                viewModel.livroAberto = true
             }
         }
     }
+}
+
+#Preview {
+    LivroInterativo(viewModel: LivroReceitasViewModel.preview)
 }
 
 

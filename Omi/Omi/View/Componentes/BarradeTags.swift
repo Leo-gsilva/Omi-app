@@ -11,15 +11,15 @@ struct BarraDeTags: View {
     @Bindable var viewModel: LivroReceitasViewModel
 
     private let ordemCategorias: [CategoriaReceita] = [
-        .cafeDaManha, .almoco, .jantar, .sobremesa, .lanches
+        .cafeDaManha, .refeicao, .saudavel, .sobremesa, .lanche
     ]
 
     private let tagPorCategoria: [CategoriaReceita: String] = [
         .cafeDaManha: "TagVermelha",
-        .almoco:      "TagAzul",
-        .jantar:      "TagVerde",
+        .refeicao:      "TagAzul",
+        .saudavel:      "TagVerde",
         .sobremesa:   "TagAmarela",
-        .lanches:     "TagLaranja"
+        .lanche:     "TagLaranja"
     ]
 
     var body: some View {
