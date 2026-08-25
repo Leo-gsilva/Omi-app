@@ -47,7 +47,6 @@ protocol ReceitaRepositorio {
         etapa: Int16,
         nome: String,
         texto: String,
-        imagem: Data?,
         tempoEstimado: Int16
     ) throws
     
@@ -56,7 +55,6 @@ protocol ReceitaRepositorio {
         novaEtapa: Int16,
         novoNome: String,
         novoTexto: String,
-        novaImagem: Data?,
         novoTempoEstimado: Int16
     ) throws
     

@@ -48,6 +48,7 @@ struct LivroInterativo: View {
                     .animation(.easeInOut(duration: 0.35), value: nomePaginaAtual)
                     .allowsHitTesting(false)
                 
+                
                 if viewModel.livroAberto {
                     LivroReceitasViewSimples(viewModel: viewModel)
                         .frame(

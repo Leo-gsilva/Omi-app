@@ -28,4 +28,5 @@ class DetalhesReceitaViewModel {
             print("Erro ao carregar detalhes: \(error)")
         }
     }
+    
 }

@@ -63,59 +63,90 @@ struct IngredienteCadastradoModel: Identifiable, Hashable {
     var nome: String
 }
 
-extension Ingrediente {
-    func toModel() -> IngredienteCadastradoModel {
-        IngredienteCadastradoModel(id: id ?? UUID(), nome: nome ?? "")
-    }
-}
-
-extension PassoReceita {
-    func toModel() -> PassoModel {
-        PassoModel(id: id ?? UUID(), etapa: etapa, nome: nome ?? "", texto: texto ?? "", tempoEstimado: tempoEstimado)
-    }
-}
+//extension Ingrediente {
+//    func toModel() -> IngredienteCadastradoModel {
+//        IngredienteCadastradoModel(id: id ?? UUID(), nome: nome ?? "")
+//    }
+//}
+//
+//extension PassoReceita {
+//    func toModel() -> PassoModel {
+//        PassoModel(id: id ?? UUID(), etapa: etapa, nome: nome ?? "", texto: texto ?? "", tempoEstimado: tempoEstimado)
+//    }
+//}
 
 // MARK: - Mapeamento Entidade ->
 // Único lugar do app que sabe transformar NSManagedObject em Struct de comínio
-extension Receita {
-    func toModel() -> ReceitaModel {
-        let ingredientesModel: [IngredienteModel] = (ingredientesDaReceita as? Set<IngredienteDaReceita> ?? [])
-            .compactMap { relacao in
-                guard let ingrediente = relacao.ingrediente else { return nil }
-                
-                return IngredienteModel(
-                    id: relacao.id ?? UUID(),
-                    nome: ingrediente.nome ?? "",
-                    quantidade: relacao.quantidade ?? "",
-                    medida: relacao.medida ?? ""
-                )
-            }
-        
-        let passosModel: [PassoModel] = (passo as? Set<PassoReceita> ?? [])
-            .map { passo in
-                PassoModel(
-                    id: passo.id ?? UUID(),
-                    etapa: passo.etapa + 1,
-                    nome: passo.nome ?? "",
-                    texto: passo.texto ?? "",
-                    tempoEstimado: passo.tempoEstimado
-                    //imagem: passo.imagem
-                )
-            }
-            .sorted { $0.etapa < $1.etapa }
-        
-        return ReceitaModel(
-            id: id ?? UUID(),
-            titulo: titulo ?? "",
-            categoria: CategoriaReceita(
-                rawValue: categoria ?? "") ?? .sobremesa,
-            descricao: descricao ?? "",
-            imagem: imagem,
-            tempoDePreparo: tempoDePreparo,
-            porcoes: porcoes ?? "",
-            dataCriacao: dataCriacao ?? Date(),
-            dataAtualizacao: dataAtualizacao,
-            ingredientes: ingredientesModel,
-            passos: passosModel)
-    }
-}
+//extension Receita {
+//    func toModel() -> ReceitaModel {
+//        let ingredientesModel: [IngredienteModel] = (ingredientesDaReceita as? Set<IngredienteDaReceita> ?? [])
+//            .compactMap { relacao in
+//                guard let ingrediente = relacao.ingrediente else { return nil }
+//                
+//                return IngredienteModel(
+//                    id: relacao.id ?? UUID(),
+//                    nome: ingrediente.nome ?? "",
+//                    quantidade: relacao.quantidade ?? "",
+//                    medida: relacao.medida ?? ""
+//                )
+//            }
+//        
+//        let passosModel: [PassoModel] = (passo as? Set<PassoReceita> ?? [])
+//            .map { passo in
+//                PassoModel(
+//                    id: passo.id ?? UUID(),
+//                    etapa: passo.etapa + 1,
+//                    nome: passo.nome ?? "",
+//                    texto: passo.texto ?? "",
+//                    tempoEstimado: passo.tempoEstimado
+//                    //imagem: passo.imagem
+//                )
+//            }
+//            .sorted { $0.etapa < $1.etapa }
+//        
+//        return ReceitaModel(
+//            id: id ?? UUID(),
+//            titulo: titulo ?? "",
+//            categoria: CategoriaReceita(
+//                rawValue: categoria ?? "") ?? .sobremesa,
+//            descricao: descricao ?? "",
+//            imagem: imagem,
+//            tempoDePreparo: tempoDePreparo,
+//            porcoes: porcoes ?? "",
+//            dataCriacao: dataCriacao ?? Date(),
+//            dataAtualizacao: dataAtualizacao,
+//            ingredientes: ingredientesModel,
+//            passos: passosModel)
+//    }
+//}
+
+//extension Receita {
+//    func toModel(_ receita: Receita) -> ReceitaModel {
+//        ReceitaModel(
+//            id: receita.id,
+//            titulo: receita.titulo,
+//            categoria: CategoriaReceita(rawValue: receita.categoria) ?? .sobremesa,
+//            descricao: receita.descricao,
+//            tempoDePreparo: receita.tempoDePreparo,
+//            porcoes: receita.porcoes,
+//            dataCriacao: receita.dataCriacao,
+//            ingredientes: receita.ingredientesDaReceita.map {
+//                IngredienteModel(
+//                    id: $0.id,
+//                    nome: $0.ingrediente?.nome ?? "",
+//                    quantidade: $0.quantidade,
+//                    medida: $0.medida)
+//            },
+//            passos: receita.passos.map {
+//                PassoModel(
+//                    id: $0.id,
+//                    etapa: $0.etapa,
+//                    nome: $0.nome,
+//                    texto: $0.texto,
+//                    tempoEstimado: $0.tempoEstimado
+//                )
+//            }
+//            .sorted{ $0.etapa < $1.etapa }
+//        )
+//    }
+//}
