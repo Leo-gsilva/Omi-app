@@ -17,7 +17,7 @@ struct IngredienteAdicionado: Identifiable {
 
 struct PassoAdicionado: Identifiable {
     let id = UUID()
-    let etapa: Int
+    var etapa: Int
     let nome: String
     let texto: String
     let tempoEstimado: Int
@@ -119,3 +119,4 @@ extension Receita {
             passos: passosModel)
     }
 }
+

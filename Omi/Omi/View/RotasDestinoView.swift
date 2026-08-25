@@ -26,7 +26,13 @@ struct RotasDestinoView: View {
             DetalhesReceitaView(viewModel: DetalhesReceitaViewModel(receita: receita, repo: ReceitaRepositorioCoreData(context: contexto)))
             
         case .criarReceita:
-            CriarReceitaView(viewModel: CriarReceitaViewModel(repo: ReceitaRepositorioCoreData(context: contexto)))
+            CriarReceitaView(viewModel: CriarReceitaViewModel(repo: ReceitaRepositorioCoreData(context: contexto), modo: .criar))
+        
+        case .editarReceita(let receitaParaEditar):
+            EditarReceitaView(viewModel: CriarReceitaViewModel(
+                repo: ReceitaRepositorioCoreData(context: contexto),
+                modo: .editar(receitaParaEditar) // Se aqui estiver .criar, ele vai duplicar a receita!
+            ))
             
 //        case .categoriaSheetView:
 //            CategoriaSheetView(categoriaSelecionada: .refeicao, aoSelecionar: { _ in } )

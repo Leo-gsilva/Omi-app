@@ -2,7 +2,7 @@ import SwiftUI
 
 struct TelaInicial: View {
     @Environment(AppRouter.self) private var router // necessária para navegação
-    @Bindable var viewModel: LivroReceitasViewModel
+    @State var viewModel: LivroReceitasViewModel
 //    @Bindable var viewModelDetalhes: DetalhesReceitaViewModel
     @State private var pesquisa = ""
     
