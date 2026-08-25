@@ -6,7 +6,8 @@
 //
 
 import Observation
-import CoreData
+import SwiftData
+import SwiftUI
 
 @Observable
 final class LivroReceitasViewModel {
@@ -16,8 +17,8 @@ final class LivroReceitasViewModel {
     var livroAberto: Bool = false
 
     private let repo: ReceitaRepositorio
-    private var observer: NSObjectProtocol?
     // Recebe protocolo e não a classe
+    private var observer: NSObjectProtocol?
             
     init(repo: ReceitaRepositorio) {
         self.repo = repo
@@ -68,33 +69,17 @@ final class LivroReceitasViewModel {
         paginaAtual = 0
     }
 
-//    func avancar() {
-//        guard paginaAtual < totalPaginas - 1 else { return }
-//        paginaAtual += 1
-//    }
-//
-//    func voltar() {
-//        guard paginaAtual > 0 else { return }
-//        paginaAtual -= 1
-//    }
-
     private func observarMudancas() {
         observer = NotificationCenter.default.addObserver(
-            forName: .NSManagedObjectContextDidSave,
+            forName: ModelContext.didSave,
             object: nil,
-            queue: .main ){ [weak self] _ in
+            queue: .main
+        ){ [weak self] _ in
                 self?.carregarReceitas()
-            }
+        }
     }
-    
-    // Funcs do antigo TelaInicialViewModel
-//    func abrirLivro() {
-//        guard !livroAberto else { return }
-//
-//        livroAberto = true
-//    }
 
-    // Agora avan;a dentro da categoria atual
+    // Agora avança dentro da categoria atual
     func avancar() {
         if totalPaginas == 0 {
             let categoriaAntes = categoriaAtual
@@ -137,19 +122,6 @@ final class LivroReceitasViewModel {
         }
     }
     
-//    func tratarPaginaSentinela(_ pagina: Int) {
-//        guard totalPaginas > 0 else { return }
-//        if pagina == 0 {
-//            let categoriaAntes = categoriaAtual
-//            categoriaAnterior()
-//            paginaAtual = categoriaAtual != categoriaAntes ? max(totalPaginas, 1) : 1
-//        } else if pagina == totalPaginas + 1 {
-//            let categoriaAntes = categoriaAtual
-//            proximaCategoria()
-//            paginaAtual = categoriaAtual != categoriaAntes ? (totalPaginas > 0 ? 1 : 0) : totalPaginas
-//        }
-//    }
-    
     func proximaCategoria() {
         guard let indiceAtual = CategoriaReceita.allCases.firstIndex(of: categoriaAtual)
         else { return }
@@ -168,7 +140,7 @@ final class LivroReceitasViewModel {
         categoriaAtual = CategoriaReceita.allCases[indiceAnterior]
     }
     
-    deinit {
+    deinit { // Pra desligar o observer
         if let observer {
             NotificationCenter.default.removeObserver(observer)
         }

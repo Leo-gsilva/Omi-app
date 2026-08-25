@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ReceitaPageView: View {
-    //ReceitaModel, não Receita (entidade) - Não chama CoreData
+    //ReceitaModel, não Receita (entidade) - View não chama SwiftData
     let receita: ReceitaModel
     
     @Environment(AppRouter.self) private var router

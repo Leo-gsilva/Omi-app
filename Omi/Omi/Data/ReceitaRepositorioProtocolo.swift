@@ -9,7 +9,7 @@ import Foundation
 
 // Contrato de acesso a dados, facilita a migração. Quando trocar para SwiftData, basta criar um ReceitaRepositorioSwiftData( ReceitaRepositorio)
 protocol ReceitaRepositorio {
-    // Receita
+    // MARK: - Receita
     func buscarReceitas() throws -> [ReceitaModel] // Busca todo o banco de dados e retorna um ARRAY de receitas
     func buscarReceita(id: UUID) throws -> ReceitaModel? // Busca direto pelo id. Mais eficiente e retornar UMA receita específica se encontrar
     
@@ -40,7 +40,8 @@ protocol ReceitaRepositorio {
     
     // Passo
     
-    func buscarPassos(para receita: Receita) throws -> [PassoReceita] 
+//    func buscarPassos(para receita: Receita) throws -> [PassoReceita] 
+    func buscarPassos(receitaId: UUID) throws -> [PassoModel]
     
     func criarPasso(
         receitaId: UUID,

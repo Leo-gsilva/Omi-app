@@ -6,7 +6,6 @@
 //    //
 //
 import SwiftUI
-//import CoreData
 
 struct DetalhesReceitaView: View {
     @Bindable var viewModel: DetalhesReceitaViewModel

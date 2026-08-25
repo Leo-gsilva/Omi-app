@@ -7,7 +7,6 @@
 import SwiftUI
 import Observation
 
-// pelo que li, é mais tranquilo implementar o coredata usando o ObservedObject
 @Observable
 class DetalhesReceitaViewModel {
     var receita: ReceitaModel?

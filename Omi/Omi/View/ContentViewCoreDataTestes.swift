@@ -6,17 +6,18 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentViewCoreDataTestes: View {
     // É o contexto do Persistence, lida com a persistência no CoreData
-    @Environment(\.managedObjectContext) private var contexto
+    @Environment(\.modelContext) private var contexto
     
     @State private var mostrarForm: Bool = false
         
     var body: some View {
         NavigationStack {
             VStack{
-                LivroReceitasViewSimples(viewModel: LivroReceitasViewModel(repo: ReceitaRepositorioCoreData(context: contexto)))
+                LivroReceitasViewSimples(viewModel: LivroReceitasViewModel(repo: ReceitaRepositorioSwiftData(context: contexto)))
             }
             .navigationTitle("Minhas Receitas")
             .toolbar {
@@ -27,7 +28,7 @@ struct ContentViewCoreDataTestes: View {
                         Image(systemName: "plus")
                     }
                     .sheet(isPresented: $mostrarForm) {
-                        CriarReceitaView(viewModel: CriarReceitaViewModel(repo: ReceitaRepositorioCoreData(context: contexto)))
+                        CriarReceitaView(viewModel: CriarReceitaViewModel(repo: ReceitaRepositorioSwiftData(context: contexto)))
                     }
                 }
             }
@@ -38,5 +39,6 @@ struct ContentViewCoreDataTestes: View {
 #Preview {
     // recebe o .preview que é uma inicialização em ambiente controlado, ambiente de pre-visualização. Em ambiente de produção/buildado o banco tem outros elementos.
     ContentViewCoreDataTestes()
-        .environment(\.managedObjectContext, ReceitaRepositorioCoreData.preview)
+        .modelContainer(PersistenceSwiftData.container)
+
 }

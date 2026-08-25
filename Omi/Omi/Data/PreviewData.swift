@@ -6,40 +6,37 @@
 //
 
 import Foundation
-import CoreData
+import SwiftData
 
-enum PreviewData {
-    static func receitas(context: NSManagedObjectContext) {
-        for i in 1...5 {
-            let receita = Receita(context: context)
-            
-            receita.id = UUID()
-            receita.titulo = "Receita \(i)"
-        }
-        
-        try? context.save()
-    }
-}
+//enum PreviewData {
+//    static func receitas(context: NSManagedObjectContext) {
+//        for i in 1...5 {
+//            let receita = Receita(context: context)
+//            
+//            receita.id = UUID()
+//            receita.titulo = "Receita \(i)"
+//        }
+//        
+//        try? context.save()
+//    }
+//}
 
-// Como aqui é sobre Preview e també importa o CoreData, posso chamar extensions do que preciso criar para passar chamar no preview
+// Como aqui é sobre Preview e també importa o SwiftData, posso chamar extensions do que preciso criar para passar chamar no preview do que receber a view model
 extension LivroReceitasViewModel {
     static var preview: LivroReceitasViewModel {
-        LivroReceitasViewModel(repo: ReceitaRepositorioCoreData(context: PersistenceController.preview.container.viewContext))
+        LivroReceitasViewModel(repo: ReceitaRepositorioSwiftData(context: PersistenceSwiftData.container.mainContext))
     }
 }
 
-
-
-// .preview para o ContentViewCoreDataTestes
-extension ReceitaRepositorioCoreData {
-    static var preview: NSManagedObjectContext {
-        PersistenceController.preview.container.viewContext
+extension ReceitaRepositorioSwiftData {
+    static var preview: ModelContext {
+        PersistenceSwiftData.preview.mainContext
     }
 }
 
 extension CriarReceitaViewModel {
     static var preview: CriarReceitaViewModel {
-        CriarReceitaViewModel(repo: ReceitaRepositorioCoreData(context: PersistenceController.preview.container.viewContext))
+        CriarReceitaViewModel(repo: ReceitaRepositorioSwiftData(context: PersistenceSwiftData.container.mainContext))
     }
 }
 
@@ -67,7 +64,7 @@ extension DetalhesReceitaViewModel {
                     
                 ]
             ),
-            repo: ReceitaRepositorioCoreData(context: PersistenceController.preview.container.viewContext)
+            repo: ReceitaRepositorioSwiftData(context: PersistenceSwiftData.container.mainContext)
         )
     }
 }

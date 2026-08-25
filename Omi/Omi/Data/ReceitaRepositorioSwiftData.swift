@@ -22,9 +22,11 @@ final class ReceitaRepositorioSwiftData: ReceitaRepositorio {
             titulo: receita.titulo,
             categoria: CategoriaReceita(rawValue: receita.categoria) ?? .sobremesa,
             descricao: receita.descricao,
+            imagem: receita.imagem,
             tempoDePreparo: receita.tempoDePreparo,
             porcoes: receita.porcoes,
             dataCriacao: receita.dataCriacao,
+            dataAtualizacao: receita.dataAtualizacao,
             ingredientes: receita.ingredientesDaReceita.map {
                 IngredienteModel(
                     id: $0.id,
@@ -32,15 +34,14 @@ final class ReceitaRepositorioSwiftData: ReceitaRepositorio {
                     quantidade: $0.quantidade,
                     medida: $0.medida)
             },
-            passos: receita.passos.map {
-                PassoModel(
+            passos: receita.passos
+                .map { PassoModel(
                     id: $0.id,
                     etapa: $0.etapa,
                     nome: $0.nome,
                     texto: $0.texto,
                     tempoEstimado: $0.tempoEstimado
-                )
-            }
+                ) }
                 .sorted{ $0.etapa < $1.etapa }
         )
     }
@@ -53,7 +54,6 @@ final class ReceitaRepositorioSwiftData: ReceitaRepositorio {
     //        IngredienteModel(id: ingrediente.id, nome: ingrediente, quantidade: ingrediente.quantidade, medida: ingrediente.medida)
     //    }
     
-    // MARK: - Read
     // #Predicate é a diferença mais visível: troca o NSPredicate(format:...)
     // (string, sem checagem de tipo) por uma closure swift normal, checda em tempo de compilação
     
@@ -77,9 +77,9 @@ final class ReceitaRepositorioSwiftData: ReceitaRepositorio {
         for item in ingredientes {
             let ingrediente = try buscarOuCriarIngrediente(nome: item.nome)
             let relacao = IngredienteDaReceita(quantidade: String(item.quantidade), medida: item.medida)
+            contexto.insert(relacao)
             relacao.receita = receita
             relacao.ingrediente = ingrediente
-            contexto.insert(relacao)
         }
         
         for item in passos {
@@ -111,10 +111,20 @@ final class ReceitaRepositorioSwiftData: ReceitaRepositorio {
     }
     
     // MARK: - Passos
-    func buscarPassos(para receita: Receita) throws -> [PassoReceita] {
-//        let receitaId = receita.id
-//        let descritor = FetchDescriptor<PassoReceita>(predicate: #Predicate{ $0.receita?.id == receitaId }, sortBy: [SortDescriptor(\.texto, order: .forward)])
-//        return try contexto.fetch(descritor).map(passoToModel)
+    func criarPasso(receitaId: UUID, etapa: Int16, nome: String, texto: String, tempoEstimado: Int16) throws {
+        guard let receita = try buscarReceitaEntity(id: receitaId) else { return }
+        
+        let passo = PassoReceita(etapa: etapa, nome: nome, texto: texto, tempoEstimado: tempoEstimado)
+        passo.receita = receita
+        contexto.insert(passo)
+        try contexto.save()
+    }
+    
+    func buscarPassos(receitaId: UUID) throws -> [PassoModel] {
+        let descritor = FetchDescriptor<PassoReceita>(
+            predicate: #Predicate { $0.receita?.id == receitaId }
+        )
+        return try contexto.fetch(descritor).map(passoToModel).sorted{ $0.etapa < $1.etapa}
     }
     
     func atualizarPasso(id: UUID, novaEtapa: Int16, novoNome: String, novoTexto: String, novoTempoEstimado: Int16) throws {
@@ -128,12 +138,6 @@ final class ReceitaRepositorioSwiftData: ReceitaRepositorio {
         try contexto.save()
     }
     
-    func criarPasso(receitaId: UUID, etapa: Int16, nome: String, texto: String, tempoEstimado: Int16) throws {
-        let passo = PassoModel(id: receitaId, etapa: etapa, nome: nome, texto: texto, tempoEstimado: tempoEstimado)
-        
-        try contexto.save()
-    }
-    
     func deletarPasso(id: UUID) throws {
         guard let passo = try buscarPassoEntity(id: id) else { return }
         contexto.delete(passo)
@@ -142,7 +146,8 @@ final class ReceitaRepositorioSwiftData: ReceitaRepositorio {
     
     // MARK: - Ingredientes
     func buscarIngredientes() throws -> [IngredienteCadastradoModel] {
-        <#code#>
+        let descritor = FetchDescriptor<Ingrediente>(sortBy: [SortDescriptor(\.nome)])
+        return try contexto.fetch(descritor).map { IngredienteCadastradoModel(id: $0.id, nome: $0.nome)}
     }
     
     func atualizarIngredienteDaReceita(id: UUID, novaQuantidade: String, novaMedida: String) throws {
@@ -155,7 +160,9 @@ final class ReceitaRepositorioSwiftData: ReceitaRepositorio {
     }
     
     func criarIngredienteAvulso(nome: String) throws -> IngredienteCadastradoModel {
-        <#code#>
+        let ingrediente = try buscarOuCriarIngrediente(nome: nome)
+        try contexto.save()
+        return IngredienteCadastradoModel(id: ingrediente.id, nome: ingrediente.nome)
     }
     
     func deletarIngrediente(id: UUID) throws {
@@ -164,7 +171,7 @@ final class ReceitaRepositorioSwiftData: ReceitaRepositorio {
         try contexto.save()
     }
     
-    // MARK: - Create
+    // MARK: - Helpers
     private func buscarOuCriarIngrediente(nome: String) throws -> Ingrediente {
         let nomeLimpo = nome.trimmingCharacters(in: .whitespaces)
         let descritor = FetchDescriptor<Ingrediente>(
@@ -178,7 +185,6 @@ final class ReceitaRepositorioSwiftData: ReceitaRepositorio {
         return novo
     }
     
-    // MARK: - Update / Delete
     private func buscarReceitaEntity(id: UUID) throws -> Receita? {
         try contexto.fetch(FetchDescriptor<Receita>(predicate: #Predicate { $0.id == id})).first
     }
@@ -194,6 +200,4 @@ final class ReceitaRepositorioSwiftData: ReceitaRepositorio {
     private func buscarRelacaoEntity(id: UUID) throws -> IngredienteDaReceita? {
         try contexto.fetch(FetchDescriptor<IngredienteDaReceita>(predicate: #Predicate { $0.id == id})).first
     }
-    
-    // o restante das funções segue o padrão do CoreData
 }
