@@ -27,7 +27,7 @@ struct ContentViewCoreDataTestes: View {
                         Image(systemName: "plus")
                     }
                     .sheet(isPresented: $mostrarForm) {
-                        CriarReceitaView(viewModel: CriarReceitaViewModel(repo: ReceitaRepositorioCoreData(context: contexto)))
+                        CriarReceitaView(viewModel: CriarReceitaViewModel(repo: ReceitaRepositorioCoreData(context: contexto), modo: .criar))
                     }
                 }
             }

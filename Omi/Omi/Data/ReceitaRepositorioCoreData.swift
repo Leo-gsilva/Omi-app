@@ -17,6 +17,7 @@ final class ReceitaRepositorioCoreData: ReceitaRepositorio {
     private func saveData() {
         do {
             try contexto.save()
+            print("PASSO 1: 📢 Core Data salvou e disparou o aviso!")
         } catch {
             contexto.rollback()
             print("ERRO AO SALVAR COREDATA: \(error.localizedDescription)")
@@ -144,6 +145,7 @@ final class ReceitaRepositorioCoreData: ReceitaRepositorio {
         let request = NSFetchRequest<Receita>(entityName: "Receita")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
+        contexto.refreshAllObjects()
         return try contexto.fetch(request).first
     }
     
@@ -281,4 +283,34 @@ final class ReceitaRepositorioCoreData: ReceitaRepositorio {
         contexto.delete(ingrediente)
         saveData()
     }
+    func atualizarReceitaCompleta(
+            id: UUID,
+            titulo: String,
+            categoria: String,
+            descricao: String,
+            imagem: Data?,
+            tempoDePreparo: Int16,
+            porcoes: String,
+            dificuldade: String?,
+            ingredientes: [IngredienteAdicionado],
+            passos: [PassoAdicionado]
+        ) throws {
+            // 1. Atualiza os dados básicos da receita chamando a função que você já tem
+            try atualizarReceita(
+                id: id,
+                novoTitulo: titulo,
+                novaCategoria: categoria,
+                novaDescricao: descricao,
+                novaImagem: imagem,
+                novoTempoDePreparo: tempoDePreparo,
+                novasPorcoes: porcoes,
+                novaDificuldade: dificuldade
+            )
+            
+            // 2. Salva tudo usando o seu saveData centralizado
+            saveData()
+        }
+}
+extension Notification.Name {
+    static let repositorioAtualizado = Notification.Name("Omi.repositorioAtualizado")
 }

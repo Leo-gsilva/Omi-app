@@ -7,11 +7,9 @@
 import SwiftUI
 import Observation
 
-// pelo que li, é mais tranquilo implementar o coredata usando o ObservedObject
 @Observable
 class DetalhesReceitaViewModel {
     var receita: ReceitaModel?
-    
     private let repo: ReceitaRepositorio
     
     init(receita: ReceitaModel, repo: ReceitaRepositorio) {
@@ -23,7 +21,10 @@ class DetalhesReceitaViewModel {
     func carregarDetalhes() {
         guard let id = receita?.id else { return }
         do {
-            receita = try repo.buscarReceita(id: id)
+            if let receitaAtualizada = try repo.buscarReceita(id: id) {
+                self.receita = receitaAtualizada
+                print("🔄 [SUCESSO] Receita atualizada na tela de detalhes: \(receitaAtualizada.titulo)")
+            }
         } catch {
             print("Erro ao carregar detalhes: \(error)")
         }
