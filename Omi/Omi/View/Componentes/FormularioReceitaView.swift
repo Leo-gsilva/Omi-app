@@ -109,115 +109,117 @@ struct FormularioReceitaView: View {
             .padding(.vertical, 8)
             .background(Color(.corFundoCapsula))
             .clipShape(Capsule())
-        }
-        .padding(.horizontal, 20)
-        
-        // MARK: Descrição
-        VStack(alignment: .leading) {
-            Text("Descrição:")
-                .font(FontesApp.corpo)
-            TextEditor(text: $viewModel.descricao)
-                .frame(minHeight: 200)
-        }
-        
-        // MARK: Ingredientes
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Ingredientes:")
-                .font(FontesApp.Semibold)
-                .foregroundStyle(.cordosTextos)
             
-            VStack(spacing: 8) {
-                TextField("Ingrediente (ex: Chocolate)", text: $viewModel.nomeIngredienteTexto)
-                Divider()
-                TextField("Quantidade (ex: 1)", text: $viewModel.quantidadeTexto)
-                Divider()
-                TextField("Medida (ex: xícara)", text: $viewModel.medidaTexto)
-                
-                Button(action: { viewModel.adicionarIngrediente() }) {
-                    Label("Adicionar Ingrediente", systemImage: "plus")
-                        .font(FontesApp.Semibold)
-                        .frame(maxWidth: .infinity)
-                }
-                .padding(.top, 4)
-            }
-            .padding(16)
-            .background(Color(.corFundoCapsula))
-            .clipShape(RoundedRectangle(cornerRadius: 20))
-            
-            VStack(spacing: 8) {
-                ForEach(Array(viewModel.ingredientesAdicionados.enumerated()), id: \.offset) { index, item in
-                    HStack {
-                        Text("• \(item.quantidade.formatted()) \(item.medida) - \(item.nome)")
-                            .font(FontesApp.corpo)
-                            .foregroundStyle(.cordosTextos)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            viewModel.ingredientesAdicionados.remove(at: index)
-                        }) {
-                            Image(systemName: "trash")
-                                .foregroundStyle(.red)
-                        }
-                    }
-                    .padding(.horizontal, 8)
-                    DividerPersonalizado()
-                }
-            }
             .padding(.horizontal, 20)
-        }
-        
-        // MARK: Modo de preparo
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Modo de Preparo:")
-                .font(FontesApp.Semibold)
-                .foregroundStyle(.cordosTextos)
             
-            VStack(alignment: .leading, spacing: 8) {
-                TextField("Nome da etapa", text: $viewModel.nomeDoPasso)
-                Divider()
-                Text("Descrição do Passo")
+            // MARK: Descrição
+            VStack(alignment: .leading) {
+                Text("Descrição:")
                     .font(FontesApp.corpo)
-                TextEditor(text: $viewModel.descricaoDoPasso)
-                    .frame(minHeight: 80)
-                    .scrollContentBackground(.hidden)
-                    .background(Color.white.opacity(0.5))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                
-                Button(action: { viewModel.adicionarPasso() }) {
-                    Label("Adicionar Etapa", systemImage: "plus")
-                        .font(FontesApp.Semibold)
-                        .frame(maxWidth: .infinity)
-                }
+                TextEditor(text: $viewModel.descricao)
+                    .frame(minHeight: 200)
             }
-            .padding(16)
-            .background(Color(.corFundoCapsula))
-            .clipShape(RoundedRectangle(cornerRadius: 20))
             
-            VStack(spacing: 8) {
-                ForEach(Array(viewModel.passosAdicionados.enumerated()), id: \.offset) { index, passo in
-                    HStack {
-                        Text("Etapa \(index + 1): \(passo.nome)")
-                            .font(FontesApp.corpo)
-                            .foregroundStyle(.cordosTextos)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            viewModel.passosAdicionados.remove(at: index)
-                            // Reorganiza o número das etapas automaticamente
-                            for i in 0..<viewModel.passosAdicionados.count {
-                                viewModel.passosAdicionados[i].etapa = i + 1
-                            }
-                        }) {
-                            Image(systemName: "trash")
-                                .foregroundStyle(.red)
-                        }
+            // MARK: Ingredientes
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Ingredientes:")
+                    .font(FontesApp.Semibold)
+                    .foregroundStyle(.cordosTextos)
+                
+                VStack(spacing: 8) {
+                    TextField("Ingrediente (ex: Chocolate)", text: $viewModel.nomeIngredienteTexto)
+                    Divider()
+                    TextField("Quantidade (ex: 1)", text: $viewModel.quantidadeTexto)
+                    Divider()
+                    TextField("Medida (ex: xícara)", text: $viewModel.medidaTexto)
+                    
+                    Button(action: { viewModel.adicionarIngrediente() }) {
+                        Label("Adicionar Ingrediente", systemImage: "plus")
+                            .font(FontesApp.Semibold)
+                            .frame(maxWidth: .infinity)
                     }
-                    .padding(.horizontal, 8)
-                    DividerPersonalizado()
+                    .padding(.top, 4)
+                }
+                .padding(16)
+                .background(Color(.corFundoCapsula))
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+                
+                VStack(spacing: 8) {
+                    ForEach(Array(viewModel.ingredientesAdicionados.enumerated()), id: \.offset) { index, item in
+                        HStack {
+                            Text("• \(item.quantidade.formatted()) \(item.medida) - \(item.nome)")
+                                .font(FontesApp.corpo)
+                                .foregroundStyle(.cordosTextos)
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                viewModel.ingredientesAdicionados.remove(at: index)
+                            }) {
+                                Image(systemName: "trash")
+                                    .foregroundStyle(.red)
+                            }
+                        }
+                        .padding(.horizontal, 8)
+                        DividerPersonalizado()
+                    }
+                }
+                .padding(.horizontal, 20)
+            }
+            
+            // MARK: Modo de preparo
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Modo de Preparo:")
+                    .font(FontesApp.Semibold)
+                    .foregroundStyle(.cordosTextos)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    TextField("Nome da etapa", text: $viewModel.nomeDoPasso)
+                    Divider()
+                    Text("Descrição do Passo")
+                        .font(FontesApp.corpo)
+                    TextEditor(text: $viewModel.descricaoDoPasso)
+                        .frame(minHeight: 80)
+                        .scrollContentBackground(.hidden)
+                        .background(Color.white.opacity(0.5))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    
+                    Button(action: { viewModel.adicionarPasso() }) {
+                        Label("Adicionar Etapa", systemImage: "plus")
+                            .font(FontesApp.Semibold)
+                            .frame(maxWidth: .infinity)
+                    }
+                }
+                .padding(16)
+                .background(Color(.corFundoCapsula))
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+                
+                VStack(spacing: 8) {
+                    ForEach(Array(viewModel.passosAdicionados.enumerated()), id: \.offset) { index, passo in
+                        HStack {
+                            Text("Etapa \(index + 1): \(passo.nome)")
+                                .font(FontesApp.corpo)
+                                .foregroundStyle(.cordosTextos)
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                viewModel.passosAdicionados.remove(at: index)
+                                // Reorganiza o número das etapas automaticamente
+                                for i in 0..<viewModel.passosAdicionados.count {
+                                    viewModel.passosAdicionados[i].etapa = i + 1
+                                }
+                            }) {
+                                Image(systemName: "trash")
+                                    .foregroundStyle(.red)
+                            }
+                        }
+                        .padding(.horizontal, 8)
+                        DividerPersonalizado()
+                    }
                 }
             }
+            
         }
         .padding(20)
     }
