@@ -57,7 +57,7 @@ struct LivroInterativo: View {
                         )
                         .padding(.leading, geo.size.width * 0.23)
                         .transition(.opacity)
-                        
+                        .zIndex(2)
                 }
                 
                 Image("ReceitaTelaInicial")

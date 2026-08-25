@@ -95,7 +95,7 @@ extension Receita {
             .map { passo in
                 PassoModel(
                     id: passo.id ?? UUID(),
-                    etapa: passo.etapa + 1,
+                    etapa: passo.etapa,
                     nome: passo.nome ?? "",
                     texto: passo.texto ?? "",
                     tempoEstimado: passo.tempoEstimado

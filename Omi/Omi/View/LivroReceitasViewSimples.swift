@@ -34,7 +34,7 @@ struct LivroReceitasViewSimples: View {
                     .tag(index + 1) // +1 pq a página atual é 1-index
                 }
             }
-            .tabViewStyle(.page)
+            .tabViewStyle(.page(indexDisplayMode: .never))
         }
     }
 }

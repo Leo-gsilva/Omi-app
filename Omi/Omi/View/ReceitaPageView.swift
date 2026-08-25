@@ -14,54 +14,64 @@ struct ReceitaPageView: View {
     @Environment(AppRouter.self) private var router
     
     var body: some View {
-        ScrollView{
-            VStack(alignment: .leading, spacing: 12) {
+        GeometryReader{ geo in
+  
+            VStack {
+                
                 Section{
-                    Text(receita.titulo)
-                        .font(.title)
-                        .bold()
-                    
-                    Text("data de criação: \(receita.dataCriacao.formatted(.dateTime))")
-                            .font(.caption)
-                    
-                    Text(receita.categoria.rawValue)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    HStack{
-                        Text("Tempo: \(receita.tempoDePreparo) min")
-                        Text("Porções: \(receita.porcoes)")
+                    VStack{
+                        
+                        if let imagemData = receita.imagem,
+                           let uiImage = UIImage(data: imagemData) {
+                            
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 426, height: 118)
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
+                            
+                        } else {
+                            
+                            Image(systemName: "photo")
+                                .resizable()
+                                .scaledToFit()
+                        }
                     }
-                    Text("Categoria: \(receita.categoria.rawValue)")
+                    .frame(width: 226, height: 118)
+                    
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    
+                    DividerPersonalizado()
+                        .padding(.horizontal, 30)
+                    
+                    Text(receita.titulo)
+                        .font(FontesApp.tituloComTexto)
+                        
+                        
+                    HStack{
+                        Image("Tempo")
+                        Text("\(receita.tempoDePreparo) min")
+                        Image("Fatia")
+                        Text("\(receita.porcoes) pessoas")
+                    }
+                    .font(FontesApp.Semibold)
+                    
                 }
                 
-                Divider()
+            
                 
                 Text(receita.descricao)
-                Button{
-                    router.push(.detalheReceita(receita))
-                } label: {
-                    Label("Ver mais detalhes", systemImage: "arrow.up.right")
-                }
-                .padding(.top)
-                            
-                if !receita.passos.isEmpty {
-                    Text("Modo de preparo")
-                        .font(.headline)
+                    .frame(maxWidth: 200, maxHeight: 100)
+                
                     
-                    ForEach(receita.passos) { passo in
-                        Text("\(passo.etapa). \(passo.nome)")
-                            .fontWeight(.semibold)
-                        Text(passo.texto)
-                    }
+                BotaoOnboarding(textoBotao: "Abrir Receita Completa") {
+                    router.push(.detalheReceita(receita))
                 }
+                .frame(width: geo.size.width * 0.60)
+                
+            
             }
             
-           
-        }
-        .contentShape(Rectangle())
-        .padding()
-        .onTapGesture {
-            router.push(.detalheReceita(receita))
         }
     }
 }

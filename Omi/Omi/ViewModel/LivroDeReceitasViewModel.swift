@@ -11,7 +11,7 @@ import CoreData
 @Observable
 final class LivroReceitasViewModel {
     var paginaAtual: Int = 0                          // índice da RECEITA dentro da categoria
-    var categoriaAtual: CategoriaReceita = .sobremesa // setada pelas tags
+    var categoriaAtual: CategoriaReceita = .cafeDaManha // setada pelas tags
     private(set) var receitas: [ReceitaModel] = []
     var livroAberto: Bool = false
 
