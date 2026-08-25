@@ -1,9 +1,8 @@
 import SwiftUI
 
 struct TelaInicial: View {
-    @Environment(AppRouter.self) private var router // necessária para navegação
-    @State var viewModel: LivroReceitasViewModel
-//    @Bindable var viewModelDetalhes: DetalhesReceitaViewModel
+    @Environment(AppRouter.self) private var router
+    @Bindable var viewModel: LivroReceitasViewModel
     @State private var pesquisa = ""
     
     var naviTitle: String {
@@ -26,19 +25,12 @@ struct TelaInicial: View {
                 
                 VStack {
                     
-//                    Text("Receitas")
-//                        .font(FontesApp.titulo)
-//                        .padding(.trailing, geo.size.width * 0.45)
-//                        .padding(geo.size.width * 0.04)
-                    
-                    // Livro
+                    Spacer()
                     LivroInterativo(
                         viewModel: viewModel
                     )
                     
-//                    DetalhesReceitaView(viewModel: viewModelDetalhes)
-                    
-                    // Botões de trocar página
+
                     TrocarPagina(
                         viewModel: viewModel,
                         
@@ -91,7 +83,6 @@ struct TelaInicial: View {
                 Spacer()
                 
                 Button {
-                    // Colocar o router e passar pra ele a view
                     router.apresentarSheet(.criarReceita)
                     print("Adicionar receita")
                 } label: {

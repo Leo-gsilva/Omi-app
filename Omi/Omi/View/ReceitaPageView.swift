@@ -37,6 +37,12 @@ struct ReceitaPageView: View {
                 Divider()
                 
                 Text(receita.descricao)
+                Button{
+                    router.push(.detalheReceita(receita))
+                } label: {
+                    Label("Ver mais detalhes", systemImage: "arrow.up.right")
+                }
+                .padding(.top)
                             
                 if !receita.passos.isEmpty {
                     Text("Modo de preparo")
@@ -50,12 +56,7 @@ struct ReceitaPageView: View {
                 }
             }
             
-            Button{
-                router.push(.detalheReceita(receita))
-            } label: {
-                Label("Ver mais detalhes", systemImage: "arrow.up.right")
-            }
-            .padding(.top)
+           
         }
         .contentShape(Rectangle())
         .padding()

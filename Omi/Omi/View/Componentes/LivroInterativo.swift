@@ -34,6 +34,7 @@ struct LivroInterativo: View {
             ZStack(alignment: .leading) {
                 if viewModel.livroAberto {
                             BarraDeTags(viewModel: viewModel)
+                      
                     }
 
 
@@ -54,9 +55,9 @@ struct LivroInterativo: View {
                             width: geo.size.width * 0.75,
                             height: geo.size.height * 0.55
                         )
-                        .padding(.leading, geo.size.width * 0.12)
+                        .padding(.leading, geo.size.width * 0.23)
                         .transition(.opacity)
-                        .zIndex(2)
+                        
                 }
                 
                 Image("ReceitaTelaInicial")
