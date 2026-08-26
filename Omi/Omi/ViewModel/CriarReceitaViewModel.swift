@@ -14,7 +14,13 @@ final class CriarReceitaViewModel {
     private let repo: ReceitaRepositorio
     private var modo: Modo = .criar
     var onSalvar: (() -> Void)?
-    
+    var tempoDePreparoFormatado: String {
+        tempoDePreparoTexto.isEmpty ? "" : "\(tempoDePreparoTexto) min"
+    }
+
+    var porcoesFormatado: String {
+        porcoesTexto.isEmpty ? "" : "\(porcoesTexto) pessoas"
+    }
     var erroIngrediente: String?
     var erroPasso: String?
     var erroReceita: String?
@@ -150,6 +156,7 @@ final class CriarReceitaViewModel {
         tempoDePreparoTexto = String(receita.tempoDePreparo)
         porcoesTexto = receita.porcoes
         dificuldade = receita.dificuldade ?? ""
+        imagem = receita.imagem
         
         ingredientesAdicionados = receita.ingredientes.map {
             IngredienteAdicionado(nome: $0.nome, quantidade: Double($0.quantidade) ?? 0, medida: $0.medida)

@@ -71,29 +71,37 @@ struct FormularioReceitaView: View {
             // MARK: Porções
             VStack(alignment: .leading, spacing: 6) {
                 Text("Porções")
-                    .font(FontesApp.corpo)
+                    .font(FontesApp.Semibold)
                     .foregroundStyle(.cordosTextos)
-                
-                TextField("Ex: 5", text: $viewModel.porcoesTexto)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    .background(Color(.corFundoCapsula))
-                    .clipShape(Capsule())
-                    .keyboardType(.numberPad)
+
+                HStack {
+                    TextField("Ex: 5", text: $viewModel.porcoesTexto)
+                        .keyboardType(.numberPad)
+                    Text("pessoas")
+                        .foregroundStyle(.cordosTextos.opacity(0.6))
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(Color(.corFundoCapsula))
+                .clipShape(Capsule())
             }
             
             // MARK: Tempo de preparo
             VStack(alignment: .leading, spacing: 6) {
-                Text("Tempo de preparo (minutos)")
-                    .font(FontesApp.corpo)
+                Text("Tempo de preparo")
+                    .font(FontesApp.Semibold)
                     .foregroundStyle(.cordosTextos)
-                
-                TextField("Ex: 30", text: $viewModel.tempoDePreparoTexto)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    .background(Color(.corFundoCapsula))
-                    .clipShape(Capsule())
-                    .keyboardType(.numberPad)
+
+                HStack {
+                    TextField("Ex: 30", text: $viewModel.tempoDePreparoTexto)
+                        .keyboardType(.numberPad)
+                    Text("min")
+                        .foregroundStyle(.cordosTextos.opacity(0.6))
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(Color(.corFundoCapsula))
+                .clipShape(Capsule())
             }
             
             // MARK: Categoria

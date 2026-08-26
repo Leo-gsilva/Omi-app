@@ -42,7 +42,16 @@ struct DetalhesReceitaView: View {
                                     .foregroundStyle(.cordosTextos)
                             }
                         }
-                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            TituloSecao(texto: "Categoria:")
+                            CartaoClaro{
+                                if let categoria = viewModel.receita?.categoria {
+                                    Text(categoria.rawValue)
+                                        .font(FontesApp.corpo)
+                                        .foregroundStyle(.cordosTextos)
+                                }
+                            }
+                        }
                         VStack(alignment: .leading, spacing: 8) {
                             TituloSecao(texto: "Ingredientes:")
                             CartaoClaro {
