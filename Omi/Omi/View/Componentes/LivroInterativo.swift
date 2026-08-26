@@ -32,7 +32,7 @@ struct LivroInterativo: View {
             ZStack(alignment: .leading) {
                 if viewModel.livroAberto {
                             BarraDeTags(viewModel: viewModel)
-                      
+                        
                     }
 
                 Image(nomePaginaAtual)

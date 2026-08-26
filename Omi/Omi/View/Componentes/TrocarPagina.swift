@@ -36,16 +36,10 @@ struct TrocarPagina: View {
                 .glassEffect()
                 
                 Text("\(viewModel.livroAberto ? viewModel.paginaAtual : 0)/\(viewModel.totalPaginas)")
-                    .font(
-                        .system(
-                            size: 20,
-                            weight: .semibold
-                        )
-                    )
-                    .frame(
-                        width: geo.size.width * 0.20,
-                        height: 50
-                    )
+                    
+                    .font(FontesApp.TrocaPagina)
+                    .foregroundStyle(Color.cordosTextos)
+                    .frame(width: geo.size.width * 0.20,height: 50)
         
                 Button(action: avancar) {
                     Image(systemName: "arrow.right")

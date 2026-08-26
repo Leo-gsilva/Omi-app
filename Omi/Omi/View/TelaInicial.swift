@@ -10,8 +10,10 @@ struct TelaInicial: View {
             return "Receita"
         } else {
             return "\(viewModel.categoriaAtual.rawValue)"
+            
         }
     }
+    
     
     var body: some View {
         GeometryReader { geo in
@@ -89,6 +91,7 @@ struct TelaInicial: View {
             }
         }
         .navigationTitle(naviTitle)
+        
     }
 }
 
