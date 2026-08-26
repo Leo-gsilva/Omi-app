@@ -15,6 +15,7 @@ struct LivroReceitasViewSimples: View {
     var body: some View {
         if viewModel.receitasFiltradas.isEmpty {
             ContentUnavailableView("Nenhuma receita nessa categoria", systemImage: "book")
+                .font(FontesApp.titulo)
         } else {
             TabView(selection: $viewModel.paginaAtual) {
                 ForEach(Array(viewModel.receitasFiltradas.enumerated()), id: \.element.id) { index, receita in

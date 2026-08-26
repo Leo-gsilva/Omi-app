@@ -47,7 +47,7 @@ struct Onboarding2: View {
                         }
                     }
                     .padding(.leading, geometry.size.height * 0.06)
-                    .offset(y: -geometry.size.height * 0.23)
+                    .offset(y: -geometry.size.height * 0.18)
                     Image(pagina.imagem)
                         .resizable()
                         .scaledToFit()

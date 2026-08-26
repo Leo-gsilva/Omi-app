@@ -28,7 +28,7 @@ struct TelaDeApresetacao: View {
                 
                 Spacer()
                 
-                Image("Ovo0")
+                Image("Ovo")
                     .resizable()
                     .scaledToFit()
                     .frame(width:geo.size.height * 0.35)

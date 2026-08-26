@@ -32,6 +32,7 @@ struct OmiApp: App {
             }
             .modelContainer(PersistenceSwiftData.container)
             .environment(router)
+            .preferredColorScheme(.light) // ou .dark
             // Aprensenta o criatReceita como um modal, separada da pilha (path). Usa o mesmo RotasDestinoView
             // Muda só como a tela aparece (como sheet, não empurrada na pilha).
             .sheet(item: $router.sheetAtual) { rota in

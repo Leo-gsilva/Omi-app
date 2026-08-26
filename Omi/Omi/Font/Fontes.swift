@@ -66,8 +66,14 @@ enum FontesApp {
         relativeTo: .body
     )
         .weight(.medium)
+    
+    
+    static let TrocaPagina = Font.custom(
+        "SFCompactRounded-Medium",
+        size: 16,
+        relativeTo: .body
+    )
+        
+    
 }
-
-
-
     

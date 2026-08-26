@@ -53,7 +53,7 @@ struct BarraDeTags: View {
                         )
                 }
             }
-            .padding(.horizontal, 150)
+            .padding(.horizontal, geo.size.width * 0.35)
            
         }
     }
