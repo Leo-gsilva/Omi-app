@@ -15,6 +15,10 @@ final class CriarReceitaViewModel {
     private var modo: Modo = .criar
     var onSalvar: (() -> Void)?
     
+    var erroIngrediente: String?
+    var erroPasso: String?
+    var erroReceita: String?
+    
     init(repo: ReceitaRepositorio, modo: Modo) {
         self.repo = repo
         self.modo = modo
@@ -62,10 +66,20 @@ final class CriarReceitaViewModel {
     //MARK: - FUNÇÕES
     //MARK: - INGREDIENTE
     func adicionarIngrediente() {
-        guard !nomeIngredienteTexto.isEmpty,
-              let quantidade = Double(quantidadeTexto),
-              !medidaTexto.isEmpty else { return }
+        guard !nomeIngredienteTexto.isEmpty else {
+            erroIngrediente = "Informe o nome do ingrediente"
+            return
+        }
+        guard let quantidade = Double(quantidadeTexto), quantidade > 0 else {
+            erroIngrediente = "Quantidade inválida - use apenas números"
+            return
+        }
+        guard !medidaTexto.isEmpty else {
+            erroIngrediente = "Informe a medida (Ex: xícara, colher de sopa, ml)"
+            return
+        }
         
+        erroIngrediente = nil
         let novoItem = IngredienteAdicionado(nome: nomeIngredienteTexto, quantidade: quantidade, medida: medidaTexto)
         ingredientesAdicionados.append(novoItem)
         
@@ -77,8 +91,15 @@ final class CriarReceitaViewModel {
     
     //MARK: - ADICIONAR PASSO
     func adicionarPasso() {
-        guard !nomeDoPasso.isEmpty, !descricaoDoPasso.isEmpty else { return }
+        guard !nomeDoPasso.isEmpty else {
+            erroPasso = "Dê um nome para essa etapa"
+            return }
+        guard !descricaoDoPasso.isEmpty else {
+            erroPasso = "Descreva o que fazer nessa etapa da receita"
+            return
+        }
         
+        erroPasso = nil
         let passo = PassoAdicionado(etapa: passosAdicionados.count + 1, nome: nomeDoPasso, texto: descricaoDoPasso, tempoEstimado: Int(tempoPassoTexto) ?? 0)
         
         passosAdicionados.append(passo)
@@ -106,7 +127,19 @@ final class CriarReceitaViewModel {
         }
     }
     
-    func salvarReceitaNoBanco() {
+    func salvarReceitaNoBanco() -> Bool {
+        guard !titulo.isEmpty else {
+            erroReceita = "Dê um título para a receita"
+            return false
+        }
+        guard !ingredientesAdicionados.isEmpty else {
+            erroReceita = "Adicione pelo menos um ingrediente em sua receita"
+            return false
+        }
+        guard !passosAdicionados.isEmpty else {
+            erroReceita = "Adicione pelo menos uma etapa em sua receita"
+            return false
+        }
         do {
             _ = imagem?.base64EncodedString() ?? ""
             
@@ -123,7 +156,9 @@ final class CriarReceitaViewModel {
                     ingredientes: ingredientesAdicionados,
                     passos: passosAdicionados
                 )
+                erroReceita = nil
                 print("Receita criada com sucesso!")
+                return true
                 
             case .editar(let receitaOriginal):
                 try repo.atualizarReceitaCompleta(
@@ -138,16 +173,21 @@ final class CriarReceitaViewModel {
                     ingredientes: ingredientesAdicionados,
                     passos: passosAdicionados
                 )
+                erroReceita = nil
                 print("Receita atualizada com sucesso!")
+                return true
             }
             
-            //AVISA QUEM ESTIVER ESCUTANDO QUE SALVOU!
-            onSalvar?()
+//            //AVISA QUEM ESTIVER ESCUTANDO QUE SALVOU!
+//            onSalvar?()
             
         } catch {
+            erroReceita = "Não foi possível salvar a receita. Tente novamente"
             print("Erro ao salvar: \(error)")
+            return false
         }
     }
+    
     // REMOVER INGREDIENTE DA LISTA
         func removerIngrediente(at offsets: IndexSet) {
             ingredientesAdicionados.remove(atOffsets: offsets)

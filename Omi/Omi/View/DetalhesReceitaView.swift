@@ -90,7 +90,6 @@ struct DetalhesReceitaView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button ("Editar") {
                     if let receitaAtual = viewModel.receita {
-                        // 🚀 Abre a sheet normalmente pelo seu Router limpinho!
                         router.apresentarSheet(.editarReceita(receitaAtual))
                     }
                 }

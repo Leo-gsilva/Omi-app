@@ -73,24 +73,26 @@ struct FormularioReceitaView: View {
                     .font(FontesApp.Semibold)
                     .foregroundStyle(.cordosTextos)
                 
-                TextField("Ex: 5 pessoas", text: $viewModel.porcoesTexto)
+                TextField("Ex: 5", text: $viewModel.porcoesTexto)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
                     .background(Color(.corFundoCapsula))
                     .clipShape(Capsule())
+                    .keyboardType(.numberPad)
             }
             
             // MARK: Tempo de preparo
             VStack(alignment: .leading, spacing: 6) {
-                Text("Tempo de preparo")
+                Text("Tempo de preparo (minutos)")
                     .font(FontesApp.Semibold)
                     .foregroundStyle(.cordosTextos)
                 
-                TextField("Ex: 30 min", text: $viewModel.tempoDePreparoTexto)
+                TextField("Ex: 30", text: $viewModel.tempoDePreparoTexto)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
                     .background(Color(.corFundoCapsula))
                     .clipShape(Capsule())
+                    .keyboardType(.numberPad)
             }
             
             // MARK: Categoria
@@ -130,6 +132,7 @@ struct FormularioReceitaView: View {
                     TextField("Ingrediente (ex: Chocolate)", text: $viewModel.nomeIngredienteTexto)
                     Divider()
                     TextField("Quantidade (ex: 1)", text: $viewModel.quantidadeTexto)
+                        .keyboardType(.numberPad)
                     Divider()
                     TextField("Medida (ex: xícara)", text: $viewModel.medidaTexto)
                     
@@ -139,6 +142,13 @@ struct FormularioReceitaView: View {
                             .frame(maxWidth: .infinity)
                     }
                     .padding(.top, 4)
+                    
+                    if let erro = viewModel.erroIngrediente {
+                        Text(erro)
+                            .font(.caption)
+                            .foregroundStyle(.red)
+                            .transition(.opacity)
+                    }
                 }
                 .padding(16)
                 .background(Color(.corFundoCapsula))
@@ -189,6 +199,13 @@ struct FormularioReceitaView: View {
                             .font(FontesApp.Semibold)
                             .frame(maxWidth: .infinity)
                     }
+                    
+                    if let erro = viewModel.erroPasso {
+                        Text(erro)
+                            .font(.caption)
+                            .foregroundStyle(.red)
+                            .transition(.opacity)
+                    }
                 }
                 .padding(16)
                 .background(Color(.corFundoCapsula))
@@ -223,4 +240,8 @@ struct FormularioReceitaView: View {
         }
         .padding(20)
     }
+}
+
+#Preview {
+    FormularioReceitaView(viewModel: CriarReceitaViewModel.preview)
 }

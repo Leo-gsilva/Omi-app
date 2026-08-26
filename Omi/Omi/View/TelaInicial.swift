@@ -53,19 +53,17 @@ struct TelaInicial: View {
             }
         }
         .toolbar {
-            ToolbarItemGroup(
-                placement: .bottomBar
-            ) {
+            ToolbarItemGroup(placement: .bottomBar) {
                 HStack {
                     Image(
                         systemName: "magnifyingglass"
                     )
                     
-                    TextField(
-                        "Pesquisar",
-                        text: $pesquisa
-                    )
-                    .textFieldStyle(.plain)
+                    TextField("Pesquisar", text: $pesquisa)
+                        .textFieldStyle(.plain)
+                        .onChange(of: pesquisa) { _, novoValor in
+                            viewModel.buscarPorNome(novoValor)
+                        }
                 }
                 .padding(.horizontal, 27)
                 .frame(height: 45)
