@@ -41,8 +41,30 @@ final class CriarReceitaViewModel {
     var titulo = ""
     var categoria: CategoriaReceita = .refeicao
     var descricao = ""
-    var tempoDePreparoTexto = ""
-    var porcoesTexto = ""
+    var tempoDePreparoTexto: String = "" {
+            didSet {
+                let apenasNumeros = tempoDePreparoTexto.filter { $0.isNumber }
+                
+                let limiteDigtos = 3
+                let limitado = String(apenasNumeros.prefix(limiteDigtos))
+                
+                if limitado != tempoDePreparoTexto {
+                    tempoDePreparoTexto = limitado
+                }
+            }
+        }
+    var porcoesTexto = "" {
+        didSet {
+            let apenasNumeros = porcoesTexto.filter { $0.isNumber }
+            
+            let limiteDigtos = 3
+            let limitado = String(apenasNumeros.prefix(limiteDigtos))
+            
+            if limitado != porcoesTexto {
+                porcoesTexto = limitado
+            }
+        }
+    }
     var dificuldade = ""
     var imagem: Data?
     
@@ -52,7 +74,18 @@ final class CriarReceitaViewModel {
     
     // Campos temporários para digitar
     var nomeIngredienteTexto = ""
-    var quantidadeTexto = ""
+    var quantidadeTexto = ""{
+        didSet {
+            let apenasNumeros = quantidadeTexto.filter { $0.isNumber }
+            
+            let limiteDigtos = 3
+            let limitado = String(apenasNumeros.prefix(limiteDigtos))
+            
+            if limitado != quantidadeTexto {
+                quantidadeTexto = limitado
+            }
+        }
+    }
     var medidaTexto = ""
     
     //MARK: - Passos
