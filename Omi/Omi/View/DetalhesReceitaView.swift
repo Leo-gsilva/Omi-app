@@ -42,7 +42,16 @@ struct DetalhesReceitaView: View {
                                     .foregroundStyle(.cordosTextos)
                             }
                         }
-                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            TituloSecao(texto: "Categoria:")
+                            CartaoClaro{
+                                if let categoria = viewModel.receita?.categoria {
+                                    Text(categoria.rawValue)
+                                        .font(FontesApp.corpo)
+                                        .foregroundStyle(.cordosTextos)
+                                }
+                            }
+                        }
                         VStack(alignment: .leading, spacing: 8) {
                             TituloSecao(texto: "Ingredientes:")
                             CartaoClaro {
@@ -97,9 +106,9 @@ struct DetalhesReceitaView: View {
         }
         // Quando a sheet fechar (vira nil), recarrega os detalhes sozinhos!
         .onChange(of: router.sheetAtual) { antigaRota, novaRota in
-            if novaRota == nil {
+          
                 viewModel.carregarDetalhes()
-            }
+            
         }
     }
 }

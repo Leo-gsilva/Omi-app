@@ -17,7 +17,7 @@ struct FormularioReceitaView: View {
             // MARK: Foto
             VStack(alignment: .leading, spacing: 6) {
                 Text("Adicionar foto")
-                    .font(FontesApp.Semibold)
+                    .font(FontesApp.corpo)
                     .foregroundStyle(.cordosTextos)
                 
                 PhotosPicker(selection: $itemSelecionado, matching: .images) {
@@ -57,10 +57,11 @@ struct FormularioReceitaView: View {
             // MARK: Título
             VStack(alignment: .leading, spacing: 6) {
                 Text("Título da Receita")
-                    .font(FontesApp.Semibold)
+                    .font(FontesApp.corpo)
                     .foregroundStyle(.cordosTextos)
                 
                 TextField("Ex: Bolo de chocolate", text: $viewModel.titulo)
+                
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
                     .background(Color(.corFundoCapsula))
@@ -72,60 +73,75 @@ struct FormularioReceitaView: View {
                 Text("Porções")
                     .font(FontesApp.Semibold)
                     .foregroundStyle(.cordosTextos)
-                
-                TextField("Ex: 5", text: $viewModel.porcoesTexto)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    .background(Color(.corFundoCapsula))
-                    .clipShape(Capsule())
-                    .keyboardType(.numberPad)
+
+                HStack {
+                    TextField("Ex: 5", text: $viewModel.porcoesTexto)
+                        .keyboardType(.numberPad)
+                    Text("pessoas")
+                        .foregroundStyle(.cordosTextos.opacity(0.6))
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(Color(.corFundoCapsula))
+                .clipShape(Capsule())
             }
             
             // MARK: Tempo de preparo
             VStack(alignment: .leading, spacing: 6) {
-                Text("Tempo de preparo (minutos)")
+                Text("Tempo de preparo")
                     .font(FontesApp.Semibold)
                     .foregroundStyle(.cordosTextos)
-                
-                TextField("Ex: 30", text: $viewModel.tempoDePreparoTexto)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    .background(Color(.corFundoCapsula))
-                    .clipShape(Capsule())
-                    .keyboardType(.numberPad)
+
+                HStack {
+                    TextField("Ex: 30", text: $viewModel.tempoDePreparoTexto)
+                        .keyboardType(.numberPad)
+                    Text("min")
+                        .foregroundStyle(.cordosTextos.opacity(0.6))
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(Color(.corFundoCapsula))
+                .clipShape(Capsule())
             }
             
             // MARK: Categoria
             VStack(alignment: .leading, spacing: 6) {
                 Text("Categoria")
-                    .font(FontesApp.Semibold)
+                    .font(FontesApp.corpo)
                     .foregroundStyle(.cordosTextos)
-                
-                //                        Picker("Categoria", selection: $viewModel.categoria) {
-                //                            ForEach(CategoriaReceita.allCases) { cat in
-                //                                Text(cat.nomeExibicao).tag(cat)
-                //                            }
+                Picker("Categoria", selection: $viewModel.categoria) {
+                    ForEach(CategoriaReceita.allCases) { cat in
+                        Text(cat.rawValue).tag(cat)
+                    }
+                }
+                .frame(width: .infinity)
+                .pickerStyle(.automatic)
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+                .background(Color(.corFundoCapsula))
+                .clipShape(Capsule())
             }
-            .pickerStyle(.menu)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-            .background(Color(.corFundoCapsula))
-            .clipShape(Capsule())
             
-            .padding(.horizontal, 20)
+           
+            
             
             // MARK: Descrição
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text("Descrição:")
                     .font(FontesApp.corpo)
+                    .foregroundStyle(.cordosTextos)
+                
                 TextEditor(text: $viewModel.descricao)
                     .frame(minHeight: 200)
+                    .scrollContentBackground(.hidden)
+                    .background(Color(.corFundoCapsula))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             
             // MARK: Ingredientes
             VStack(alignment: .leading, spacing: 8) {
                 Text("Ingredientes:")
-                    .font(FontesApp.Semibold)
+                    .font(FontesApp.corpo)
                     .foregroundStyle(.cordosTextos)
                 
                 VStack(spacing: 8) {
@@ -180,20 +196,20 @@ struct FormularioReceitaView: View {
             // MARK: Modo de preparo
             VStack(alignment: .leading, spacing: 8) {
                 Text("Modo de Preparo:")
-                    .font(FontesApp.Semibold)
+                    .font(FontesApp.corpo)
                     .foregroundStyle(.cordosTextos)
                 
                 VStack(alignment: .leading, spacing: 8) {
                     TextField("Nome da etapa", text: $viewModel.nomeDoPasso)
                     Divider()
-                    Text("Descrição do Passo")
+                    Text("Descrição do Passo:")
                         .font(FontesApp.corpo)
+                        .foregroundStyle(.cordosTextos)
                     TextEditor(text: $viewModel.descricaoDoPasso)
                         .frame(minHeight: 80)
                         .scrollContentBackground(.hidden)
-                        .background(Color.white.opacity(0.5))
+                        .background(Color.cordoFundo)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
-                    
                     Button(action: { viewModel.adicionarPasso() }) {
                         Label("Adicionar Etapa", systemImage: "plus")
                             .font(FontesApp.Semibold)
@@ -241,7 +257,6 @@ struct FormularioReceitaView: View {
         .padding(20)
     }
 }
-
-#Preview {
-    FormularioReceitaView(viewModel: CriarReceitaViewModel.preview)
-}
+//#Preview {
+//    FormularioReceitaView(viewModel: CriarReceitaViewModel.preview)
+//}

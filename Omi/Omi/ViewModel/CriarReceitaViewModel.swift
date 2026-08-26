@@ -14,7 +14,13 @@ final class CriarReceitaViewModel {
     private let repo: ReceitaRepositorio
     private var modo: Modo = .criar
     var onSalvar: (() -> Void)?
-    
+    var tempoDePreparoFormatado: String {
+        tempoDePreparoTexto.isEmpty ? "" : "\(tempoDePreparoTexto) min"
+    }
+
+    var porcoesFormatado: String {
+        porcoesTexto.isEmpty ? "" : "\(porcoesTexto) pessoas"
+    }
     var erroIngrediente: String?
     var erroPasso: String?
     var erroReceita: String?
@@ -41,8 +47,30 @@ final class CriarReceitaViewModel {
     var titulo = ""
     var categoria: CategoriaReceita = .refeicao
     var descricao = ""
-    var tempoDePreparoTexto = ""
-    var porcoesTexto = ""
+    var tempoDePreparoTexto: String = "" {
+            didSet {
+                let apenasNumeros = tempoDePreparoTexto.filter { $0.isNumber }
+                
+                let limiteDigtos = 3
+                let limitado = String(apenasNumeros.prefix(limiteDigtos))
+                
+                if limitado != tempoDePreparoTexto {
+                    tempoDePreparoTexto = limitado
+                }
+            }
+        }
+    var porcoesTexto = "" {
+        didSet {
+            let apenasNumeros = porcoesTexto.filter { $0.isNumber }
+            
+            let limiteDigtos = 3
+            let limitado = String(apenasNumeros.prefix(limiteDigtos))
+            
+            if limitado != porcoesTexto {
+                porcoesTexto = limitado
+            }
+        }
+    }
     var dificuldade = ""
     var imagem: Data?
     
@@ -52,7 +80,18 @@ final class CriarReceitaViewModel {
     
     // Campos temporários para digitar
     var nomeIngredienteTexto = ""
-    var quantidadeTexto = ""
+    var quantidadeTexto = ""{
+        didSet {
+            let apenasNumeros = quantidadeTexto.filter { $0.isNumber }
+            
+            let limiteDigtos = 3
+            let limitado = String(apenasNumeros.prefix(limiteDigtos))
+            
+            if limitado != quantidadeTexto {
+                quantidadeTexto = limitado
+            }
+        }
+    }
     var medidaTexto = ""
     
     //MARK: - Passos
@@ -117,6 +156,7 @@ final class CriarReceitaViewModel {
         tempoDePreparoTexto = String(receita.tempoDePreparo)
         porcoesTexto = receita.porcoes
         dificuldade = receita.dificuldade ?? ""
+        imagem = receita.imagem
         
         ingredientesAdicionados = receita.ingredientes.map {
             IngredienteAdicionado(nome: $0.nome, quantidade: Double($0.quantidade) ?? 0, medida: $0.medida)
@@ -174,7 +214,7 @@ final class CriarReceitaViewModel {
                     passos: passosAdicionados
                 )
                 erroReceita = nil
-                print("Receita atualizada com sucesso!")
+                print("Receita atualizada com sucesso! Ingredientes: \(ingredientesAdicionados.count), Passos: \(passosAdicionados.count), Receita:\(titulo)")
                 return true
             }
             
