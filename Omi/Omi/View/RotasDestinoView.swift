@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 // Único lugar do App que transforma Rota em View
 
 struct RotasDestinoView: View {
     let rota: Rota
     
-    @Environment(\.managedObjectContext) private var contexto
+    @Environment(\.modelContext) private var contexto
     
     var body: some View {
         switch rota {
@@ -20,17 +21,17 @@ struct RotasDestinoView: View {
             OnboardingView(viewModel: OnboardingViewModel())
             
         case .telaInicial:
-            TelaInicial(viewModel: LivroReceitasViewModel(repo: ReceitaRepositorioCoreData(context: contexto)))
+            TelaInicial(viewModel: LivroReceitasViewModel(repo: ReceitaRepositorioSwiftData(context: contexto)))
         
         case .detalheReceita(let receita):
-            DetalhesReceitaView(viewModel: DetalhesReceitaViewModel(receita: receita, repo: ReceitaRepositorioCoreData(context: contexto)))
+            DetalhesReceitaView(viewModel: DetalhesReceitaViewModel(receita: receita, repo: ReceitaRepositorioSwiftData(context: contexto)))
             
         case .criarReceita:
-            CriarReceitaView(viewModel: CriarReceitaViewModel(repo: ReceitaRepositorioCoreData(context: contexto), modo: .criar))
+            CriarReceitaView(viewModel: CriarReceitaViewModel(repo: ReceitaRepositorioSwiftData(context: contexto), modo: .criar))
         
         case .editarReceita(let receitaParaEditar):
             EditarReceitaView(viewModel: CriarReceitaViewModel(
-                repo: ReceitaRepositorioCoreData(context: contexto),
+                repo: ReceitaRepositorioSwiftData(context: contexto),
                 modo: .editar(receitaParaEditar) // Se aqui estiver .criar, ele vai duplicar a receita!
             ))
             

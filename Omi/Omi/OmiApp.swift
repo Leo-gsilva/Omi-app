@@ -6,11 +6,10 @@
 //
 
 import SwiftUI
-import CoreData
+import SwiftData
 
 @main
 struct OmiApp: App {
-    let persistentController = PersistenceController.shared
     @State private var router = AppRouter()
     
     // Le do UserDefaults quando é finalizado pelo finalizarOnboarding()
@@ -22,7 +21,7 @@ struct OmiApp: App {
             NavigationStack(path: $router.path) {
                 Group{
                     if onboardingConcluido {
-                        TelaInicial(viewModel: LivroReceitasViewModel(repo: ReceitaRepositorioCoreData(context: persistentController.container.viewContext)))
+                        TelaInicial(viewModel: LivroReceitasViewModel(repo: ReceitaRepositorioSwiftData(context: PersistenceSwiftData.container.mainContext)))
                     } else {
                         OnboardingView()
                     }
@@ -31,13 +30,13 @@ struct OmiApp: App {
                     RotasDestinoView(rota: rota)
                 }
             }
-            .environment(\.managedObjectContext, persistentController.container.viewContext)
+            .modelContainer(PersistenceSwiftData.container)
             .environment(router)
             // Aprensenta o criatReceita como um modal, separada da pilha (path). Usa o mesmo RotasDestinoView
             // Muda só como a tela aparece (como sheet, não empurrada na pilha).
             .sheet(item: $router.sheetAtual) { rota in
                 RotasDestinoView(rota: rota)
-                    .environment(\.managedObjectContext, persistentController.container.viewContext) // Passa o environment novamente pra evitar perda de contexto no futuro, explicitando qual é o contexto a ser observado
+                    .modelContainer(PersistenceSwiftData.container) // Passa o modelContainer novamente pra evitar perda de contexto no futuro, explicitando qual é o contexto a ser observado
             }
         }
     }
