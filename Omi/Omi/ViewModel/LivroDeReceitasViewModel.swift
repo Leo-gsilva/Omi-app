@@ -11,41 +11,48 @@ import SwiftUI
 
 @Observable
 final class LivroReceitasViewModel {
-    var paginaAtual: Int = 0                          // índice da RECEITA dentro da categoria
-    var categoriaAtual: CategoriaReceita = .cafeDaManha // setada pelas tags
+    var paginaAtual: Int = 0                          
+    var categoriaAtual: CategoriaReceita = .cafeDaManha
     private(set) var receitas: [ReceitaModel] = []
     var livroAberto: Bool = false
     var pesquisa: String = ""
-
+    
     private let repo: ReceitaRepositorio
     private var observer: NSObjectProtocol?
     // Recebe protocolo e não a classe
-            
+    
     init(repo: ReceitaRepositorio) {
         self.repo = repo
         carregarReceitas()
         observarMudancas()
     }
-
+    
     var receitasFiltradas: [ReceitaModel] {
         guard !pesquisa.isEmpty else {
             return receitas.filter { $0.categoria == categoriaAtual }
         }
         
-        return receitas.filter { $0.titulo.localizedCaseInsensitiveContains(pesquisa)}
+       
+        return receitas.filter { receita in
+            receita.titulo.localizedCaseInsensitiveContains(pesquisa) ||
+            receita.descricao.localizedCaseInsensitiveContains(pesquisa) ||
+            receita.categoria.rawValue.localizedCaseInsensitiveContains(pesquisa) ||
+            receita.ingredientes.contains {
+                $0.nome.localizedCaseInsensitiveContains(pesquisa)
+            }
+        }
     }
     
     func buscarPorNome(_ nome: String) {
         pesquisa = nome
         paginaAtual = 0
     }
-
+    
     var totalPaginas: Int {
         receitasFiltradas.count
     }
     
-    // Receita correspondete a página atual
-    // Usar para alimentar o tabView
+   
     var receitaAtual: ReceitaModel? {
         guard paginaAtual >= 1, paginaAtual <= receitasFiltradas.count else { return nil }
         return receitasFiltradas[paginaAtual - 1]
@@ -59,7 +66,7 @@ final class LivroReceitasViewModel {
             receitas = []
         }
     }
-
+    
     func deletar(_ receita: ReceitaModel) {
         do {
             try repo.deletarReceita(id: receita.id)
@@ -68,17 +75,17 @@ final class LivroReceitasViewModel {
             print("Erro ao deletar receita \(error)")
         }
     }
-
+    
     func abrirLivro() {
         guard !livroAberto else { return }
         livroAberto = true
     }
-
+    
     func selecionarCategoria(_ categoria: CategoriaReceita) {
         categoriaAtual = categoria
         paginaAtual = 0
     }
-
+    
     private func observarMudancas() {
         observer = NotificationCenter.default.addObserver(
             forName: ModelContext.didSave,
@@ -87,8 +94,8 @@ final class LivroReceitasViewModel {
                 self?.carregarReceitas()
             }
     }
-
-    // Agora avan;a dentro da categoria atual
+    
+    
     func avancar() {
         if totalPaginas == 0 {
             let categoriaAntes = categoriaAtual
@@ -149,7 +156,7 @@ final class LivroReceitasViewModel {
         categoriaAtual = CategoriaReceita.allCases[indiceAnterior]
     }
     
-    deinit { // Desliga o observer
+    deinit {
         if let observer {
             NotificationCenter.default.removeObserver(observer)
         }
