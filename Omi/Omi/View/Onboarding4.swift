@@ -23,7 +23,6 @@ struct Onboarding4: View {
                     totalDePaginas: viewModel.totalDePaginas - 1
                 )
                 
-                
                 Text(pagina.titulo)
                     .font(FontesApp.titulo)
                     .foregroundStyle(.black.opacity(0.7))
@@ -31,12 +30,10 @@ struct Onboarding4: View {
                 
                 Spacer()
                 
-                
-                    Image(pagina.imagem)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width:geo.size.height * 0.35)
-                
+                Image(pagina.imagem)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width:geo.size.height * 0.35)
                 
                 Spacer()
                 
@@ -59,8 +56,8 @@ struct Onboarding4: View {
                     
                     
                 }
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.black.opacity(0.7))
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.black.opacity(0.7))
                 
                 Spacer()
                 

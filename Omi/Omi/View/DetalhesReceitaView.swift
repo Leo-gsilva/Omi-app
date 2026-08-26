@@ -96,7 +96,7 @@ struct DetalhesReceitaView: View {
                 }
             }
         }
-        // 👇 A MÁGICA ACONTECE AQUI: Quando a sheet fechar (vira nil), recarrega os detalhes sozinhos!
+        // Quando a sheet fechar (vira nil), recarrega os detalhes sozinhos!
         .onChange(of: router.sheetAtual) { antigaRota, novaRota in
             if novaRota == nil {
                 viewModel.carregarDetalhes()

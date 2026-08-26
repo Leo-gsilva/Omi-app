@@ -27,19 +27,6 @@ struct ReceitaEtapaCardView: View {
                         .foregroundStyle(.cordosTextos)
                 }
             }
-
-//            if let imagemData, let uiImage = UIImage(data: imagemData) {
-//                GeometryReader { geo in
-//                    Image(uiImage: uiImage)
-//                    
-//                        .resizable()
-//                        .scaledToFill()
-//                        .frame(width: geo.size.width, height: geo.size.height)
-//                        .clipped()
-//                }
-//                .aspectRatio(308.0 / 188.0, contentMode: .fit)
-//                .clipShape(RoundedRectangle(cornerRadius: 16))
-//           }
         }
     }
 }

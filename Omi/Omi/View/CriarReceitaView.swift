@@ -7,11 +7,7 @@
 import SwiftUI
 import PhotosUI
 
-
-
 struct CriarReceitaView: View {
-    //@Environment(AppRouter.self) private var router
-    
     @Environment(\.dismiss) private var voltar
     @State var viewModel: CriarReceitaViewModel
     
@@ -22,7 +18,7 @@ struct CriarReceitaView: View {
                     .ignoresSafeArea()
                 
                 ScrollView {
-                    FormularioReceitaView(viewModel: viewModel)   // ✅ chama o componente compartilhado
+                    FormularioReceitaView(viewModel: viewModel)
                 }
             }
             .navigationTitle(viewModel.tituloDaTela)
@@ -49,4 +45,3 @@ struct CriarReceitaView: View {
         }
     }
 }
-// bTr um if aqui pra decdiiri que tela mostrar

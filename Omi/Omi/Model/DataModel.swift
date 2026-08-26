@@ -7,7 +7,6 @@
 
 import Foundation
 
-// Agora a struct temporária guarda apenas a String do nome!
 struct IngredienteAdicionado: Identifiable {
     let id = UUID()
     let nome: String

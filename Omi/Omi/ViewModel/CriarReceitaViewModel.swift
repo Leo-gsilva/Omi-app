@@ -5,7 +5,6 @@
 //  Created by Leonardo Gonçalves da Silva on 18/08/26.
 //
 import Observation
-import Foundation
 import SwiftUI
 
 @Observable
@@ -34,7 +33,7 @@ final class CriarReceitaViewModel {
         estaEditando ? "Editar de Receita" : "Anotar Receita"
     }
     
-    // Receita
+    // MARK: - Receita
     var titulo = ""
     var categoria: CategoriaReceita = .refeicao
     var descricao = ""
@@ -43,7 +42,7 @@ final class CriarReceitaViewModel {
     var dificuldade = ""
     var imagem: Data?
     
-    // Ingredientes
+    //MARK: - Ingredientes
     // Lista dos itens que o usuário foi adicionando na tela
     var ingredientesAdicionados: [IngredienteAdicionado] = []
     
@@ -52,7 +51,7 @@ final class CriarReceitaViewModel {
     var quantidadeTexto = ""
     var medidaTexto = ""
     
-    // Passos
+    //MARK: - Passos
     var passosAdicionados: [PassoAdicionado] = []
     
     var nomeDoPasso: String = ""
@@ -60,8 +59,8 @@ final class CriarReceitaViewModel {
     var tempoPassoTexto: String = ""
     var imagemPasso: Data?
     
-    // FUNÇÕES
-    // INGREDIENTE
+    //MARK: - FUNÇÕES
+    //MARK: - INGREDIENTE
     func adicionarIngrediente() {
         guard !nomeIngredienteTexto.isEmpty,
               let quantidade = Double(quantidadeTexto),
@@ -76,7 +75,7 @@ final class CriarReceitaViewModel {
         medidaTexto = ""
     }
     
-    // ADICIONAR PASSO
+    //MARK: - ADICIONAR PASSO
     func adicionarPasso() {
         guard !nomeDoPasso.isEmpty, !descricaoDoPasso.isEmpty else { return }
         
@@ -142,7 +141,7 @@ final class CriarReceitaViewModel {
                 print("Receita atualizada com sucesso!")
             }
             
-            // 📢 AVISA QUEM ESTIVER ESCUTANDO QUE SALVOU!
+            //AVISA QUEM ESTIVER ESCUTANDO QUE SALVOU!
             onSalvar?()
             
         } catch {

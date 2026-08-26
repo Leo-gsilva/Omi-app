@@ -114,6 +114,34 @@ final class ReceitaRepositorioSwiftData: ReceitaRepositorio {
         saveData()
     }
     
+    func atualizarReceitaCompleta(
+        id: UUID,
+        titulo: String,
+        categoria: String,
+        descricao: String,
+        imagem: Data?,
+        tempoDePreparo: Int16,
+        porcoes: String,
+        dificuldade: String?,
+        ingredientes: [IngredienteAdicionado],
+        passos: [PassoAdicionado]
+    ) throws {
+        // 1. Atualiza os dados básicos da receita chamando a função que já tem
+        try atualizarReceita(
+            id: id,
+            novoTitulo: titulo,
+            novaCategoria: categoria,
+            novaDescricao: descricao,
+            novaImagem: imagem,
+            novoTempoDePreparo: tempoDePreparo,
+            novasPorcoes: porcoes,
+            novaDificuldade: dificuldade
+        )
+        
+        // 2. Salva tudo usando o saveData centralizado
+        saveData()
+    }
+    
     func deletarReceita(id: UUID) throws {
         guard let receita = try buscarReceitaEntity(id: id) else { return }
         contexto.delete(receita) // deleteRule: .cascade já apaga passos e ingredientes junts
@@ -209,34 +237,6 @@ final class ReceitaRepositorioSwiftData: ReceitaRepositorio {
     
     private func buscarRelacaoEntity(id: UUID) throws -> IngredienteDaReceita? {
         try contexto.fetch(FetchDescriptor<IngredienteDaReceita>(predicate: #Predicate { $0.id == id})).first
-    }
-    
-    func atualizarReceitaCompleta(
-        id: UUID,
-        titulo: String,
-        categoria: String,
-        descricao: String,
-        imagem: Data?,
-        tempoDePreparo: Int16,
-        porcoes: String,
-        dificuldade: String?,
-        ingredientes: [IngredienteAdicionado],
-        passos: [PassoAdicionado]
-    ) throws {
-        // 1. Atualiza os dados básicos da receita chamando a função que já tem
-        try atualizarReceita(
-            id: id,
-            novoTitulo: titulo,
-            novaCategoria: categoria,
-            novaDescricao: descricao,
-            novaImagem: imagem,
-            novoTempoDePreparo: tempoDePreparo,
-            novasPorcoes: porcoes,
-            novaDificuldade: dificuldade
-        )
-        
-        // 2. Salva tudo usando o saveData centralizado
-        saveData()
     }
 }
 

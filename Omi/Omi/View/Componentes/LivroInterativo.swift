@@ -10,9 +10,7 @@ import SwiftUI
 
 struct LivroInterativo: View {
     @Bindable var viewModel: LivroReceitasViewModel
-//    @Bindable var viewModelDetalhes:
     @State private var pesquisa = ""
-//    @State private var mostrarLivroAberto = false
     
     private let animacaoLivro = Animation.spring(
         response: 0.65,
@@ -36,7 +34,6 @@ struct LivroInterativo: View {
                             BarraDeTags(viewModel: viewModel)
                       
                     }
-
 
                 Image(nomePaginaAtual)
                     .resizable()
@@ -83,16 +80,11 @@ struct LivroInterativo: View {
                 .easeInOut(duration: 0.4),
                 value: viewModel.paginaAtual
             )
-            
-        
-            
         }
     }
     private func abrirLivro() {
         
-        guard !viewModel.livroAberto else {
-            return
-        }
+        guard !viewModel.livroAberto else { return }
     
         withAnimation(animacaoLivro) {
             viewModel.abrirLivro()

@@ -36,11 +36,22 @@ protocol ReceitaRepositorio {
         novaDificuldade: String?
     ) throws
     
+    func atualizarReceitaCompleta(
+        id: UUID,
+        titulo: String,
+        categoria: String,
+        descricao: String,
+        imagem: Data?,
+        tempoDePreparo: Int16,
+        porcoes: String,
+        dificuldade: String?,
+        ingredientes: [IngredienteAdicionado],
+        passos: [PassoAdicionado]
+    ) throws
+    
     func deletarReceita(id: UUID) throws
     
-    // Passo
-    
-    //    func buscarPassos(para receita: Receita) throws -> [PassoReceita]
+    // MARK: - Passo
     func buscarPassos(receitaId: UUID) throws -> [PassoModel]
     
     func criarPasso(
@@ -61,7 +72,7 @@ protocol ReceitaRepositorio {
     
     func deletarPasso(id: UUID) throws
     
-    // Ingredientes
+    // MARK: - Ingredientes
     func buscarIngredientes() throws -> [IngredienteCadastradoModel]
     
     func deletarIngrediente(id: UUID) throws
@@ -73,17 +84,4 @@ protocol ReceitaRepositorio {
     ) throws
     
     func criarIngredienteAvulso(nome: String) throws -> IngredienteCadastradoModel
-    
-    func atualizarReceitaCompleta(
-        id: UUID,
-        titulo: String,
-        categoria: String,
-        descricao: String,
-        imagem: Data?, // ou Data?, dependendo de como está no seu repo
-        tempoDePreparo: Int16,
-        porcoes: String,
-        dificuldade: String?,
-        ingredientes: [IngredienteAdicionado],
-        passos: [PassoAdicionado]
-    ) throws
 }

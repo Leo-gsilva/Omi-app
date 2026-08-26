@@ -32,14 +32,11 @@ struct RotasDestinoView: View {
         case .editarReceita(let receitaParaEditar):
             EditarReceitaView(viewModel: CriarReceitaViewModel(
                 repo: ReceitaRepositorioSwiftData(context: contexto),
-                modo: .editar(receitaParaEditar) // Se aqui estiver .criar, ele vai duplicar a receita!
+                modo: .editar(receitaParaEditar) // Se aqui estiver .criar, ele vai duplicar a receita
             ))
             
 //        case .categoriaSheetView:
 //            CategoriaSheetView(categoriaSelecionada: .refeicao, aoSelecionar: { _ in } )
-            
-//        case .listaIngredientes:
-//            ListaIngredientesView(viewModel: IngredientesViewModel(repo: ReceitaRepositorioCoreData(context: contexto)))
         }
     }
 }

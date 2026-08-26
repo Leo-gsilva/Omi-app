@@ -10,8 +10,6 @@ import SwiftUI
 import PhotosUI
 
 struct EditarReceitaView: View {
-    //@Environment(AppRouter.self) private var router
-    
     @Environment(\.dismiss) private var voltar
     @State var viewModel: CriarReceitaViewModel
  
@@ -23,7 +21,7 @@ struct EditarReceitaView: View {
                     .ignoresSafeArea()
                 
                 ScrollView {
-                    FormularioReceitaView(viewModel: viewModel)   // ✅ mesmo componente
+                    FormularioReceitaView(viewModel: viewModel)
                 }
             }
             .navigationTitle(viewModel.tituloDaTela)

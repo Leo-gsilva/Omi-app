@@ -13,16 +13,6 @@ struct LivroReceitasViewSimples: View {
     @Bindable var viewModel: LivroReceitasViewModel
 
     var body: some View {
-//        Picker("Categoria", selection: $viewModel.categoriaAtual) {
-//            ForEach(CategoriaReceita.allCases) { categoria in
-//                Text(categoria.rawValue).tag(categoria)
-//            }
-//        }
-//        .pickerStyle(.segmented)
-//        .onChange(of: viewModel.categoriaAtual) { _, _ in
-//            viewModel.paginaAtual = 1
-//        }
-        
         if viewModel.receitasFiltradas.isEmpty {
             ContentUnavailableView("Nenhuma receita nessa categoria", systemImage: "book")
         } else {

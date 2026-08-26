@@ -23,16 +23,15 @@ struct Onboarding5: View {
                     totalDePaginas: viewModel.totalDePaginas - 1
                 )
                 
-                
                 Text(pagina.titulo)
                     .font(FontesApp.titulo)
                     .foregroundStyle(Color.cordosTextos)
                     .padding(.top, geo.size.height * 0.035)
- 
-                    Image(pagina.imagem)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width:geo.size.height * 0.30)
+                
+                Image(pagina.imagem)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width:geo.size.height * 0.30)
                 
                 Spacer()
                 
@@ -49,14 +48,14 @@ struct Onboarding5: View {
                     (pagina.palavraDestaque2.map { Text($0) } ?? Text(""))
                         .font(FontesApp.ExtraBold)
                 }
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(Color.cordosTextos)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(Color.cordosTextos)
                 
                 Spacer()
                 
                 BotaoOnboarding(textoBotao: "Continuar") {
                     viewModel.continuar()
-//                    router.push(.telaInicial)
+                    //                    router.push(.telaInicial)
                 }
                 .frame(width: geo.size.width * 0.80)
             }

@@ -11,7 +11,6 @@ enum Rota: Hashable {
     case telaInicial
     case detalheReceita(ReceitaModel)
     case criarReceita
-//    case listaIngredientes
     case onboarding
     case editarReceita(ReceitaModel)
     //case categoriaSheetView

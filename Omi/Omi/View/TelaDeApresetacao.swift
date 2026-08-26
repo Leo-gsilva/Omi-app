@@ -35,9 +35,7 @@ struct TelaDeApresetacao: View {
                 
                 Spacer()
                 
-                
                 BotaoOnboarding(textoBotao: "Continuar") {
-//                    router.push(.onboarding)
                     viewModel.continuar()
                 }
                 .frame(width: geo.size.width * 0.80)

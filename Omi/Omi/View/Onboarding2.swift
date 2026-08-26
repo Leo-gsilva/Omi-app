@@ -24,9 +24,7 @@ struct Onboarding2: View {
     
     var body: some View {
         GeometryReader { geometry in
-            
-            VStack() {
-                
+            VStack {
                 ProgressoOnboarding(
                     paginaAtual: viewModel.paginaAtual,
                     totalDePaginas: viewModel.totalDePaginas - 1
@@ -41,12 +39,11 @@ struct Onboarding2: View {
                 
                 ZStack() {
                     
-                    
                     HStack(spacing: 2) {
                         ForEach(postits.indices, id: \.self) { index in
                             
                             PostitOnboarding(imagem: postits[index],ativo: viewModel.postitAtivo == index)
-                            .frame(width: geometry.size.width * 0.099)
+                                .frame(width: geometry.size.width * 0.099)
                         }
                     }
                     .padding(.leading, geometry.size.height * 0.06)
@@ -57,8 +54,6 @@ struct Onboarding2: View {
                         .frame(width: geometry.size.width * 0.70)
                 }
                 
-                
-                
                 VStack{
                     Text(pagina.descricao)
                     +
@@ -68,11 +63,11 @@ struct Onboarding2: View {
                     +
                     (pagina.palavraDestaque2.map { Text($0) } ?? Text(""))
                         .font(FontesApp.ExtraBold)
-                    }
+                }
                 
-                    .font(FontesApp.tituloComTexto)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(Color.cordosTextos)
+                .font(FontesApp.tituloComTexto)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(Color.cordosTextos)
                 
                 Spacer()
                 

@@ -15,12 +15,9 @@ struct ReceitaPageView: View {
     
     var body: some View {
         GeometryReader{ geo in
-  
             VStack {
-                
                 Section{
                     VStack{
-                        
                         if let imagemData = receita.imagem,
                            let uiImage = UIImage(data: imagemData) {
                             
@@ -29,9 +26,7 @@ struct ReceitaPageView: View {
                                 .scaledToFill()
                                 .frame(width: 426, height: 118)
                                 .clipShape(RoundedRectangle(cornerRadius: 20))
-                            
                         } else {
-                            
                             Image(systemName: "photo")
                                 .resizable()
                                 .scaledToFit()
@@ -46,8 +41,7 @@ struct ReceitaPageView: View {
                     
                     Text(receita.titulo)
                         .font(FontesApp.tituloComTexto)
-                        
-                        
+                    
                     HStack{
                         Image("Tempo")
                         Text("\(receita.tempoDePreparo) min")
@@ -58,20 +52,14 @@ struct ReceitaPageView: View {
                     
                 }
                 
-            
-                
                 Text(receita.descricao)
                     .frame(maxWidth: 200, maxHeight: 100)
                 
-                    
                 BotaoOnboarding(textoBotao: "Abrir Receita Completa") {
                     router.push(.detalheReceita(receita))
                 }
                 .frame(width: geo.size.width * 0.60)
-                
-            
             }
-            
         }
     }
 }

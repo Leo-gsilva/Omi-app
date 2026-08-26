@@ -23,7 +23,6 @@ struct Onboarding1: View {
                     totalDePaginas: viewModel.totalDePaginas - 1
                 )
                 
-                
                 Text(pagina.titulo)
                     .font(FontesApp.titulo)
                     .foregroundStyle(Color.cordosTextos)
@@ -31,12 +30,10 @@ struct Onboarding1: View {
                 
                 Spacer()
                 
-                
-                    Image(pagina.imagem)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width:geo.size.height * 0.35)
-                
+                Image(pagina.imagem)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width:geo.size.height * 0.35)
                 
                 Spacer()
                 
@@ -47,8 +44,8 @@ struct Onboarding1: View {
                     Text(pagina.palavraDestaque)
                         .font(FontesApp.ExtraBold)
                 }
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(Color.cordosTextos)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(Color.cordosTextos)
                 
                 Spacer()
                 

@@ -9,7 +9,6 @@ import Observation
 
 @Observable
 class IngredientesViewModel {
-    // Look how clean this is! No @Published needed.
     var itens: [IngredienteCadastradoModel] = []
     
     // We make the repo private so the View can't touch it directly.

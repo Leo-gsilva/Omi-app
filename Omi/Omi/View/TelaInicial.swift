@@ -14,11 +14,8 @@ struct TelaInicial: View {
     }
     
     var body: some View {
-        
         GeometryReader { geo in
-            
             ZStack {
-                
                 Image("fundo")
                     .resizable()
                     .ignoresSafeArea()
@@ -30,10 +27,8 @@ struct TelaInicial: View {
                         viewModel: viewModel
                     )
                     
-
                     TrocarPagina(
                         viewModel: viewModel,
-                        
                         voltar: {
                             withAnimation(
                                 .easeInOut(duration: 0.4)
@@ -41,7 +36,6 @@ struct TelaInicial: View {
                                 viewModel.voltar()
                             }
                         },
-                        
                         avancar: {
                             if !viewModel.livroAberto {
                                 return
@@ -58,15 +52,11 @@ struct TelaInicial: View {
                 }
             }
         }
-        
         .toolbar {
-            
             ToolbarItemGroup(
                 placement: .bottomBar
             ) {
-                
                 HStack {
-                    
                     Image(
                         systemName: "magnifyingglass"
                     )
@@ -86,7 +76,6 @@ struct TelaInicial: View {
                     router.apresentarSheet(.criarReceita)
                     print("Adicionar receita")
                 } label: {
-                    
                     Image(
                         systemName: "plus"
                     )
