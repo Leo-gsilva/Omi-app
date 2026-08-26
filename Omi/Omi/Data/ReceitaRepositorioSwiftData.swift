@@ -126,19 +126,44 @@ final class ReceitaRepositorioSwiftData: ReceitaRepositorio {
         ingredientes: [IngredienteAdicionado],
         passos: [PassoAdicionado]
     ) throws {
-        // 1. Atualiza os dados básicos da receita chamando a função que já tem
-        try atualizarReceita(
-            id: id,
-            novoTitulo: titulo,
-            novaCategoria: categoria,
-            novaDescricao: descricao,
-            novaImagem: imagem,
-            novoTempoDePreparo: tempoDePreparo,
-            novasPorcoes: porcoes,
-            novaDificuldade: dificuldade
-        )
-        
-        // 2. Salva tudo usando o saveData centralizado
+        guard let receita = try buscarReceitaEntity(id: id) else { return }
+
+        // 1. Atualiza os campos escalares
+        receita.titulo = titulo
+        receita.categoria = categoria
+        receita.descricao = descricao
+        receita.imagem = imagem
+        receita.tempoDePreparo = tempoDePreparo
+        receita.porcoes = porcoes
+        receita.dificuldade = dificuldade
+        receita.dataAtualizacao = Date()
+
+        // 2. Remove as relações antigas (o deleteRule .cascade nas próprias
+        //    relações não se aplica aqui — estamos deletando os "filhos"
+        //    individualmente, não a receita inteira, então precisa ser manual)
+        for relacaoAntiga in receita.ingredientesDaReceita {
+            contexto.delete(relacaoAntiga)
+        }
+        for passoAntigo in receita.passos {
+            contexto.delete(passoAntigo)
+        }
+
+        // 3. Recria ingredientes a partir da lista nova vinda da tela
+        for item in ingredientes {
+            let ingrediente = try buscarOuCriarIngrediente(nome: item.nome)
+            let relacao = IngredienteDaReceita(quantidade: String(item.quantidade), medida: item.medida)
+            contexto.insert(relacao)
+            relacao.receita = receita
+            relacao.ingrediente = ingrediente
+        }
+
+        // 4. Recria passos a partir da lista nova vinda da tela
+        for item in passos {
+            let passo = PassoReceita(etapa: Int16(item.etapa), nome: item.nome, texto: item.texto, tempoEstimado: Int16(item.tempoEstimado))
+            passo.receita = receita
+            contexto.insert(passo)
+        }
+
         saveData()
     }
     

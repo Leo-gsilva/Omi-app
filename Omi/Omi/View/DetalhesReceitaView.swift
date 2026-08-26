@@ -97,9 +97,9 @@ struct DetalhesReceitaView: View {
         }
         // Quando a sheet fechar (vira nil), recarrega os detalhes sozinhos!
         .onChange(of: router.sheetAtual) { antigaRota, novaRota in
-            if novaRota == nil {
+          
                 viewModel.carregarDetalhes()
-            }
+            
         }
     }
 }

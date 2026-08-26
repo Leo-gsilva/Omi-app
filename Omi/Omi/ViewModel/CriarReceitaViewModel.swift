@@ -207,7 +207,7 @@ final class CriarReceitaViewModel {
                     passos: passosAdicionados
                 )
                 erroReceita = nil
-                print("Receita atualizada com sucesso!")
+                print("Receita atualizada com sucesso! Ingredientes: \(ingredientesAdicionados.count), Passos: \(passosAdicionados.count), Receita:\(titulo)")
                 return true
             }
             

@@ -19,7 +19,7 @@ struct ReceitaHeroView: View {
                             .resizable()
                             .scaledToFill()
                     } else {
-                        Image(systemName: "image")
+                        Image(systemName: "photo")
                             .resizable()
                             .scaledToFill()
                     }
