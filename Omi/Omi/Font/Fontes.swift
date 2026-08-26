@@ -14,29 +14,29 @@ enum FontesApp {
         size: 32,
         relativeTo: .largeTitle
     )
-    .weight(.bold)
+        .weight(.bold)
     
     static let tituloComTexto = Font.custom(
         "Dosis",
         size: 32,
         relativeTo: .largeTitle
     )
-    .weight(.semibold)
+        .weight(.semibold)
     
-        static let subtitulo = Font.custom(
+    static let subtitulo = Font.custom(
         "Dosis",
         size: 20,
         relativeTo: .title3
     )
-    .weight(.semibold)
+        .weight(.semibold)
     
-
+    
     static let corpo = Font.custom(
         "Dosis",
         size: 17,
         relativeTo: .body
     )
-    .weight(.medium)
+        .weight(.medium)
     
     
     static let ExtraBold = Font.custom(
@@ -59,7 +59,15 @@ enum FontesApp {
         relativeTo: .body
     )
         .weight(.semibold)
+    
+    static let CorpoPreview = Font.custom(
+        "Dosis",
+        size: 14,
+        relativeTo: .body
+    )
+        .weight(.medium)
 }
+
 
 
     

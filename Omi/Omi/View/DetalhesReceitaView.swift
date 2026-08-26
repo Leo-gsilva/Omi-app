@@ -6,20 +6,17 @@
 //    //
 //
 import SwiftUI
-//import CoreData
 
 struct DetalhesReceitaView: View {
-    @Bindable var viewModel: DetalhesReceitaViewModel
-    
+    @State var viewModel: DetalhesReceitaViewModel
+    @State private var mostrarEdicao = false
+    @Environment(AppRouter.self) private var router
     
     var body: some View {
         GeometryReader { geo in
-            
-            
             ZStack {
                 Color(.cordoFundo)
                     .ignoresSafeArea()
-                
                 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
@@ -68,7 +65,6 @@ struct DetalhesReceitaView: View {
                                         numero: passo.etapa,
                                         nome: passo.nome,
                                         texto: passo.texto
-                                        //imagemData: passo.imagemPasso
                                     )
                                 }
                             }
@@ -92,9 +88,18 @@ struct DetalhesReceitaView: View {
             }
             
             ToolbarItem(placement: .topBarTrailing) {
-                Button("Editar") {
-                    // Action for edit
+                Button ("Editar") {
+                    if let receitaAtual = viewModel.receita {
+                        // 🚀 Abre a sheet normalmente pelo seu Router limpinho!
+                        router.apresentarSheet(.editarReceita(receitaAtual))
+                    }
                 }
+            }
+        }
+        // 👇 A MÁGICA ACONTECE AQUI: Quando a sheet fechar (vira nil), recarrega os detalhes sozinhos!
+        .onChange(of: router.sheetAtual) { antigaRota, novaRota in
+            if novaRota == nil {
+                viewModel.carregarDetalhes()
             }
         }
     }
@@ -106,4 +111,5 @@ struct DetalhesReceitaView: View {
             viewModel: DetalhesReceitaViewModel.preview
         )
     }
+    .environment(AppRouter())
 }

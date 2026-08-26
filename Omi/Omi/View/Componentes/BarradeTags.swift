@@ -54,6 +54,7 @@ struct BarraDeTags: View {
                 }
             }
             .padding(.horizontal, 150)
+           
         }
     }
 }

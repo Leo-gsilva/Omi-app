@@ -6,21 +6,33 @@
 //
 import Observation
 import Foundation
+import SwiftUI
 
 @Observable
 final class CriarReceitaViewModel {
-    private let repo: ReceitaRepositorio
-//    var receita: ReceitaModel?
     
-    init(repo: ReceitaRepositorio) {
+    
+    private let repo: ReceitaRepositorio
+    private var modo: Modo = .criar
+    var onSalvar: (() -> Void)?
+    
+    init(repo: ReceitaRepositorio, modo: Modo) {
         self.repo = repo
+        self.modo = modo
         
-//        if modo {
-//            preencherComReceitaExistente(receita)
-//        }
+        if case .editar(let receita) = modo {
+            preencherComReceitaExistente(receita)
+        }
     }
     
-    var modo: Bool = false
+    var estaEditando: Bool {
+        if case .editar = modo {return true}
+        return false
+    }
+    
+    var tituloDaTela: String {
+        estaEditando ? "Editar de Receita" : "Anotar Receita"
+    }
     
     // Receita
     var titulo = ""
@@ -86,9 +98,8 @@ final class CriarReceitaViewModel {
         porcoesTexto = receita.porcoes
         dificuldade = receita.dificuldade ?? ""
         
-        ingredientesAdicionados = receita.ingredientes.compactMap {
-            guard let qtd = Double($0.quantidade) else { return nil }
-            return IngredienteAdicionado(nome: $0.nome, quantidade: qtd, medida: $0.medida)
+        ingredientesAdicionados = receita.ingredientes.map {
+            IngredienteAdicionado(nome: $0.nome, quantidade: Double($0.quantidade) ?? 0, medida: $0.medida)
         }
         
         passosAdicionados = receita.passos.map {
@@ -98,20 +109,58 @@ final class CriarReceitaViewModel {
     
     func salvarReceitaNoBanco() {
         do {
-            try repo.criarReceita(
-                titulo: titulo,
-                categoria: categoria.rawValue,
-                descricao: descricao,
-                imagem: imagem,
-                tempoDePreparo: Int16(tempoDePreparoTexto) ?? 0,
-                porcoes: porcoesTexto,
-                dificuldade: dificuldade,
-                ingredientes: ingredientesAdicionados,
-                passos: passosAdicionados
-            )
-            print("Receita e ingredientes salvos perfeitamente!")
+            _ = imagem?.base64EncodedString() ?? ""
+            
+            switch modo {
+            case .criar:
+                try repo.criarReceita(
+                    titulo: titulo,
+                    categoria: categoria.rawValue,
+                    descricao: descricao,
+                    imagem: imagem,
+                    tempoDePreparo: Int16(tempoDePreparoTexto) ?? 0,
+                    porcoes: porcoesTexto,
+                    dificuldade: dificuldade.isEmpty ? nil : dificuldade,
+                    ingredientes: ingredientesAdicionados,
+                    passos: passosAdicionados
+                )
+                print("Receita criada com sucesso!")
+                
+            case .editar(let receitaOriginal):
+                try repo.atualizarReceitaCompleta(
+                    id: receitaOriginal.id,
+                    titulo: titulo,
+                    categoria: categoria.rawValue,
+                    descricao: descricao,
+                    imagem: imagem ?? nil,
+                    tempoDePreparo: Int16(tempoDePreparoTexto) ?? 0,
+                    porcoes: porcoesTexto,
+                    dificuldade: dificuldade.isEmpty ? nil : dificuldade,
+                    ingredientes: ingredientesAdicionados,
+                    passos: passosAdicionados
+                )
+                print("Receita atualizada com sucesso!")
+            }
+            
+            // 📢 AVISA QUEM ESTIVER ESCUTANDO QUE SALVOU!
+            onSalvar?()
+            
         } catch {
             print("Erro ao salvar: \(error)")
         }
     }
+    // REMOVER INGREDIENTE DA LISTA
+        func removerIngrediente(at offsets: IndexSet) {
+            ingredientesAdicionados.remove(atOffsets: offsets)
+        }
+
+        // REMOVER PASSO DA LISTA
+        func removerPasso(at offsets: IndexSet) {
+            passosAdicionados.remove(atOffsets: offsets)
+            
+            // Reorganiza o número das etapas para não ficar bagunçado
+            for (index, _) in passosAdicionados.enumerated() {
+                passosAdicionados[index].etapa = index + 1
+            }
+        }
 }

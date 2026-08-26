@@ -1,19 +1,20 @@
 //
-//  CriarReceitaView.swift
+//  EditarReceitaView.swift
 //  Omi
 //
-//  Created by Leonardo Gonçalves da Silva on 18/08/26.
+//  Created by Leonardo Gonçalves da Silva on 25/08/26.
 //
+//
+
 import SwiftUI
 import PhotosUI
 
-
-
-struct CriarReceitaView: View {
+struct EditarReceitaView: View {
     //@Environment(AppRouter.self) private var router
     
     @Environment(\.dismiss) private var voltar
     @State var viewModel: CriarReceitaViewModel
+ 
     
     var body: some View {
         NavigationStack {
@@ -22,7 +23,7 @@ struct CriarReceitaView: View {
                     .ignoresSafeArea()
                 
                 ScrollView {
-                    FormularioReceitaView(viewModel: viewModel)   // ✅ chama o componente compartilhado
+                    FormularioReceitaView(viewModel: viewModel)   // ✅ mesmo componente
                 }
             }
             .navigationTitle(viewModel.tituloDaTela)
@@ -37,6 +38,7 @@ struct CriarReceitaView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
                         viewModel.salvarReceitaNoBanco()
+               
                         voltar()
                     }) {
                         Image(systemName: "checkmark")
@@ -49,4 +51,3 @@ struct CriarReceitaView: View {
         }
     }
 }
-// bTr um if aqui pra decdiiri que tela mostrar
