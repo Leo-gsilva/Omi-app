@@ -28,14 +28,13 @@ struct Onboarding3: View {
                     .foregroundStyle(.black.opacity(0.7))
                     .padding(.top, geo.size.height * 0.035)
                 
-                Spacer()
+                
                 
                 Image(pagina.imagem)
                     .resizable()
                     .scaledToFit()
-                    .frame(width:geo.size.height * 0.25)
-                
-                Spacer()
+                    .frame(width:geo.size.height * 0.40)
+                    Spacer()
                 
                 VStack{
                     Text(pagina.descricao)

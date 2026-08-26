@@ -4,6 +4,7 @@ struct TelaInicial: View {
     @Environment(AppRouter.self) private var router
     @Bindable var viewModel: LivroReceitasViewModel
     @State private var pesquisa = ""
+    @FocusState private var buscaAtiva: Bool
     
     var naviTitle: String {
         if !viewModel.livroAberto {
@@ -54,6 +55,7 @@ struct TelaInicial: View {
                 }
             }
         }
+        .ignoresSafeArea(.keyboard)
         .toolbar {
             ToolbarItemGroup(placement: .bottomBar) {
                 HStack {
@@ -63,12 +65,19 @@ struct TelaInicial: View {
                     
                     TextField("Pesquisar", text: $pesquisa)
                         .textFieldStyle(.plain)
+                        .focused($buscaAtiva)
                         .onChange(of: pesquisa) { _, novoValor in
                             viewModel.buscarPorNome(novoValor)
                         }
                 }
                 .padding(.horizontal, 27)
                 .frame(height: 45)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    buscaAtiva = true
+                    pesquisa = ""
+                    viewModel.buscarPorNome("")
+                }
                 
                 Spacer()
                 
