@@ -15,6 +15,7 @@ final class LivroReceitasViewModel {
     var categoriaAtual: CategoriaReceita = .cafeDaManha // setada pelas tags
     private(set) var receitas: [ReceitaModel] = []
     var livroAberto: Bool = false
+    var pesquisa: String = ""
 
     private let repo: ReceitaRepositorio
     private var observer: NSObjectProtocol?
@@ -27,7 +28,16 @@ final class LivroReceitasViewModel {
     }
 
     var receitasFiltradas: [ReceitaModel] {
-        receitas.filter { $0.categoria == categoriaAtual }
+        guard !pesquisa.isEmpty else {
+            return receitas.filter { $0.categoria == categoriaAtual }
+        }
+        
+        return receitas.filter { $0.titulo.localizedCaseInsensitiveContains(pesquisa)}
+    }
+    
+    func buscarPorNome(_ nome: String) {
+        pesquisa = nome
+        paginaAtual = 0
     }
 
     var totalPaginas: Int {
