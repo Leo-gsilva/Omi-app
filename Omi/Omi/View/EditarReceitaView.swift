@@ -35,9 +35,9 @@ struct EditarReceitaView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
-                        viewModel.salvarReceitaNoBanco()
-               
-                        voltar()
+                        if viewModel.salvarReceitaNoBanco() {
+                            voltar()
+                        }
                     }) {
                         Image(systemName: "checkmark")
                     }

@@ -142,6 +142,13 @@ struct FormularioReceitaView: View {
                             .frame(maxWidth: .infinity)
                     }
                     .padding(.top, 4)
+                    
+                    if let erro = viewModel.erroIngrediente {
+                        Text(erro)
+                            .font(.caption)
+                            .foregroundStyle(.red)
+                            .transition(.opacity)
+                    }
                 }
                 .padding(16)
                 .background(Color(.corFundoCapsula))
@@ -191,6 +198,13 @@ struct FormularioReceitaView: View {
                         Label("Adicionar Etapa", systemImage: "plus")
                             .font(FontesApp.Semibold)
                             .frame(maxWidth: .infinity)
+                    }
+                    
+                    if let erro = viewModel.erroPasso {
+                        Text(erro)
+                            .font(.caption)
+                            .foregroundStyle(.red)
+                            .transition(.opacity)
                     }
                 }
                 .padding(16)

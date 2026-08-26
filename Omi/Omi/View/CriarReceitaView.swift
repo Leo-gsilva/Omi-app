@@ -18,6 +18,13 @@ struct CriarReceitaView: View {
                     .ignoresSafeArea()
                 
                 ScrollView {
+                    if let erro = viewModel.erroReceita {
+                        Text(erro)
+                            .font(.footnote)
+                            .foregroundStyle(.red)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.vertical, 4)
+                    }
                     FormularioReceitaView(viewModel: viewModel)
                 }
             }
@@ -32,8 +39,9 @@ struct CriarReceitaView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
-                        viewModel.salvarReceitaNoBanco()
-                        voltar()
+                        if viewModel.salvarReceitaNoBanco() {
+                            voltar()
+                        }
                     }) {
                         Image(systemName: "checkmark")
                     }
@@ -44,4 +52,8 @@ struct CriarReceitaView: View {
             }
         }
     }
+}
+
+#Preview {
+    CriarReceitaView(viewModel: CriarReceitaViewModel.preview)
 }
