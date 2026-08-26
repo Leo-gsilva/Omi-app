@@ -15,50 +15,59 @@ struct ReceitaPageView: View {
     
     var body: some View {
         GeometryReader{ geo in
-            VStack {
-                Section{
-                    VStack{
-                        if let imagemData = receita.imagem,
-                           let uiImage = UIImage(data: imagemData) {
-                            
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 426, height: 118)
-                                .clipShape(RoundedRectangle(cornerRadius: 20))
-                        } else {
-                            Image(systemName: "photo")
-                                .resizable()
-                                .scaledToFit()
+            ScrollView{
+                VStack (spacing: 16){
+                    Section{
+                        VStack (spacing: 4){
+                            if let imagemData = receita.imagem,
+                               let uiImage = UIImage(data: imagemData) {
+                                
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 426, height: 118)
+                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                            } else {
+                                Image(systemName: "photo")
+                                    .resizable()
+                                    .scaledToFit()
+                            }
                         }
+                        .frame(width: 226, height: 118)
+                        
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        
+                        DividerPersonalizado()
+                            .padding(.horizontal, 30)
+                        
+                        Text(receita.titulo)
+                            .font(FontesApp.tituloComTexto)
+                            .frame(maxWidth: 200, maxHeight: 40)
+                            .lineLimit(1)
+                        
+                        HStack{
+                            Image("Tempo")
+                            Text("\(receita.tempoDePreparo) min")
+                            Image("Fatia")
+                            Text("\(receita.porcoes) pessoas")
+                        }
+                        .font(FontesApp.Semibold)
+                        
                     }
-                    .frame(width: 226, height: 118)
                     
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    Text(receita.descricao)
+                        .frame(maxWidth: 200, maxHeight: 100)
+                        .lineLimit(1)
                     
-                    DividerPersonalizado()
-                        .padding(.horizontal, 30)
-                    
-                    Text(receita.titulo)
-                        .font(FontesApp.tituloComTexto)
-                    
-                    HStack{
-                        Image("Tempo")
-                        Text("\(receita.tempoDePreparo) min")
-                        Image("Fatia")
-                        Text("\(receita.porcoes) pessoas")
+                    BotaoOnboarding(textoBotao: "Abrir Receita Completa") {
+                        router.push(.detalheReceita(receita))
                     }
-                    .font(FontesApp.Semibold)
+                    .frame(width: geo.size.width * 0.60)
                     
                 }
-                
-                Text(receita.descricao)
-                    .frame(maxWidth: 200, maxHeight: 100)
-                
-                BotaoOnboarding(textoBotao: "Abrir Receita Completa") {
-                    router.push(.detalheReceita(receita))
-                }
-                .frame(width: geo.size.width * 0.60)
+            }
+            .onTapGesture {
+                router.push(.detalheReceita(receita))
             }
         }
     }
@@ -69,7 +78,7 @@ struct ReceitaPageView: View {
         ReceitaPageView(
             receita: ReceitaModel(
                 id: UUID(),
-                titulo: "Bolo de Cenoura",
+                titulo: "Bolo de Cenoura ADADADADA",
                 categoria: .sobremesa,
                 descricao: "Receita de teste para Preview.",
                 imagem: nil,
