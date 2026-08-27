@@ -1,0 +1,35 @@
+//
+//  ReceitaEtapaCardView.swift
+//  Omi
+//
+//  Created by Leonardo Gonçalves da Silva on 20/08/26.
+//
+import SwiftUI
+
+struct ReceitaEtapaCardView: View {
+    let numero: Int16
+    let nome: String
+    let texto: String
+//    let imagemData: Data?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            CartaoClaro {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Etapa \(numero): \(nome)")
+                        .font(FontesApp.subtitulo)
+                        .foregroundStyle(.cordosTextos)
+
+                    DividerPersonalizado()
+
+                    Text(texto)
+                        .font(FontesApp.corpo)
+                        .foregroundStyle(.cordosTextos)
+                }
+            }
+        }
+    }
+}
+#Preview {
+    ReceitaEtapaCardView(numero: 1, nome: "Leo", texto: "ola")
+}
