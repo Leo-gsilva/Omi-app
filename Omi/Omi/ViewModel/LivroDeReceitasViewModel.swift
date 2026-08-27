@@ -67,12 +67,12 @@ final class LivroReceitasViewModel {
         }
     }
     
-    func deletar(_ receita: ReceitaModel) {
+    func excluirReceita(_ receita: ReceitaModel) {
         do {
             try repo.deletarReceita(id: receita.id)
-            carregarReceitas()
+            carregarReceitas() 
         } catch {
-            print("Erro ao deletar receita \(error)")
+            print("Erro ao excluir receita: \(error)")
         }
     }
     

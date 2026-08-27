@@ -28,7 +28,15 @@ struct TelaInicial: View {
                     Spacer()
                     LivroInterativo(
                         viewModel: viewModel
-                    )
+                    ).contextMenu {
+                        if viewModel.livroAberto, let receitaParaExcluir = viewModel.receitaAtual {
+                            Button(role: .destructive) {
+                                viewModel.excluirReceita(receitaParaExcluir)
+                            } label: {
+                                Label("Excluir", systemImage: "trash")
+                            }
+                        }
+                    }
                     
                     TrocarPagina(
                         viewModel: viewModel,
