@@ -97,22 +97,37 @@ struct DetalhesReceitaView: View {
             }
             
             ToolbarItem(placement: .topBarTrailing) {
-                Button ("Editar") {
-                    if let receitaAtual = viewModel.receita {
-                        router.apresentarSheet(.editarReceita(receitaAtual))
+                Menu {
+                    Button {
+                        if let receitaAtual = viewModel.receita {
+                            router.apresentarSheet(.editarReceita(receitaAtual))
+                        }
+                    } label: {
+                        Label("Editar", systemImage: "pencil")
                     }
+                    Button(role: .destructive) {
+                        if let receitaAtual = viewModel.receita {
+                           viewModel.excluirReceita(receitaAtual)
+                            
+                            router.pop()
+                        }
+                    } label: {
+                        Label("Excluir", systemImage: "trash")
+                    }
+                    
+                } label: {
+                    Image(systemName: "ellipsis")
                 }
             }
         }
-        // Quando a sheet fechar (vira nil), recarrega os detalhes sozinhos!
         .onChange(of: router.sheetAtual) { antigaRota, novaRota in
-          
-                viewModel.carregarDetalhes()
+            
+            viewModel.carregarDetalhes()
+            
             
         }
     }
 }
-
 #Preview {
     NavigationStack{
         DetalhesReceitaView(

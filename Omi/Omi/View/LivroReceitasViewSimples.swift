@@ -21,7 +21,15 @@ struct LivroReceitasViewSimples: View {
                 ForEach(Array(viewModel.receitasFiltradas.enumerated()), id: \.element.id) { index, receita in
                     ReceitaPageView(
                         receita: receita
-                    )
+                    ).contextMenu {
+                        if viewModel.livroAberto, let receitaParaExcluir = viewModel.receitaAtual {
+                            Button(role: .destructive) {
+                                viewModel.excluirReceita(receitaParaExcluir)
+                            } label: {
+                                Label("Excluir", systemImage: "trash")
+                            }
+                        }
+                    }
                     .tag(index + 1) // +1 pq a página atual é 1-index
                 }
             }

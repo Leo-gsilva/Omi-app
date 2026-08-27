@@ -29,4 +29,11 @@ class DetalhesReceitaViewModel {
             print("Erro ao carregar detalhes: \(error)")
         }
     }
+    func excluirReceita(_ receita: ReceitaModel) {
+        do {
+            try repo.deletarReceita(id: receita.id)
+        } catch {
+            print("Erro ao excluir receita: \(error)")
+        }
+    }
 }
