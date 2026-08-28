@@ -11,6 +11,7 @@ struct FormularioReceitaView: View {
     @Bindable var viewModel: CriarReceitaViewModel
     @State private var itemSelecionado: PhotosPickerItem?
     @State private var mostrarCamera = false
+    @State private var mostrarGaleria = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -28,7 +29,9 @@ struct FormularioReceitaView: View {
                         Label("Tirar foto", systemImage: "camera")
                     }
                     
-                    PhotosPicker(selection: $itemSelecionado, matching: .images) {
+                    Button {
+                        mostrarGaleria = true
+                    } label: {
                         Label("Escolher da galeria", systemImage: "photo.on.rectangle")
                     }
                 } label: {
@@ -56,6 +59,11 @@ struct FormularioReceitaView: View {
                     .background(Color(.corFundoCapsula))
                     .clipShape(Capsule())
                 }
+                .photosPicker(
+                    isPresented: $mostrarGaleria,
+                    selection: $itemSelecionado,
+                    matching: .images
+                )
                 .onChange(of: itemSelecionado) { _, novoItem in
                     Task {
                         if let dados = try? await novoItem?.loadTransferable(type: Data.self) {
@@ -275,4 +283,3 @@ struct FormularioReceitaView: View {
 //#Preview {
 //    FormularioReceitaView(viewModel: CriarReceitaViewModel.preview)
 //}
-
