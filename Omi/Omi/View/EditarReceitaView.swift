@@ -49,3 +49,7 @@ struct EditarReceitaView: View {
         }
     }
 }
+
+#Preview {
+    EditarReceitaView( viewModel: .preview)
+}

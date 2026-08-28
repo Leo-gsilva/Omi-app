@@ -10,6 +10,7 @@ import PhotosUI
 struct FormularioReceitaView: View {
     @Bindable var viewModel: CriarReceitaViewModel
     @State private var itemSelecionado: PhotosPickerItem?
+    @State private var mostrarCamera = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -20,7 +21,17 @@ struct FormularioReceitaView: View {
                     .font(FontesApp.corpo)
                     .foregroundStyle(.cordosTextos)
                 
-                PhotosPicker(selection: $itemSelecionado, matching: .images) {
+                Menu {
+                    Button {
+                        mostrarCamera = true
+                    } label: {
+                        Label("Tirar foto", systemImage: "camera")
+                    }
+                    
+                    PhotosPicker(selection: $itemSelecionado, matching: .images) {
+                        Label("Escolher da galeria", systemImage: "photo.on.rectangle")
+                    }
+                } label: {
                     HStack(spacing: 12) {
                         if let dados = viewModel.imagem, let uiImage = UIImage(data: dados) {
                             Image(uiImage: uiImage)
@@ -51,6 +62,10 @@ struct FormularioReceitaView: View {
                             viewModel.imagem = dados
                         }
                     }
+                }
+                .fullScreenCover(isPresented: $mostrarCamera) {
+                    CameraPicker(imagemCapturada: $viewModel.imagem)
+                        .ignoresSafeArea()
                 }
             }
             
@@ -260,3 +275,4 @@ struct FormularioReceitaView: View {
 //#Preview {
 //    FormularioReceitaView(viewModel: CriarReceitaViewModel.preview)
 //}
+
