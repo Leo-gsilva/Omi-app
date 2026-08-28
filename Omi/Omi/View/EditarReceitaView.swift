@@ -12,7 +12,7 @@ import PhotosUI
 struct EditarReceitaView: View {
     @Environment(\.dismiss) private var voltar
     @State var viewModel: CriarReceitaViewModel
- 
+    @State private var mostrarCadastroFinalizado = false
     
     var body: some View {
         NavigationStack {
@@ -36,7 +36,7 @@ struct EditarReceitaView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
                         if viewModel.salvarReceitaNoBanco() {
-                            voltar()
+                            mostrarCadastroFinalizado = true
                         }
                     }) {
                         Image(systemName: "checkmark")
@@ -44,6 +44,13 @@ struct EditarReceitaView: View {
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.circle)
                     .tint(.green)
+                }
+            }
+            .fullScreenCover(isPresented: $mostrarCadastroFinalizado) {
+                TelaCadastroFinalizado(nomeReceita: viewModel.titulo) {
+                    // Fecha a sheet inteira (EditarReceitaView + o cover por cima)
+                    // de uma vez, voltando direto pra TelaInicial.
+                    voltar()
                 }
             }
         }
